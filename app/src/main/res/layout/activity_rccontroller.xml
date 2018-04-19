@@ -11,14 +11,14 @@
         android:id="@+id/feedback_area_critical"
         android:layout_width="550dp"
         android:layout_height="39dp"
-        android:background="#ff3355"
+        android:background="@color/black_overlay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/tc_imageView"
+        android:id="@+id/tcs_imageView"
         android:layout_width="45dp"
         android:layout_height="35dp"
         android:layout_marginLeft="2dp"
@@ -27,7 +27,7 @@
         android:scaleType="fitCenter"
         app:layout_constraintStart_toStartOf="@+id/feedback_area_critical"
         app:layout_constraintTop_toTopOf="@+id/feedback_area_critical"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:srcCompat="@drawable/tcs_off" />
 
     <ImageView
         android:id="@+id/abs_imageView"
@@ -37,9 +37,9 @@
         android:layout_marginStart="2dp"
         android:layout_marginTop="2dp"
         android:scaleType="fitCenter"
-        app:layout_constraintStart_toEndOf="@+id/tc_imageView"
+        app:layout_constraintStart_toEndOf="@+id/tcs_imageView"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:srcCompat="@drawable/abs_off" />
 
     <ImageView
         android:id="@+id/esc_imageView"
@@ -51,7 +51,7 @@
         android:scaleType="fitCenter"
         app:layout_constraintStart_toEndOf="@+id/abs_imageView"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:srcCompat="@drawable/esc_off" />
 
     <ImageView
         android:id="@+id/understeer_imageView"
@@ -63,7 +63,7 @@
         android:scaleType="fitCenter"
         app:layout_constraintStart_toEndOf="@+id/esc_imageView"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:srcCompat="@drawable/understeer_off" />
 
     <ImageView
         android:id="@+id/oversteer_imageView"
@@ -75,7 +75,7 @@
         android:scaleType="fitCenter"
         app:layout_constraintStart_toEndOf="@+id/understeer_imageView"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:srcCompat="@drawable/oversteer_off" />
 
     <ImageView
         android:id="@+id/cds_imageView"
@@ -87,7 +87,7 @@
         android:scaleType="fitCenter"
         app:layout_constraintStart_toEndOf="@+id/oversteer_imageView"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:srcCompat="@drawable/cds_off" />
 
     <ImageView
         android:id="@+id/rearHBridgeTemp_imageView"
@@ -154,7 +154,7 @@
         android:layout_width="0dp"
         android:layout_height="44dp"
         android:layout_marginTop="2dp"
-        android:background="#ff3355"
+        android:background="@color/black_overlay"
         app:layout_constraintEnd_toEndOf="@+id/feedback_area_critical"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
