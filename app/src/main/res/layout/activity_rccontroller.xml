@@ -90,7 +90,7 @@
         app:srcCompat="@drawable/cds_off" />
 
     <ImageView
-        android:id="@+id/rearHBridgeTemp_imageView"
+        android:id="@+id/carTemps_imageView"
         android:layout_width="45dp"
         android:layout_height="35dp"
         android:layout_marginEnd="2dp"
@@ -99,7 +99,64 @@
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toStartOf="@+id/batteryTemp_imageView"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:srcCompat="@drawable/car_temps_off" />
+
+    <ImageView
+        android:id="@+id/frontDriverMotorTemps_imageView"
+        android:layout_width="15dp"
+        android:layout_height="10dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="@+id/carTemps_imageView"
+        app:layout_constraintTop_toTopOf="@+id/carTemps_imageView"/>
+
+    <ImageView
+        android:id="@+id/frontCoDriverMotorTemps_imageView"
+        android:layout_width="15dp"
+        android:layout_height="10dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="@+id/carTemps_imageView"
+        app:layout_constraintBottom_toBottomOf="@+id/carTemps_imageView"
+        android:rotation="180"/>
+
+    <ImageView
+        android:id="@+id/frontHbridgeTemps_imageView"
+        android:layout_width="15dp"
+        android:layout_height="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="@+id/frontDriverMotorTemps_imageView"
+        app:layout_constraintTop_toBottomOf="@+id/frontDriverMotorTemps_imageView"
+        app:layout_constraintBottom_toTopOf="@+id/frontCoDriverMotorTemps_imageView"/>
+
+    <ImageView
+        android:id="@+id/rearDriverMotorTemps_imageView"
+        android:layout_width="15dp"
+        android:layout_height="10dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="@+id/carTemps_imageView"
+        app:layout_constraintTop_toTopOf="@+id/carTemps_imageView"/>
+
+    <ImageView
+        android:id="@+id/rearCoDriverMotorTemps_imageView"
+        android:layout_width="15dp"
+        android:layout_height="10dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="@+id/carTemps_imageView"
+        app:layout_constraintBottom_toBottomOf="@+id/carTemps_imageView"
+        android:rotation="180"/>
+
+    <ImageView
+        android:id="@+id/rearHbridgeTemps_imageView"
+        android:layout_width="15dp"
+        android:layout_height="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="@+id/rearDriverMotorTemps_imageView"
+        app:layout_constraintTop_toBottomOf="@+id/rearDriverMotorTemps_imageView"
+        app:layout_constraintBottom_toTopOf="@+id/rearCoDriverMotorTemps_imageView"
+        android:rotation="180"/>
 
     <ImageView
         android:id="@+id/batteryTemp_imageView"
@@ -109,33 +166,9 @@
         android:layout_marginRight="2dp"
         android:layout_marginTop="2dp"
         android:scaleType="fitCenter"
-        app:layout_constraintEnd_toStartOf="@+id/rearCoDriverMotorTemp_imageView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher_round" />
-
-    <ImageView
-        android:id="@+id/rearCoDriverMotorTemp_imageView"
-        android:layout_width="45dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginRight="2dp"
-        android:layout_marginTop="2dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintEnd_toStartOf="@+id/rearDriverMotorTemp_imageView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher_round" />
-
-    <ImageView
-        android:id="@+id/rearDriverMotorTemp_imageView"
-        android:layout_width="45dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginRight="2dp"
-        android:layout_marginTop="2dp"
-        android:scaleType="fitCenter"
         app:layout_constraintEnd_toStartOf="@+id/raspiTemp_imageView"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:srcCompat="@drawable/batteries_temp_off" />
 
     <ImageView
         android:id="@+id/raspiTemp_imageView"
@@ -147,7 +180,7 @@
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="@+id/feedback_area_critical"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:srcCompat="@drawable/raspi_temp_off" />
 
     <View
         android:id="@+id/feedback_area_info"

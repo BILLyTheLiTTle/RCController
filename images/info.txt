@@ -5,3 +5,5 @@ idle state = ffffff
 howto = apply color to base signal, black to alpha, reapply color to base signal
 
 small image width = 30
+
+small car's items (motors, h-bridges) temps width = 10
