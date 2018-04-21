@@ -203,7 +203,7 @@
         android:scaleType="fitCenter"
         app:layout_constraintStart_toStartOf="@+id/feedback_area_info"
         app:layout_constraintTop_toTopOf="@+id/feedback_area_info"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:srcCompat="@drawable/turn_light_off" />
 
     <ImageView
         android:id="@+id/rightTurn_imageView"
@@ -215,7 +215,8 @@
         android:scaleType="fitCenter"
         app:layout_constraintStart_toEndOf="@+id/leftTurn_imageView"
         app:layout_constraintTop_toTopOf="@+id/feedback_area_info"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:srcCompat="@drawable/turn_light_off"
+        android:rotation="180"/>
 
     <ImageView
         android:id="@+id/reverse_imageView"
@@ -227,7 +228,7 @@
         android:scaleType="fitCenter"
         app:layout_constraintStart_toEndOf="@+id/rightTurn_imageView"
         app:layout_constraintTop_toTopOf="@+id/feedback_area_info"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:srcCompat="@drawable/reverse_off" />
 
     <ImageView
         android:id="@+id/lights_imageView"
@@ -239,7 +240,7 @@
         android:scaleType="fitCenter"
         app:layout_constraintStart_toEndOf="@+id/reverse_imageView"
         app:layout_constraintTop_toTopOf="@+id/feedback_area_info"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:srcCompat="@drawable/lights_off" />
 
     <!-- cruise control -->
     <ImageView
@@ -252,7 +253,19 @@
         android:scaleType="fitCenter"
         app:layout_constraintStart_toEndOf="@+id/lights_imageView"
         app:layout_constraintTop_toTopOf="@+id/feedback_area_info"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:srcCompat="@drawable/cruise_control_off" />
+
+    <ImageView
+        android:id="@+id/handbrake_imageView"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toEndOf="@+id/cc_imageView"
+        app:layout_constraintTop_toTopOf="@+id/feedback_area_info"
+        app:srcCompat="@drawable/handbrake_off" />
 
     <SeekBar
         android:id="@+id/steering_seekBar"
