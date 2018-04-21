@@ -206,7 +206,7 @@
         app:srcCompat="@drawable/turn_light_off" />
 
     <ImageView
-        android:id="@+id/rightTurn_imageView"
+        android:id="@+id/emergency_imageView"
         android:layout_width="50dp"
         android:layout_height="40dp"
         android:layout_marginLeft="2dp"
@@ -214,6 +214,18 @@
         android:layout_marginTop="2dp"
         android:scaleType="fitCenter"
         app:layout_constraintStart_toEndOf="@+id/leftTurn_imageView"
+        app:layout_constraintTop_toTopOf="@+id/feedback_area_info"
+        app:srcCompat="@drawable/emergency_lights_off" />
+
+    <ImageView
+        android:id="@+id/rightTurn_imageView"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toEndOf="@+id/emergency_imageView"
         app:layout_constraintTop_toTopOf="@+id/feedback_area_info"
         app:srcCompat="@drawable/turn_light_off"
         android:rotation="180"/>
