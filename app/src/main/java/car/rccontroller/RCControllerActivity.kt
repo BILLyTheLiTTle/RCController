@@ -20,6 +20,8 @@ class RCControllerActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.hide()
 
+        //setup feedback area info tools
+
         steering_seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) { seekBar.progress = 50 }
             override fun onStartTrackingTouch(seekBar: SeekBar){}

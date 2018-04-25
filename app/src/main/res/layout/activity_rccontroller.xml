@@ -291,6 +291,18 @@
         app:layout_constraintTop_toTopOf="@+id/feedback_area_info"
         app:srcCompat="@drawable/engine_stopped_start_action" />
 
+    <ImageView
+        android:id="@+id/parkingBrake_imageView"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toEndOf="@+id/engineStartStop_imageView"
+        app:layout_constraintTop_toTopOf="@+id/feedback_area_info"
+        app:srcCompat="@drawable/parking_brake_off" />
+
     <SeekBar
         android:id="@+id/steering_seekBar"
         android:layout_width="300dp"
