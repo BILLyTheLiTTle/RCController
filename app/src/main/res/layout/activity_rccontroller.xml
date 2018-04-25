@@ -268,18 +268,6 @@
         app:srcCompat="@drawable/cruise_control_off" />
 
     <ImageView
-        android:id="@+id/handbrake_imageView"
-        android:layout_width="50dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="2dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintStart_toEndOf="@+id/cc_imageView"
-        app:layout_constraintTop_toTopOf="@+id/feedback_area_info"
-        app:srcCompat="@drawable/handbrake_off" />
-
-    <ImageView
         android:id="@+id/engineStartStop_imageView"
         android:layout_width="50dp"
         android:layout_height="40dp"
@@ -287,7 +275,7 @@
         android:layout_marginStart="2dp"
         android:layout_marginTop="2dp"
         android:scaleType="fitCenter"
-        app:layout_constraintStart_toEndOf="@+id/handbrake_imageView"
+        app:layout_constraintStart_toEndOf="@+id/cc_imageView"
         app:layout_constraintTop_toTopOf="@+id/feedback_area_info"
         app:srcCompat="@drawable/engine_stopped_start_action" />
 
@@ -302,6 +290,20 @@
         app:layout_constraintStart_toEndOf="@+id/engineStartStop_imageView"
         app:layout_constraintTop_toTopOf="@+id/feedback_area_info"
         app:srcCompat="@drawable/parking_brake_off" />
+
+    <ImageView
+        android:id="@+id/handbrake_imageView"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginTop="2dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="@+id/feedback_area_info"
+        app:layout_constraintTop_toTopOf="@+id/feedback_area_info"
+        app:srcCompat="@drawable/handbrake_off" />
 
     <SeekBar
         android:id="@+id/steering_seekBar"
