@@ -35,7 +35,7 @@ private fun doRequest(url: String): String {
         urlGet = URL(url)
         con = urlGet.openConnection() as HttpURLConnection
         con.readTimeout = 10000 /* milliseconds */
-        con.connectTimeout = 15000 /* milliseconds */
+        con.connectTimeout = 2000 /* milliseconds */
         con.requestMethod = "GET"
         con.doInput = true
         // Start the query
