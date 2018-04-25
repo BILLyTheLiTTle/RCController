@@ -8,7 +8,6 @@ import android.widget.SeekBar
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_rccontroller.*
 import car.rccontroller.network.*
-import kotlinx.android.synthetic.main.dialog_server_connection.*
 
 
 /**
@@ -28,7 +27,13 @@ class RCControllerActivity : AppCompatActivity() {
 
         //setup feedback area info tools
         engineStartStop_imageView.setOnLongClickListener { _ ->
-            showServerConnectionDialog()
+            if(isEngineStarted) {
+                //TODO something to stop it
+            }
+            else {
+                //start it
+                showServerConnectionDialog()
+            }
 
             true
         }
@@ -55,19 +60,20 @@ class RCControllerActivity : AppCompatActivity() {
             setTitle(getString(R.string.server_dialog_title))
             setMessage(getString(R.string.server_dialog_msg))
             setPositiveButton(getString(R.string.server_dialog_ok_button)){ _, _ ->
-                serverIp =  dialogView.findViewById<EditText>(R.id.serverIp_editText).text.toString()
-                serverPort = dialogView.findViewById<EditText>(R.id.serverPort_editText2).text.toString().toInt()
-                if(serverIp != null && serverPort != null) {
-                    val status = handshake(serverIp!!, serverPort!!)
-                    if (status == OK_STATUS) {
-                        engineStartStop_imageView.setImageResource(R.drawable.engine_started_stop_action)
-                    } else {
-                        Toast.makeText(context, status, Toast.LENGTH_LONG).show()
-                    }
+                val serverIp =  dialogView.findViewById<EditText>(R.id.serverIp_editText).text
+                        .toString()
+                val serverPort = dialogView.findViewById<EditText>(R.id.serverPort_editText2).text
+                        .toString().toIntOrNull()
+
+                val status = handshake(serverIp, serverPort)
+                if (status == OK_DATA) {
+                    engineStartStop_imageView.setImageResource(R.drawable.engine_started_stop_action)
+                } else {
+                    Toast.makeText(context, status, Toast.LENGTH_LONG).show()
                 }
             }
             setNegativeButton(getString(R.string.server_dialog_cancel_button)) { _, _ ->
-
+                //TODO a cancel job or not todo?
             }
             show()
         }

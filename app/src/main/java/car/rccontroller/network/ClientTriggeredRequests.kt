@@ -1,7 +1,6 @@
 package car.rccontroller.network
 
 import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
 import java.io.BufferedReader
 import java.io.IOException
@@ -11,16 +10,34 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 
-const val OK_STATUS = "OK"
+const val OK_DATA = "OK"
+const val NO_DATA = "NULL"
 
 var serverIp: String? = null
 var serverPort: Int? = null
 
-fun handshake(serverIp: String, serverPort: Int): String{
-    var returnMsg: String = "empty"
+val isEngineStarted: Boolean
+get() {
+    //TODO call the appropriate server url/function
+    return true
+}
+
+fun handshake(serverIp: String?, serverPort: Int?): String{
+    car.rccontroller.network.serverIp = serverIp
+    car.rccontroller.network.serverPort = serverPort
+
+    //TODO add the nanohttp ip and port when needed as argument to the handshake
+    val url = "http://${car.rccontroller.network.serverIp}:" +
+            "${car.rccontroller.network.serverPort}/handshake"
+
+    return doBlockingRequest(url)
+}
+
+private fun doBlockingRequest(url:String): String {
+    var returnMsg: String = NO_DATA
     runBlocking {
-        //TODO add the nanohttp ip and port when needed
-        val msg = async { doRequest("http://$serverIp:$serverPort/handshake") }
+
+        val msg = async { doRequest(url) }
         returnMsg = msg.await()
     }
 
@@ -28,9 +45,9 @@ fun handshake(serverIp: String, serverPort: Int): String{
 }
 
 private fun doRequest(url: String): String {
-    var con: HttpURLConnection? = null
+    var con: HttpURLConnection?
     val urlGet: URL
-    var inputStream: InputStream? = null
+    var inputStream: InputStream?
     try {
         urlGet = URL(url)
         con = urlGet.openConnection() as HttpURLConnection
@@ -43,7 +60,7 @@ private fun doRequest(url: String): String {
         inputStream = con.inputStream
     } catch (e: IOException) {
         //handle the exception !
-        return e.message ?: "empty"
+        return e.message ?: NO_DATA
     }
 
     val bufferReader = BufferedReader(InputStreamReader(inputStream), 4096)
