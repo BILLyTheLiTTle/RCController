@@ -1,6 +1,8 @@
 package car.rccontroller.network
 
+import android.util.Log
 import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
 import java.io.BufferedReader
 import java.io.IOException
@@ -16,6 +18,9 @@ const val NO_DATA = "NULL"
 var serverIp: String? = null
 var serverPort: Int? = null
 
+/////////
+// Engine
+/////////
 val isEngineStarted: Boolean
 get() = doBlockingRequest("http://${car.rccontroller.network.serverIp}:" +
             "${car.rccontroller.network.serverPort}/get_engine_state").toBoolean()
@@ -31,9 +36,54 @@ fun startEngine(serverIp: String?, serverPort: Int?): String{
     return doBlockingRequest(url)
 }
 
-fun stopEngine() = doBlockingRequest("http://${car.rccontroller.network.serverIp}:" +
-        "${car.rccontroller.network.serverPort}/stop_engine")
+fun stopEngine(): String {
+    val msg = doBlockingRequest("http://$serverIp:" +
+            "$serverPort/stop_engine")
 
+    if(msg == OK_DATA) {
+        serverIp = null
+        serverPort = null
+    }
+
+    return msg
+}
+
+
+/////////
+// Throttle -n- Brakes
+/////////
+const val ACTION_MOVE_FORWARD = "forward"
+const val ACTION_MOVE_BACKWARD = "backwards"
+const val ACTION_STILL = "still"
+const val ACTION_PARKING_BRAKE = "parking brake"
+const val ACTION_HANDBRAKE = "handbrake"
+// Initial value should be 0 cuz in server is -1
+var throttleBrakeActionId = 0
+val isParkingBrakeActive: Boolean
+    get() = doBlockingRequest("http://$serverIp:$serverPort/" +
+            "get_parking_brake_state").toBoolean()
+
+fun activateParkingBrake(state: Boolean) = if (state)
+        doBlockingRequest("http://$serverIp:$serverPort/" +
+                "set_throttle_brake_system?" +
+                "id=${throttleBrakeActionId++}" +
+                "&action=$ACTION_PARKING_BRAKE" +
+                "&value=100")
+    else
+        doBlockingRequest("http://$serverIp:$serverPort/" +
+                "set_throttle_brake_system?" +
+                "id=${throttleBrakeActionId++}" +
+                "&action=$ACTION_PARKING_BRAKE" +
+                "&value=0")
+
+
+
+/////////
+// General use
+/////////
+private fun doNonBlockingRequest(url:String) {
+    launch { doRequest(url) }
+}
 
 private fun doBlockingRequest(url:String): String {
     var returnMsg: String = NO_DATA

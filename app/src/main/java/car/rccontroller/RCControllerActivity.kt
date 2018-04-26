@@ -27,25 +27,59 @@ class RCControllerActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.hide()
 
+        //////
         //setup engine start-n-stop
+        //////
         engineStartStop_imageView.setOnLongClickListener { _ ->
             if(isEngineStarted) {
                 val status = stopEngine()
                 if (status == OK_DATA) {
-                    engineStartStop_imageView.setImageResource(R.drawable.engine_stopped_start_action)
+                    changeInteractiveIconsStatus()
                 } else {
                     Toast.makeText(this, status, Toast.LENGTH_LONG).show()
                 }
             }
             else {
-                //start it
+                //start the engine
                 showServerConnectionDialog()
             }
 
             true
         }
         engineStartStop_imageView.setOnClickListener {_ ->
-            Toast.makeText(this, getString(R.string.engine_info), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
+            true
+        }
+
+        //////
+        // setup parking brake
+        //////
+        parkingBrake_imageView.setOnLongClickListener { _ ->
+            // If, for any reason, engine is stopped I should not do anything
+            if(isEngineStarted) {
+                if (isParkingBrakeActive) {
+                    val status = activateParkingBrake(false)
+                    if (status == OK_DATA) {
+                        parkingBrake_imageView.setImageResource(R.drawable.parking_brake_off)
+                    } else {
+                        Toast.makeText(this, status, Toast.LENGTH_LONG).show()
+                    }
+                } else {
+                    val status = activateParkingBrake(true)
+                    if (status == OK_DATA) {
+                        parkingBrake_imageView.setImageResource(R.drawable.parking_brake_on)
+                    } else {
+                        Toast.makeText(this, status, Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+            else {
+                changeInteractiveIconsStatus()
+            }
+            true
+        }
+        parkingBrake_imageView.setOnClickListener {_ ->
+            Toast.makeText(this, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
             true
         }
 
@@ -57,7 +91,9 @@ class RCControllerActivity : AppCompatActivity() {
 
         throttleNbrake_mySeekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) { seekBar.progress = 50 }
-            override fun onStartTrackingTouch(seekBar: SeekBar){}
+            override fun onStartTrackingTouch(seekBar: SeekBar){
+                changeMotionInteractiveIconsStatus()
+            }
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean){}
         })
     }
@@ -78,7 +114,7 @@ class RCControllerActivity : AppCompatActivity() {
 
                 val status = startEngine(serverIp, serverPort)
                 if (status == OK_DATA) {
-                    engineStartStop_imageView.setImageResource(R.drawable.engine_started_stop_action)
+                    changeInteractiveIconsStatus()
                 } else {
                     Toast.makeText(context, status, Toast.LENGTH_LONG).show()
                 }
@@ -88,6 +124,37 @@ class RCControllerActivity : AppCompatActivity() {
             }
             show()
         }
+    }
+
+    /* After every interaction with interactive actions all icons must get
+        their state from the server for client to be up-to-date with
+        server's data.
+     */
+    private fun changeInteractiveIconsStatus(){
+        if (isEngineStarted)
+            engineStartStop_imageView.setImageResource(R.drawable.engine_started_stop_action)
+        else
+            engineStartStop_imageView.setImageResource(R.drawable.engine_stopped_start_action)
+
+        changeMotionInteractiveIconsStatus()
+    }
+    /* Motion interactive actions must be depending on each other.
+        Their states on the server should be changed by set methods.
+        This function here should get these states which must be as I want,
+        but if they don't check the set functions between client-server.
+     */
+    private fun changeMotionInteractiveIconsStatus(){
+        if(isParkingBrakeActive)
+            parkingBrake_imageView.setImageResource(R.drawable.parking_brake_on)
+        else
+            parkingBrake_imageView.setImageResource(R.drawable.parking_brake_off)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val status = activateParkingBrake(true)
+        if(status == OK_DATA)
+            parkingBrake_imageView.setImageResource(R.drawable.parking_brake_on)
     }
 
     override fun onBackPressed() {

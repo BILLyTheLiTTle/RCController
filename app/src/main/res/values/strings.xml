@@ -4,7 +4,7 @@
     <string name="exit_info">Please click BACK again to exit</string>
     <string name="tachometer">0 km/h</string>
 
-    <string name="engine_info">Long-click to start/stop engine</string>
+    <string name="long_click_info">Long-click to interact</string>
 
     <string name="server_dialog_title">Server IP and Port</string>
     <string name="server_dialog_msg">Set IP and port</string>
