@@ -17,21 +17,23 @@ var serverIp: String? = null
 var serverPort: Int? = null
 
 val isEngineStarted: Boolean
-get() {
-    //TODO call the appropriate server url/function
-    return true
-}
+get() = doBlockingRequest("http://${car.rccontroller.network.serverIp}:" +
+            "${car.rccontroller.network.serverPort}/get_engine_state").toBoolean()
 
-fun handshake(serverIp: String?, serverPort: Int?): String{
+fun startEngine(serverIp: String?, serverPort: Int?): String{
     car.rccontroller.network.serverIp = serverIp
     car.rccontroller.network.serverPort = serverPort
 
     //TODO add the nanohttp ip and port when needed as argument to the handshake
     val url = "http://${car.rccontroller.network.serverIp}:" +
-            "${car.rccontroller.network.serverPort}/handshake"
+            "${car.rccontroller.network.serverPort}/start_engine"
 
     return doBlockingRequest(url)
 }
+
+fun stopEngine() = doBlockingRequest("http://${car.rccontroller.network.serverIp}:" +
+        "${car.rccontroller.network.serverPort}/stop_engine")
+
 
 private fun doBlockingRequest(url:String): String {
     var returnMsg: String = NO_DATA

@@ -1,13 +1,15 @@
 <resources>
     <string name="app_name">RCController</string>
 
-    <string name="dummy_button">Dummy Button</string>
+    <string name="exit_info">Please click BACK again to exit</string>
     <string name="tachometer">0 km/h</string>
+
+    <string name="engine_info">Long-click to start/stop engine</string>
 
     <string name="server_dialog_title">Server IP and Port</string>
     <string name="server_dialog_msg">Set IP and port</string>
     <string name="server_dialog_ok_button">OK</string>
     <string name="server_dialog_cancel_button">Cancel</string>
     <string name="server_ip_hint">Server IP</string>
-    <string name="server_port_hint">Server Port</string>
+    <string name="server_port_hint">Server Port</string>Please click BACK again to exit
 </resources>

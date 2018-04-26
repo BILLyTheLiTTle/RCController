@@ -2,6 +2,7 @@ package car.rccontroller
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.app.AlertDialog
 import android.widget.EditText
 import android.widget.SeekBar
@@ -16,6 +17,7 @@ import car.rccontroller.network.*
  */
 class RCControllerActivity : AppCompatActivity() {
 
+    private var doubleBackToExitPressedOnce = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,16 +27,25 @@ class RCControllerActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.hide()
 
-        //setup feedback area info tools
+        //setup engine start-n-stop
         engineStartStop_imageView.setOnLongClickListener { _ ->
             if(isEngineStarted) {
-                //TODO something to stop it
+                val status = stopEngine()
+                if (status == OK_DATA) {
+                    engineStartStop_imageView.setImageResource(R.drawable.engine_stopped_start_action)
+                } else {
+                    Toast.makeText(this, status, Toast.LENGTH_LONG).show()
+                }
             }
             else {
                 //start it
                 showServerConnectionDialog()
             }
 
+            true
+        }
+        engineStartStop_imageView.setOnClickListener {_ ->
+            Toast.makeText(this, getString(R.string.engine_info), Toast.LENGTH_SHORT).show()
             true
         }
 
@@ -65,7 +76,7 @@ class RCControllerActivity : AppCompatActivity() {
                 val serverPort = dialogView.findViewById<EditText>(R.id.serverPort_editText2).text
                         .toString().toIntOrNull()
 
-                val status = handshake(serverIp, serverPort)
+                val status = startEngine(serverIp, serverPort)
                 if (status == OK_DATA) {
                     engineStartStop_imageView.setImageResource(R.drawable.engine_started_stop_action)
                 } else {
@@ -77,6 +88,19 @@ class RCControllerActivity : AppCompatActivity() {
             }
             show()
         }
+    }
+
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            stopEngine()
+            return
+        }
+
+        doubleBackToExitPressedOnce = true
+        Toast.makeText(this, getString(R.string.exit_info), Toast.LENGTH_SHORT).show()
+
+        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 
 }
