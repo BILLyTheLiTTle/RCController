@@ -27,6 +27,9 @@ get() = doBlockingRequest("http://${car.rccontroller.network.serverIp}:" +
             "${car.rccontroller.network.serverPort}/get_engine_state").toBoolean()
 
 fun startEngine(serverIp: String?, serverPort: Int?): String{
+    // reset this id to the client
+    throttleBrakeActionId = 0
+
     car.rccontroller.network.serverIp = serverIp
     car.rccontroller.network.serverPort = serverPort
 
