@@ -57,21 +57,12 @@ class RCControllerActivity : AppCompatActivity() {
         parkingBrake_imageView.setOnLongClickListener { _ ->
             // If, for any reason, engine is stopped I should not do anything
             if(isEngineStarted) {
-                if (isParkingBrakeActive) {
-                    val status = activateParkingBrake(false)
-                    if (status == OK_DATA) {
-                        parkingBrake_imageView.setImageResource(R.drawable.parking_brake_off)
-                    } else {
-                        Toast.makeText(this, status, Toast.LENGTH_LONG).show()
-                    }
-                } else {
-                    val status = activateParkingBrake(true)
-                    if (status == OK_DATA) {
-                        parkingBrake_imageView.setImageResource(R.drawable.parking_brake_on)
-                    } else {
-                        Toast.makeText(this, status, Toast.LENGTH_LONG).show()
-                    }
-                }
+				val status = activateParkingBrake(!isParkingBrakeActive)
+				if (status == OK_DATA) {
+					changeMotionInteractiveIconsStatus()
+				} else {
+					Toast.makeText(this, status, Toast.LENGTH_LONG).show()
+				}
             }
             else {
                 changeInteractiveIconsStatus()
@@ -92,6 +83,7 @@ class RCControllerActivity : AppCompatActivity() {
         throttleNbrake_mySeekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) { seekBar.progress = 50 }
             override fun onStartTrackingTouch(seekBar: SeekBar){
+				//TODO update server's motion variables (ThrottleBrakeSystem)
                 changeMotionInteractiveIconsStatus()
             }
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean){}
