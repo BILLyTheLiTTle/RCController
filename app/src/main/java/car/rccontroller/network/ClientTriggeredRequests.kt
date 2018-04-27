@@ -1,6 +1,7 @@
 package car.rccontroller.network
 
 import android.util.Log
+import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
@@ -81,20 +82,9 @@ fun activateParkingBrake(state: Boolean) = if (state)
 /////////
 // General use
 /////////
-private fun doNonBlockingRequest(url:String) {
-    launch { doRequest(url) }
-}
+private fun doNonBlockingRequest(url:String) = launch { doRequest(url) }
 
-private fun doBlockingRequest(url:String): String {
-    var returnMsg: String = NO_DATA
-    runBlocking {
-
-        val msg = async { doRequest(url) }
-        returnMsg = msg.await()
-    }
-
-    return returnMsg
-}
+private fun doBlockingRequest(url:String) = runBlocking(CommonPool) { doRequest(url) }
 
 private fun doRequest(url: String): String {
     var con: HttpURLConnection?
