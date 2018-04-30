@@ -25,80 +25,88 @@ class RCControllerActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_rccontroller)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        supportActionBar?.hide()
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(false)
+            hide()
+        }
 
         //////
         //setup engine start-n-stop
         //////
-        engineStartStop_imageView.setOnLongClickListener { _ ->
-            if(isEngineStarted) {
-                val status = stopEngine()
-                if (status == OK_DATA) {
-                    changeInteractiveIconsStatus()
-                } else {
-                    Toast.makeText(this, status, Toast.LENGTH_LONG).show()
+        engineStartStop_imageView.apply {
+            setOnLongClickListener { _ ->
+                if(isEngineStarted) {
+                    val status = stopEngine()
+                    if (status == OK_DATA) {
+                        changeInteractiveIconsStatus()
+                    } else {
+                        Toast.makeText(context, status, Toast.LENGTH_LONG).show()
+                    }
                 }
-            }
-            else {
-                //start the engine
-                showServerConnectionDialog()
-            }
+                else {
+                    //start the engine
+                    showServerConnectionDialog()
+                }
 
-            true
-        }
-        engineStartStop_imageView.setOnClickListener {_ ->
-            Toast.makeText(this, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
-            true
+                true
+            }
+            setOnClickListener {_ ->
+                Toast.makeText(context, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
+                true
+            }
         }
 
         //////
         // setup parking brake
         //////
-        parkingBrake_imageView.setOnLongClickListener { _ ->
-            // If, for any reason, engine is stopped I should not do anything
-            if(isEngineStarted) {
-				val status = activateParkingBrake(!isParkingBrakeActive)
-				if (status == OK_DATA) {
-					changeMotionInteractiveIconsStatus()
-				} else {
-					Toast.makeText(this, status, Toast.LENGTH_LONG).show()
-				}
+        parkingBrake_imageView.apply {
+            setOnLongClickListener { _ ->
+                // If, for any reason, engine is stopped I should not do anything
+                if(isEngineStarted) {
+                    val status = activateParkingBrake(!isParkingBrakeActive)
+                    if (status == OK_DATA) {
+                        changeMotionInteractiveIconsStatus()
+                    } else {
+                        Toast.makeText(context, status, Toast.LENGTH_LONG).show()
+                    }
+                }
+                else {
+                    changeInteractiveIconsStatus()
+                }
+                true
             }
-            else {
-                changeInteractiveIconsStatus()
+            setOnClickListener {_ ->
+                Toast.makeText(context, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
+                true
             }
-            true
-        }
-        parkingBrake_imageView.setOnClickListener {_ ->
-            Toast.makeText(this, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
-            true
         }
 
         //////
         // setup handbrake
         //////
-        handbrake_imageView.setOnTouchListener {_, event: MotionEvent ->
-            if (event.action == android.view.MotionEvent.ACTION_DOWN) {
-                /* Use the serverIp variable to check if the engine is running.
-                   I use the serverIp because I did not want to use a blocking network request. */
-                if(serverIp != null) {
-                    handbrake_imageView.setImageResource(R.drawable.handbrake_on)
-                    activateHandbrake(true)
+        handbrake_imageView.apply {
+            setOnTouchListener {_, event: MotionEvent ->
+                if (event.action == android.view.MotionEvent.ACTION_DOWN) {
+                    /* Use the serverIp variable to check if the engine is running.
+                       I use the serverIp because I did not want to use a blocking network request. */
+                    if(serverIp != null) {
+                        handbrake_imageView.setImageResource(R.drawable.handbrake_on)
+                        activateHandbrake(true)
+                    }
+                } else if (event.action == android.view.MotionEvent.ACTION_UP) {
+                    if(serverIp != null) {
+                        handbrake_imageView.setImageResource(R.drawable.handbrake_off)
+                        activateHandbrake(false)
+                    }
                 }
-            } else if (event.action == android.view.MotionEvent.ACTION_UP) {
-                if(serverIp != null) {
-                    handbrake_imageView.setImageResource(R.drawable.handbrake_off)
-                    activateHandbrake(false)
-                }
+                false;
             }
-            false;
-        }
-        //The blocking actions should not interfere with driving,
-        // that's why they are on different listener
-        handbrake_imageView.setOnClickListener {_ ->
-            changeInteractiveIconsStatus()
-            true
+            //The blocking actions should not interfere with driving,
+            // that's why they are on different listener
+            setOnClickListener {_ ->
+                changeInteractiveIconsStatus()
+                true
+            }
         }
 
 
