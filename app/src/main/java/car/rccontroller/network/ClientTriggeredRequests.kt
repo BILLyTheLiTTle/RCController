@@ -63,6 +63,8 @@ const val ACTION_PARKING_BRAKE = "parking_brake"
 const val ACTION_HANDBRAKE = "handbrake"
 // Initial value should be 0 cuz in server is -1
 var throttleBrakeActionId = 0
+
+//---- Parking Brake ----
 val isParkingBrakeActive: Boolean
     get() = doBlockingRequest("http://$serverIp:$serverPort/" +
             "get_parking_brake_state").toBoolean()
@@ -80,6 +82,23 @@ fun activateParkingBrake(state: Boolean) = if (state)
                 "&action=$ACTION_PARKING_BRAKE" +
                 "&value=0")
 
+//---- Handbrake ----
+val isHandbrakeActive: Boolean
+    get() = doBlockingRequest("http://$serverIp:$serverPort/" +
+            "get_handbrake_state").toBoolean()
+
+fun activateHandbrake(state: Boolean) = if (state)
+    doNonBlockingRequest("http://$serverIp:$serverPort/" +
+            "set_throttle_brake_system?" +
+            "id=${throttleBrakeActionId++}" +
+            "&action=$ACTION_HANDBRAKE" +
+            "&value=100")
+else
+    doNonBlockingRequest("http://$serverIp:$serverPort/" +
+            "set_throttle_brake_system?" +
+            "id=${throttleBrakeActionId++}" +
+            "&action=$ACTION_HANDBRAKE" +
+            "&value=0")
 
 
 /////////

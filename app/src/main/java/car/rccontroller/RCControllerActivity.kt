@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AlertDialog
+import android.view.MotionEvent
 import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.Toast
@@ -74,6 +75,33 @@ class RCControllerActivity : AppCompatActivity() {
             true
         }
 
+        //////
+        // setup handbrake
+        //////
+        handbrake_imageView.setOnTouchListener {_, event: MotionEvent ->
+            if (event.action == android.view.MotionEvent.ACTION_DOWN) {
+                /* Use the serverIp variable to check if the engine is running.
+                   I use the serverIp because I did not want to use a blocking network request. */
+                if(serverIp != null) {
+                    handbrake_imageView.setImageResource(R.drawable.handbrake_on)
+                    activateHandbrake(true)
+                }
+            } else if (event.action == android.view.MotionEvent.ACTION_UP) {
+                if(serverIp != null) {
+                    handbrake_imageView.setImageResource(R.drawable.handbrake_off)
+                    activateHandbrake(false)
+                }
+            }
+            false;
+        }
+        //The blocking actions should not interfere with driving,
+        // that's why they are on different listener
+        handbrake_imageView.setOnClickListener {_ ->
+            changeInteractiveIconsStatus()
+            true
+        }
+
+
         steering_seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) { seekBar.progress = 50 }
             override fun onStartTrackingTouch(seekBar: SeekBar){}
@@ -140,6 +168,11 @@ class RCControllerActivity : AppCompatActivity() {
             parkingBrake_imageView.setImageResource(R.drawable.parking_brake_on)
         else
             parkingBrake_imageView.setImageResource(R.drawable.parking_brake_off)
+
+        if(isHandbrakeActive)
+            handbrake_imageView.setImageResource(R.drawable.handbrake_on)
+        else
+            handbrake_imageView.setImageResource(R.drawable.handbrake_off)
     }
 
     override fun onPause() {
