@@ -111,31 +111,34 @@ private fun doBlockingRequest(url:String) = runBlocking(CommonPool) { doRequest(
 private fun doRequest(url: String): String {
     var con: HttpURLConnection?
     val urlGet: URL
-    var inputStream: InputStream?
+    var inputStream: InputStream? = null
+    val sb =  StringBuilder()
     try {
         urlGet = URL(url)
         con = urlGet.openConnection() as HttpURLConnection
-        con.readTimeout = 10000 /* milliseconds */
-        con.connectTimeout = 2000 /* milliseconds */
-        con.requestMethod = "GET"
-        con.doInput = true
-        // Start the query
-        con.connect()
-        inputStream = con.inputStream
+        inputStream = con.run {
+            readTimeout = 10000 /* milliseconds */
+            connectTimeout = 2000 /* milliseconds */
+            requestMethod = "GET"
+            doInput = true
+            // Start the query
+            connect()
+            inputStream
+        }
+
+        val bufferReader = BufferedReader(InputStreamReader(inputStream), 4096)
+        var line: String?
+
+        line = bufferReader.readLine()
+        while (line != null) {
+            sb.append(line)
+            line = bufferReader.readLine()
+        }
+        bufferReader.close()
     } catch (e: IOException) {
         //handle the exception !
-        return e.message ?: NO_DATA
+        sb.append(e.message ?: NO_DATA)
     }
-
-    val bufferReader = BufferedReader(InputStreamReader(inputStream), 4096)
-    var line: String?
-    val sb =  StringBuilder()
-    line = bufferReader.readLine()
-    while (line != null) {
-        sb.append(line)
-        line = bufferReader.readLine()
-    }
-    bufferReader.close()
     return sb.toString()
 
 }
