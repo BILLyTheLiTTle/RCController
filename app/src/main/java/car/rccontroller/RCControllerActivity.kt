@@ -115,7 +115,9 @@ class RCControllerActivity : AppCompatActivity() {
 
 
         steering_seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
-            override fun onStopTrackingTouch(seekBar: SeekBar) { seekBar.progress = 50 }
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                seekBar.progress = resources.getInteger(R.integer.default_steering)
+            }
             override fun onStartTrackingTouch(seekBar: SeekBar) {
                 changeInteractiveUIItemsStatus()
             }
@@ -137,7 +139,9 @@ class RCControllerActivity : AppCompatActivity() {
         })
 
         throttleNbrake_mySeekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
-            override fun onStopTrackingTouch(seekBar: SeekBar) { seekBar.progress = 10 }
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                seekBar.progress = resources.getInteger(R.integer.default_throttle_n_brake)
+            }
             override fun onStartTrackingTouch(seekBar: SeekBar) {
 				changeInteractiveUIItemsStatus()
             }
@@ -174,7 +178,7 @@ class RCControllerActivity : AppCompatActivity() {
                 val serverPort = dialogView.findViewById<EditText>(R.id.serverPort_editText2).text
                         .toString().toIntOrNull()
 
-                val status = startEngine(serverIp, serverPort)
+                val status = startEngine(resources, serverIp, serverPort)
                 if (status == OK_DATA) {
                     changeInteractiveUIItemsStatus()
                 } else {
@@ -196,9 +200,10 @@ class RCControllerActivity : AppCompatActivity() {
         if (isEngineStarted) {
             engineStartStop_imageView.setImageResource(R.drawable.engine_started_stop_action)
             steering_seekBar.isEnabled = true
-            steering_seekBar.progress = 50
+            steering_seekBar.progress = resources.getInteger(R.integer.default_steering)
             throttleNbrake_mySeekBar.isEnabled = true
-            throttleNbrake_mySeekBar.progress = 10
+            throttleNbrake_mySeekBar.progress = resources.
+                getInteger(R.integer.default_throttleBrakeActionId);
         }
         else {
             engineStartStop_imageView.setImageResource(R.drawable.engine_stopped_start_action)

@@ -1,8 +1,8 @@
 package car.rccontroller.network
 
-import android.util.Log
+import android.content.res.Resources
+import car.rccontroller.R
 import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.runBlocking
 import java.io.BufferedReader
@@ -18,6 +18,7 @@ const val NO_DATA = "NULL"
 
 var serverIp: String? = null
 var serverPort: Int? = null
+var resources: Resources? = null
 
 /////////
 // Engine
@@ -26,13 +27,15 @@ val isEngineStarted: Boolean
 get() = doBlockingRequest("http://${car.rccontroller.network.serverIp}:" +
             "${car.rccontroller.network.serverPort}/get_engine_state").toBoolean()
 
-fun startEngine(serverIp: String?, serverPort: Int?): String{
+fun startEngine(resources: Resources, serverIp: String?, serverPort: Int?): String{
     //reset and get ready for new requests
-    throttleBrakeActionId = 0
-    steeringDirectionId = 0
+    throttleBrakeActionId = resources.getInteger(R.integer.default_throttleBrakeActionId)
+    steeringDirectionId = resources.getInteger(R.integer.default_steeringDirectionId)
 
     car.rccontroller.network.serverIp = serverIp
     car.rccontroller.network.serverPort = serverPort
+    car.rccontroller.network.resources = resources
+
 
     //TODO add the nanohttp ip and port when needed as argument to the handshake
     val url = "http://${car.rccontroller.network.serverIp}:" +
