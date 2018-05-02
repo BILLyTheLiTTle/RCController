@@ -57,7 +57,7 @@ fun stopEngine(): String {
 // Throttle -n- Brakes
 /////////
 const val ACTION_MOVE_FORWARD = "forward"
-const val ACTION_MOVE_BACKWARD = "backwards"
+const val ACTION_MOVE_BACKWARD = "backward"
 const val ACTION_NEUTRAL = "neutral"
 const val ACTION_BRAKING_STILL = "braking_still"
 const val ACTION_PARKING_BRAKE = "parking_brake"
@@ -101,6 +101,21 @@ else
             "&action=$ACTION_HANDBRAKE" +
             "&value=0")
 
+//---- Throttle / Brake / Neutral ----
+fun setNeutral() = doNonBlockingRequest("http://$serverIp:$serverPort/" +
+        "set_throttle_brake_system?id=${throttleBrakeActionId++}&action=$ACTION_NEUTRAL")
+
+fun setBrakingStill() = doNonBlockingRequest("http://$serverIp:$serverPort/" +
+        "set_throttle_brake_system?" +
+        "id=${throttleBrakeActionId++}" +
+        "&action=$ACTION_BRAKING_STILL")
+
+fun setThrottleBrake(direction: String, value: Int) = doNonBlockingRequest("http://$serverIp:$serverPort/" +
+        "set_throttle_brake_system?" +
+        "id=${throttleBrakeActionId++}" +
+        "&action=$direction" +
+        "&value=$value")
+
 
 /////////
 // General use
@@ -112,12 +127,12 @@ private fun doBlockingRequest(url:String) = runBlocking(CommonPool) { doRequest(
 private fun doRequest(url: String): String {
     var con: HttpURLConnection?
     val urlGet: URL
-    var inputStream: InputStream? = null
+    var requestInputStream: InputStream? = null
     val sb =  StringBuilder()
     try {
         urlGet = URL(url)
         con = urlGet.openConnection() as HttpURLConnection
-        inputStream = con.run {
+        requestInputStream = con.run {
             readTimeout = 10000 /* milliseconds */
             connectTimeout = 2000 /* milliseconds */
             requestMethod = "GET"
@@ -127,7 +142,7 @@ private fun doRequest(url: String): String {
             inputStream
         }
 
-        val bufferReader = BufferedReader(InputStreamReader(inputStream), 4096)
+        val bufferReader = BufferedReader(InputStreamReader(requestInputStream), 4096)
         var line: String?
 
         line = bufferReader.readLine()

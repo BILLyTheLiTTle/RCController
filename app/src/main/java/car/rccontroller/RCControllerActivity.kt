@@ -117,12 +117,28 @@ class RCControllerActivity : AppCompatActivity() {
         })
 
         throttleNbrake_mySeekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
-            override fun onStopTrackingTouch(seekBar: SeekBar) { seekBar.progress = 50 }
+            override fun onStopTrackingTouch(seekBar: SeekBar) { seekBar.progress = 10 }
             override fun onStartTrackingTouch(seekBar: SeekBar){
-				//TODO update server's motion variables (ThrottleBrakeSystem)
+				setNeutral()
+
                 changeMotionInteractiveIconsStatus()
             }
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean){}
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean){
+                when (progress) {
+                    0 -> setBrakingStill()
+                    10 -> setNeutral()
+                    20 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
+                    40 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
+                    50 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
+                    65 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
+                    75 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
+                    80 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
+                    85 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
+                    90 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
+                    95 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
+                    100 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
+                }
+            }
         })
     }
 
