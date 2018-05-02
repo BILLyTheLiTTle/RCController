@@ -30,6 +30,10 @@ class RCControllerActivity : AppCompatActivity() {
             hide()
         }
 
+        // disable them from here cuz it did not work from xml
+        steering_seekBar.isEnabled = false
+        throttleNbrake_mySeekBar.isEnabled = false
+
         //////
         //setup engine start-n-stop
         //////
@@ -38,7 +42,7 @@ class RCControllerActivity : AppCompatActivity() {
                 if(isEngineStarted) {
                     val status = stopEngine()
                     if (status == OK_DATA) {
-                        changeInteractiveIconsStatus()
+                        changeInteractiveUIItemsStatus()
                     } else {
                         Toast.makeText(context, status, Toast.LENGTH_LONG).show()
                     }
@@ -71,7 +75,7 @@ class RCControllerActivity : AppCompatActivity() {
                     }
                 }
                 else {
-                    changeInteractiveIconsStatus()
+                    changeInteractiveUIItemsStatus()
                 }
                 true
             }
@@ -104,7 +108,7 @@ class RCControllerActivity : AppCompatActivity() {
             //The blocking actions should not interfere with driving,
             // that's why they are on different listener
             setOnClickListener {_ ->
-                changeInteractiveIconsStatus()
+                changeInteractiveUIItemsStatus()
                 true
             }
         }
@@ -112,16 +116,30 @@ class RCControllerActivity : AppCompatActivity() {
 
         steering_seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) { seekBar.progress = 50 }
-            override fun onStartTrackingTouch(seekBar: SeekBar){}
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean){}
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                changeInteractiveUIItemsStatus()
+            }
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean){
+                when (progress) {
+                    0 -> setSteering(ACTION_TURN_LEFT, progress+100) //100% left
+                    10 -> setSteering(ACTION_TURN_LEFT, progress+70) //80% left
+                    20 -> setSteering(ACTION_TURN_LEFT, progress+40) //60% left
+                    30 -> setSteering(ACTION_TURN_LEFT, progress+10) //40% left
+                    40 -> setSteering(ACTION_TURN_LEFT, progress-20) //20% left
+                    50 -> setSteering(ACTION_STRAIGHT) //0% means straight
+                    60 -> setSteering(ACTION_TURN_RIGHT, progress-40) //20% right
+                    70 -> setSteering(ACTION_TURN_RIGHT, progress-30) //40% right
+                    80 -> setSteering(ACTION_TURN_RIGHT, progress-20) //60% right
+                    90 -> setSteering(ACTION_TURN_RIGHT, progress-10) //80% right
+                    100 -> setSteering(ACTION_TURN_RIGHT, progress) //100% right
+                }
+            }
         })
 
         throttleNbrake_mySeekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) { seekBar.progress = 10 }
-            override fun onStartTrackingTouch(seekBar: SeekBar){
-				setNeutral()
-
-                changeMotionInteractiveIconsStatus()
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+				changeInteractiveUIItemsStatus()
             }
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean){
                 when (progress) {
@@ -158,7 +176,7 @@ class RCControllerActivity : AppCompatActivity() {
 
                 val status = startEngine(serverIp, serverPort)
                 if (status == OK_DATA) {
-                    changeInteractiveIconsStatus()
+                    changeInteractiveUIItemsStatus()
                 } else {
                     Toast.makeText(context, status, Toast.LENGTH_LONG).show()
                 }
@@ -174,11 +192,19 @@ class RCControllerActivity : AppCompatActivity() {
         their state from the server for client to be up-to-date with
         server's data.
      */
-    private fun changeInteractiveIconsStatus(){
-        if (isEngineStarted)
+    private fun changeInteractiveUIItemsStatus(){
+        if (isEngineStarted) {
             engineStartStop_imageView.setImageResource(R.drawable.engine_started_stop_action)
-        else
+            steering_seekBar.isEnabled = true
+            steering_seekBar.progress = 50
+            throttleNbrake_mySeekBar.isEnabled = true
+            throttleNbrake_mySeekBar.progress = 10
+        }
+        else {
             engineStartStop_imageView.setImageResource(R.drawable.engine_stopped_start_action)
+            steering_seekBar.isEnabled = false
+            throttleNbrake_mySeekBar.isEnabled = false
+        }
 
         changeMotionInteractiveIconsStatus()
     }

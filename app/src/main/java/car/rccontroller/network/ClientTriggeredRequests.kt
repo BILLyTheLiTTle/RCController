@@ -27,8 +27,9 @@ get() = doBlockingRequest("http://${car.rccontroller.network.serverIp}:" +
             "${car.rccontroller.network.serverPort}/get_engine_state").toBoolean()
 
 fun startEngine(serverIp: String?, serverPort: Int?): String{
-    // reset this id to the client
+    //reset and get ready for new requests
     throttleBrakeActionId = 0
+    steeringDirectionId = 0
 
     car.rccontroller.network.serverIp = serverIp
     car.rccontroller.network.serverPort = serverPort
@@ -110,11 +111,32 @@ fun setBrakingStill() = doNonBlockingRequest("http://$serverIp:$serverPort/" +
         "id=${throttleBrakeActionId++}" +
         "&action=$ACTION_BRAKING_STILL")
 
-fun setThrottleBrake(direction: String, value: Int) = doNonBlockingRequest("http://$serverIp:$serverPort/" +
+fun setThrottleBrake(direction: String, value: Int) =
+    doNonBlockingRequest("http://$serverIp:$serverPort/" +
         "set_throttle_brake_system?" +
         "id=${throttleBrakeActionId++}" +
         "&action=$direction" +
         "&value=$value")
+
+
+/////////
+// Steering
+/////////
+const val ACTION_TURN_RIGHT = "right"
+const val ACTION_TURN_LEFT = "left"
+const val ACTION_STRAIGHT = "straight"
+// Initial value should be 0 cuz in server is -1
+var steeringDirectionId = 0
+val steeringDirection
+    get() = doBlockingRequest("http://$serverIp:$serverPort/" +
+            "get_steering_direction")
+
+fun setSteering(direction: String, value: Int = 0) =
+    doNonBlockingRequest("http://$serverIp:$serverPort/" +
+            "set_steering_system?" +
+            "id=${steeringDirectionId++}" +
+            "&direction=$direction" +
+            "&value=$value")
 
 
 /////////
