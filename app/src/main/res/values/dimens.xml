@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="width_feedback_area_critical">550dp</dimen>
+    <dimen name="height_feedback_area_critical">39dp</dimen>
+
+    <dimen name="width_imageViews_feedback_area_critical">45dp</dimen>
+    <dimen name="height_imageViews_feedback_area_critical">35dp</dimen>
+    <dimen name="margin_before_imageViews_feedback_area_critical">2dp</dimen>
+    <dimen name="margin_above_imageViews_feedback_area_critical">2dp</dimen>
+    <dimen name="margin_after_imageViews_feedback_area_critical">2dp</dimen>
+
+
+    <dimen name="width_inner_imageViews_feedback_area_critical">15dp</dimen>
+    <dimen name="height_inner_imageViews_feedback_area_critical">10dp</dimen>
+    <dimen name="margin_before_inner_imageViews_feedback_area_critical">5dp</dimen>
+    <dimen name="margin_after_inner_imageViews_feedback_area_critical">5dp</dimen>
+
+    <dimen name="width_feedback_area_info">0dp</dimen>
+    <dimen name="height_feedback_area_info">44dp</dimen>
+    <dimen name="margin_above_feedback_area_info">2dp</dimen>
+
+    <dimen name="width_imageViews_feedback_area_info">50dp</dimen>
+    <dimen name="height_imageViews_feedback_area_info">40dp</dimen>
+    <dimen name="margin_before_imageViews_feedback_area_info">2dp</dimen>
+    <dimen name="margin_above_imageViews_feedback_area_info">2dp</dimen>
+    <dimen name="margin_after_imageViews_feedback_area_info">2dp</dimen>
+
+    <dimen name="width_steering_seekBar">300dp</dimen>
+    <dimen name="margin_below_steering_seekBar">100dp</dimen>
+    <dimen name="margin_before_steering_seekBar">16dp</dimen>
+
+    <dimen name="textSize_vehicle_speed_textView">50sp</dimen>
+    <dimen name="margin_above_vehicle_speed_textView">90dp</dimen>
+
+    <dimen name="height_throttleNbrake_mySeekBar">300dp</dimen>
+    <dimen name="margin_throttleNbrake_mySeekBar">100dp</dimen>
+    <dimen name="margin_before_throttleNbrake_mySeekBar">5dp</dimen>
+    <dimen name="margin_after_throttleNbrake_mySeekBar">16dp</dimen>
+    <dimen name="margin_above_throttleNbrake_mySeekBar">10dp</dimen>
+    <dimen name="margin_below_throttleNbrake_mySeekBar">10dp</dimen>
+</resources>

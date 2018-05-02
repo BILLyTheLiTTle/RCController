@@ -5,4 +5,8 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="black_overlay">#66000000</color>
+
+    <color name="background_main_activity">#0099cc</color>
+
+    <color name="textColor_vehicle_speed_textView">#33b5e5</color>
 </resources>

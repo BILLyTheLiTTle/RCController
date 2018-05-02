@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="default_throttle_n_brake">10</integer>
+    <integer name="default_steering">50</integer>
+    <integer name="max_throttle_n_brake">100</integer>
+    <integer name="max_steering">100</integer>
+
+    <integer name="default_throttleBrakeActionId">0</integer>
+    <integer name="default_steeringDirectionId">0</integer>
+</resources>
