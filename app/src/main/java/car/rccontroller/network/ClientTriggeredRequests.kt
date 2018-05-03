@@ -1,6 +1,6 @@
 package car.rccontroller.network
 
-import android.content.res.Resources
+import android.content.Context
 import car.rccontroller.R
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
@@ -11,6 +11,13 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import android.content.Context.WIFI_SERVICE
+import android.net.wifi.WifiInfo
+import android.net.wifi.WifiManager
+import android.text.format.Formatter
+import android.util.Log
+import java.net.InetAddress
+import java.util.*
 
 
 const val OK_DATA = "OK"
@@ -18,7 +25,7 @@ const val NO_DATA = "NULL"
 
 var serverIp: String? = null
 var serverPort: Int? = null
-var resources: Resources? = null
+var context: Context? = null
 
 /////////
 // Engine
@@ -27,21 +34,20 @@ val isEngineStarted: Boolean
 get() = doBlockingRequest("http://${car.rccontroller.network.serverIp}:" +
             "${car.rccontroller.network.serverPort}/get_engine_state").toBoolean()
 
-fun startEngine(resources: Resources, serverIp: String?, serverPort: Int?): String{
+fun startEngine(context: Context, serverIp: String?, serverPort: Int?): String{
     //reset and get ready for new requests
-    throttleBrakeActionId = resources.getInteger(R.integer.default_throttleBrakeActionId)
-    steeringDirectionId = resources.getInteger(R.integer.default_steeringDirectionId)
+    throttleBrakeActionId = context.resources.getInteger(R.integer.default_throttleBrakeActionId)
+    steeringDirectionId = context.resources.getInteger(R.integer.default_steeringDirectionId)
 
     car.rccontroller.network.serverIp = serverIp
     car.rccontroller.network.serverPort = serverPort
-    car.rccontroller.network.resources = resources
-
+    car.rccontroller.network.context = context
 
     //TODO add the nanohttp ip and port when needed as argument to the handshake
-    val url = "http://${car.rccontroller.network.serverIp}:" +
-            "${car.rccontroller.network.serverPort}/start_engine"
-
-    return doBlockingRequest(url)
+    return doBlockingRequest("http://${car.rccontroller.network.serverIp}:" +
+            "${car.rccontroller.network.serverPort}/start_engine?" +
+            "nanohttp_client_ip=$myIP" +
+            "&nanohttp_client_port=${-1}")
 }
 
 fun stopEngine(): String {
@@ -181,5 +187,15 @@ private fun doRequest(url: String): String {
         sb.append(e.message ?: NO_DATA)
     }
     return sb.toString()
-
 }
+
+val myIP:String
+    get() {
+        val wifiMgr = context?.getSystemService(WIFI_SERVICE) as WifiManager?
+        val wifiInfo = wifiMgr?.connectionInfo
+        return if (wifiInfo != null) {
+            Formatter.formatIpAddress(wifiInfo.ipAddress)
+        }
+        else
+            NO_DATA
+    }

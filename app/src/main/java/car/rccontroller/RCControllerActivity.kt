@@ -10,6 +10,7 @@ import android.widget.SeekBar
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_rccontroller.*
 import car.rccontroller.network.*
+import java.net.InetAddress
 
 
 /**
@@ -178,7 +179,7 @@ class RCControllerActivity : AppCompatActivity() {
                 val serverPort = dialogView.findViewById<EditText>(R.id.serverPort_editText2).text
                         .toString().toIntOrNull()
 
-                val status = startEngine(resources, serverIp, serverPort)
+                val status = startEngine(context, serverIp, serverPort)
                 if (status == OK_DATA) {
                     changeInteractiveUIItemsStatus()
                 } else {
@@ -203,7 +204,7 @@ class RCControllerActivity : AppCompatActivity() {
             steering_seekBar.progress = resources.getInteger(R.integer.default_steering)
             throttleNbrake_mySeekBar.isEnabled = true
             throttleNbrake_mySeekBar.progress = resources.
-                getInteger(R.integer.default_throttleBrakeActionId);
+                getInteger(R.integer.default_throttle_n_brake);
         }
         else {
             engineStartStop_imageView.setImageResource(R.drawable.engine_stopped_start_action)
