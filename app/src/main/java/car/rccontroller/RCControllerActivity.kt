@@ -114,6 +114,23 @@ class RCControllerActivity : AppCompatActivity() {
             }
         }
 
+        //////
+        // setup reverse
+        //////
+        reverse_imageView. apply {
+            setOnLongClickListener { _ ->
+                // If, for any reason, engine is stopped I should not do anything
+                if(isEngineStarted) {
+                    reverseIntention = !reverseIntention
+                }
+                changeInteractiveUIItemsStatus()
+                true
+            }
+            setOnClickListener {_ ->
+                Toast.makeText(context, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
+                true
+            }
+        }
 
         steering_seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
@@ -122,7 +139,7 @@ class RCControllerActivity : AppCompatActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar) {
                 changeInteractiveUIItemsStatus()
             }
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean){
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 when (progress) {
                     0 -> setSteering(ACTION_TURN_LEFT, progress+100) //100% left
                     10 -> setSteering(ACTION_TURN_LEFT, progress+70) //80% left
@@ -144,22 +161,27 @@ class RCControllerActivity : AppCompatActivity() {
                 seekBar.progress = resources.getInteger(R.integer.default_throttle_n_brake)
             }
             override fun onStartTrackingTouch(seekBar: SeekBar) {
+                activateHandbrake(false)
+                activateParkingBrake(false)
+                setBrakingStill()// or setNeutral()? TODO Will see in action
+
 				changeInteractiveUIItemsStatus()
             }
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean){
+                val direction = if (reverseIntention) ACTION_MOVE_BACKWARD else ACTION_MOVE_FORWARD
                 when (progress) {
                     0 -> setBrakingStill()
                     10 -> setNeutral()
-                    20 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
-                    40 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
-                    50 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
-                    65 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
-                    75 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
-                    80 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
-                    85 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
-                    90 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
-                    95 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
-                    100 -> setThrottleBrake(ACTION_MOVE_FORWARD, progress)
+                    20 -> setThrottleBrake(direction, progress)
+                    40 -> setThrottleBrake(direction, progress)
+                    50 -> setThrottleBrake(direction, progress)
+                    65 -> setThrottleBrake(direction, progress)
+                    75 -> setThrottleBrake(direction, progress)
+                    80 -> setThrottleBrake(direction, progress)
+                    85 -> setThrottleBrake(direction, progress)
+                    90 -> setThrottleBrake(direction, progress)
+                    95 -> setThrottleBrake(direction, progress)
+                    100 -> setThrottleBrake(direction, progress)
                 }
             }
         })
@@ -205,11 +227,16 @@ class RCControllerActivity : AppCompatActivity() {
             throttleNbrake_mySeekBar.isEnabled = true
             throttleNbrake_mySeekBar.progress = resources.
                 getInteger(R.integer.default_throttle_n_brake);
+            if (reverseIntention)
+                reverse_imageView.setImageResource(R.drawable.reverse_on)
+            else
+                reverse_imageView.setImageResource(R.drawable.reverse_off)
         }
         else {
             engineStartStop_imageView.setImageResource(R.drawable.engine_stopped_start_action)
             steering_seekBar.isEnabled = false
             throttleNbrake_mySeekBar.isEnabled = false
+            reverse_imageView.setImageResource(R.drawable.reverse_off)
         }
 
         changeMotionInteractiveIconsStatus()

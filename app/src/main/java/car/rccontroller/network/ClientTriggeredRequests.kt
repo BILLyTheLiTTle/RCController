@@ -39,6 +39,12 @@ fun startEngine(context: Context, serverIp: String?, serverPort: Int?): String{
     throttleBrakeActionId = context.resources.getInteger(R.integer.default_throttleBrakeActionId)
     steeringDirectionId = context.resources.getInteger(R.integer.default_steeringDirectionId)
 
+    /* The server will know when car is moving backward and not when the car is going to move
+        backward in the next throttle action. The default state for this “ImageView” will be
+        false (means not backward). So, this local variable must be reset at every start.
+     */
+    reverseIntention = false
+
     car.rccontroller.network.serverIp = serverIp
     car.rccontroller.network.serverPort = serverPort
     car.rccontroller.network.context = context
@@ -111,7 +117,9 @@ else
             "&action=$ACTION_HANDBRAKE" +
             "&value=0")
 
-//---- Throttle / Brake / Neutral ----
+//---- Throttle / Brake / Neutral / Reverse ----
+var reverseIntention = false
+
 fun setNeutral() = doNonBlockingRequest("http://$serverIp:$serverPort/" +
         "set_throttle_brake_system?id=${throttleBrakeActionId++}&action=$ACTION_NEUTRAL")
 
