@@ -5,6 +5,7 @@
     <string name="tachometer">0 km/h</string>
 
     <string name="long_click_info">Long-click to interact</string>
+    <string name="cruise_control_info">Cruise Control activated.\nUse throttle to deactivate it</string>
 
     <string name="server_dialog_title">Server IP and Port</string>
     <string name="server_dialog_msg">Set IP and port</string>

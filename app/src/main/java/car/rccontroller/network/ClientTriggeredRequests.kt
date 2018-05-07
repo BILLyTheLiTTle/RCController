@@ -12,12 +12,8 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import android.content.Context.WIFI_SERVICE
-import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.text.format.Formatter
-import android.util.Log
-import java.net.InetAddress
-import java.util.*
 
 
 const val OK_DATA = "OK"

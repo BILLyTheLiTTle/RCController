@@ -10,16 +10,15 @@ import android.widget.SeekBar
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_rccontroller.*
 import car.rccontroller.network.*
-import java.net.InetAddress
 
 
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
+ * An full-screen activity in landscape mode.
  */
 class RCControllerActivity : AppCompatActivity() {
 
     private var doubleBackToExitPressedOnce = false
+    private var cruiseControlActive = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -132,6 +131,27 @@ class RCControllerActivity : AppCompatActivity() {
             }
         }
 
+        //////
+        // setup cruise control
+        //////
+        cc_imageView. apply {
+            setOnLongClickListener { _ ->
+                // If, for any reason, engine is stopped I should not do anything
+                if(isEngineStarted) {
+                    if (cruiseControlActive) {
+                        Toast.makeText(context, getString(R.string.cruise_control_info), Toast.LENGTH_SHORT).show()
+                    }
+                    cruiseControlActive = true
+                }
+                changeInteractiveUIItemsStatus()
+                true
+            }
+            setOnClickListener {_ ->
+                Toast.makeText(context, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
+                true
+            }
+        }
+
         steering_seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 seekBar.progress = resources.getInteger(R.integer.default_steering)
@@ -158,9 +178,13 @@ class RCControllerActivity : AppCompatActivity() {
 
         throttleNbrake_mySeekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                seekBar.progress = resources.getInteger(R.integer.default_throttle_n_brake)
+                if(!cruiseControlActive) {
+                    seekBar.progress = resources.getInteger(R.integer.default_throttle_n_brake)
+                }
             }
             override fun onStartTrackingTouch(seekBar: SeekBar) {
+                cruiseControlActive = false
+
                 activateHandbrake(false)
                 activateParkingBrake(false)
                 setBrakingStill()// or setNeutral()? TODO Will see in action
@@ -231,12 +255,19 @@ class RCControllerActivity : AppCompatActivity() {
                 reverse_imageView.setImageResource(R.drawable.reverse_on)
             else
                 reverse_imageView.setImageResource(R.drawable.reverse_off)
+            if (cruiseControlActive)
+                cc_imageView.setImageResource(R.drawable.cruise_control_on)
+            else
+                cc_imageView.setImageResource(R.drawable.cruise_control_off)
         }
         else {
             engineStartStop_imageView.setImageResource(R.drawable.engine_stopped_start_action)
             steering_seekBar.isEnabled = false
             throttleNbrake_mySeekBar.isEnabled = false
             reverse_imageView.setImageResource(R.drawable.reverse_off)
+            //reset the cruise control flag
+            cruiseControlActive = false
+            cc_imageView.setImageResource(R.drawable.cruise_control_off)
         }
 
         changeMotionInteractiveIconsStatus()
