@@ -102,7 +102,7 @@
         app:srcCompat="@drawable/car_temps_off" />
 
     <ImageView
-        android:id="@+id/frontDriverMotorTemps_imageView"
+        android:id="@+id/frontLeftMotorTemps_imageView"
         android:layout_width="@dimen/width_inner_imageViews_feedback_area_critical"
         android:layout_height="@dimen/height_inner_imageViews_feedback_area_critical"
         android:scaleType="fitCenter"
@@ -110,7 +110,7 @@
         app:layout_constraintTop_toTopOf="@+id/carTemps_imageView"/>
 
     <ImageView
-        android:id="@+id/frontCoDriverMotorTemps_imageView"
+        android:id="@+id/frontRightMotorTemps_imageView"
         android:layout_width="@dimen/width_inner_imageViews_feedback_area_critical"
         android:layout_height="@dimen/height_inner_imageViews_feedback_area_critical"
         android:scaleType="fitCenter"
@@ -125,12 +125,12 @@
         android:layout_marginLeft="@dimen/margin_before_inner_imageViews_feedback_area_critical"
         android:layout_marginStart="@dimen/margin_before_inner_imageViews_feedback_area_critical"
         android:scaleType="fitCenter"
-        app:layout_constraintStart_toStartOf="@+id/frontDriverMotorTemps_imageView"
-        app:layout_constraintTop_toBottomOf="@+id/frontDriverMotorTemps_imageView"
-        app:layout_constraintBottom_toTopOf="@+id/frontCoDriverMotorTemps_imageView"/>
+        app:layout_constraintStart_toStartOf="@+id/frontLeftMotorTemps_imageView"
+        app:layout_constraintTop_toBottomOf="@+id/frontLeftMotorTemps_imageView"
+        app:layout_constraintBottom_toTopOf="@+id/frontRightMotorTemps_imageView"/>
 
     <ImageView
-        android:id="@+id/rearDriverMotorTemps_imageView"
+        android:id="@+id/rearLeftMotorTemps_imageView"
         android:layout_width="@dimen/width_inner_imageViews_feedback_area_critical"
         android:layout_height="@dimen/height_inner_imageViews_feedback_area_critical"
         android:scaleType="fitCenter"
@@ -138,7 +138,7 @@
         app:layout_constraintTop_toTopOf="@+id/carTemps_imageView"/>
 
     <ImageView
-        android:id="@+id/rearCoDriverMotorTemps_imageView"
+        android:id="@+id/rearRightMotorTemps_imageView"
         android:layout_width="@dimen/width_inner_imageViews_feedback_area_critical"
         android:layout_height="@dimen/height_inner_imageViews_feedback_area_critical"
         android:scaleType="fitCenter"
@@ -153,9 +153,9 @@
         android:layout_marginRight="@dimen/margin_after_inner_imageViews_feedback_area_critical"
         android:layout_marginEnd="@dimen/margin_after_inner_imageViews_feedback_area_critical"
         android:scaleType="fitCenter"
-        app:layout_constraintEnd_toEndOf="@+id/rearDriverMotorTemps_imageView"
-        app:layout_constraintTop_toBottomOf="@+id/rearDriverMotorTemps_imageView"
-        app:layout_constraintBottom_toTopOf="@+id/rearCoDriverMotorTemps_imageView"
+        app:layout_constraintEnd_toEndOf="@+id/rearLeftMotorTemps_imageView"
+        app:layout_constraintTop_toBottomOf="@+id/rearLeftMotorTemps_imageView"
+        app:layout_constraintBottom_toTopOf="@+id/rearRightMotorTemps_imageView"
         android:rotation="180"/>
 
     <ImageView
