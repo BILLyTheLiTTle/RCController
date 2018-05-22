@@ -4,7 +4,10 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AlertDialog
+import android.util.Log
+import android.view.GestureDetector
 import android.view.MotionEvent
+import android.view.View
 import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.Toast
@@ -148,6 +151,37 @@ class RCControllerActivity : AppCompatActivity() {
             }
             setOnClickListener {_ ->
                 Toast.makeText(context, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
+                true
+            }
+        }
+
+
+        //////
+        // setup main lights
+        //////
+        val gestureDetector = GestureDetector(this,
+            object: GestureDetector.SimpleOnGestureListener(){
+                override fun onDoubleTap(e: MotionEvent): Boolean {
+                    Log.e("E", "DOUBLE")
+                    return true
+                }
+
+                override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                    Log.e("E", "SINGLE")
+                    return true
+                }
+        })
+        lights_imageView. apply {
+            setOnTouchListener{_, event -> gestureDetector.onTouchEvent(event);}
+            setOnLongClickListener { _ ->
+                // If, for any reason, engine is stopped I should not do anything
+                if(isEngineStarted) {
+                    if (cruiseControlActive) {
+                        Toast.makeText(context, getString(R.string.cruise_control_info), Toast.LENGTH_SHORT).show()
+                    }
+                    cruiseControlActive = true
+                }
+                changeInteractiveUIItemsStatus()
                 true
             }
         }
