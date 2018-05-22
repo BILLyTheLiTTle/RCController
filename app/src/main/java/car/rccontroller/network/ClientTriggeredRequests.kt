@@ -153,6 +153,25 @@ fun setSteering(direction: String, value: Int = 0) =
 
 
 /////////
+// Main Lights
+/////////
+const val LIGHTS_OFF = "lights_off"
+const val POSITION_LIGHTS = "position_lights"
+const val DRIVING_LIGHTS = "driving_lights"
+const val LONG_RANGE_LIGHTS = "long_range_lights"
+const val LONG_RANGE_SIGNAL_LIGHTS = "long_range_signal_lights"
+var mainLightsState: String
+    set(value) {
+        doBlockingRequest("http://$serverIp:$serverPort/" +
+                "set_main_lights_state?" +
+                "value=$value")
+    }
+    get() = doBlockingRequest("http://$serverIp:$serverPort/" +
+                "get_main_lights_state")
+
+
+
+/////////
 // General use
 /////////
 private fun doNonBlockingRequest(url:String) = launch { doRequest(url) }

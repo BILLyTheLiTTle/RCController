@@ -162,12 +162,12 @@ class RCControllerActivity : AppCompatActivity() {
         val gestureDetector = GestureDetector(this,
             object: GestureDetector.SimpleOnGestureListener(){
                 override fun onDoubleTap(e: MotionEvent): Boolean {
-                    Log.e("E", "DOUBLE")
+                    Log.e("E", mainLightsState)
                     return true
                 }
 
                 override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-                    Log.e("E", "SINGLE")
+                    mainLightsState = POSITION_LIGHTS
                     return true
                 }
         })
