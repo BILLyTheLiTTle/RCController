@@ -114,7 +114,12 @@ else
             "&value=0")
 
 //---- Throttle / Brake / Neutral / Reverse ----
-var reverseIntention = false
+var reverseIntention: Boolean
+    get() = doBlockingRequest("http://$serverIp:$serverPort/" +
+            "get_reverse_lights_state").toBoolean()
+    set(value) {doBlockingRequest("http://$serverIp:$serverPort/" +
+            "set_reverse_lights_state?" +
+            "state=$value")}
 
 fun setNeutral() = doNonBlockingRequest("http://$serverIp:$serverPort/" +
         "set_throttle_brake_system?id=${throttleBrakeActionId++}&action=$ACTION_NEUTRAL")
