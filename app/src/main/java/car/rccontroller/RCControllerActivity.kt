@@ -162,12 +162,35 @@ class RCControllerActivity : AppCompatActivity() {
         val gestureDetector = GestureDetector(this,
             object: GestureDetector.SimpleOnGestureListener(){
                 override fun onDoubleTap(e: MotionEvent): Boolean {
-                    Log.e("E", mainLightsState)
+                    if (isEngineStarted){
+                        when (mainLightsState) {
+                            LIGHTS_OFF -> mainLightsState = POSITION_LIGHTS
+                            POSITION_LIGHTS -> mainLightsState = DRIVING_LIGHTS
+                            DRIVING_LIGHTS -> mainLightsState = LONG_RANGE_LIGHTS
+                            LONG_RANGE_LIGHTS -> Toast.makeText(context,
+                                    getString(R.string.long_range_lights_warning),
+                                    Toast.LENGTH_SHORT).show()
+                        }
+                        // update the icon using server info for verification
+                        changeInteractiveUIItemsStatus()
+                    }
                     return true
                 }
 
                 override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-                    mainLightsState = POSITION_LIGHTS
+                    if (isEngineStarted){
+                        when (mainLightsState) {
+                            LONG_RANGE_LIGHTS -> mainLightsState = DRIVING_LIGHTS
+                            DRIVING_LIGHTS -> mainLightsState = POSITION_LIGHTS
+                            POSITION_LIGHTS -> mainLightsState = LIGHTS_OFF
+                            LIGHTS_OFF ->
+                                Toast.makeText(context,
+                                    getString(R.string.lights_off_warning),
+                                    Toast.LENGTH_SHORT).show()
+                        }
+                        // update the icon using server info for verification
+                        changeInteractiveUIItemsStatus()
+                    }
                     return true
                 }
         })
@@ -176,10 +199,7 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted) {
-                    if (cruiseControlActive) {
-                        Toast.makeText(context, getString(R.string.cruise_control_info), Toast.LENGTH_SHORT).show()
-                    }
-                    cruiseControlActive = true
+                    mainLightsState = LONG_RANGE_SIGNAL_LIGHTS
                 }
                 changeInteractiveUIItemsStatus()
                 true
@@ -280,28 +300,44 @@ class RCControllerActivity : AppCompatActivity() {
     private fun changeInteractiveUIItemsStatus(){
         if (isEngineStarted) {
             engineStartStop_imageView.setImageResource(R.drawable.engine_started_stop_action)
+
             steering_seekBar.isEnabled = true
             steering_seekBar.progress = resources.getInteger(R.integer.default_steering)
+
             throttleNbrake_mySeekBar.isEnabled = true
             throttleNbrake_mySeekBar.progress = resources.
                 getInteger(R.integer.default_throttle_n_brake);
+
             if (reverseIntention)
                 reverse_imageView.setImageResource(R.drawable.reverse_on)
             else
                 reverse_imageView.setImageResource(R.drawable.reverse_off)
+
             if (cruiseControlActive)
                 cc_imageView.setImageResource(R.drawable.cruise_control_on)
             else
                 cc_imageView.setImageResource(R.drawable.cruise_control_off)
+
+            when (mainLightsState) {
+                LONG_RANGE_LIGHTS -> lights_imageView.setImageResource(R.drawable.lights_long_range)
+                DRIVING_LIGHTS -> lights_imageView.setImageResource(R.drawable.lights_driving)
+                POSITION_LIGHTS -> lights_imageView.setImageResource(R.drawable.lights_position)
+                LIGHTS_OFF -> lights_imageView.setImageResource(R.drawable.lights_off)
+            }
         }
         else {
             engineStartStop_imageView.setImageResource(R.drawable.engine_stopped_start_action)
+
             steering_seekBar.isEnabled = false
             throttleNbrake_mySeekBar.isEnabled = false
+
             reverse_imageView.setImageResource(R.drawable.reverse_off)
+
             //reset the cruise control flag
             cruiseControlActive = false
             cc_imageView.setImageResource(R.drawable.cruise_control_off)
+
+            lights_imageView.setImageResource(R.drawable.lights_off)
         }
 
         changeMotionInteractiveIconsStatus()
