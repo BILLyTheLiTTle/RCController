@@ -45,6 +45,16 @@ class RCControllerActivity : AppCompatActivity() {
                 if(isEngineStarted) {
                     val status = stopEngine()
                     if (status == OK_DATA) {
+                        /* This function works even after I set the server ip and port to null
+                            because "bullshit".toBoolean() equals false!
+
+                            TODO or not TODO, that's the question
+                            1. There will be another function which resets the states of the variables
+                            used for updating the UI items,
+                            2. then call the changeInteractiveUIItemsStatus() to update the
+                            UI items
+                            3. and then call the stopEngine().
+                         */
                         changeInteractiveUIItemsStatus()
                     } else {
                         Toast.makeText(context, status, Toast.LENGTH_LONG).show()
