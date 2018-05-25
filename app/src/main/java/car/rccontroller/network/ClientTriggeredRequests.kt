@@ -175,6 +175,22 @@ var mainLightsState: String
                 "get_main_lights_state")
 
 
+/////////
+// Turn Lights (Left/Right/Straight)
+/////////
+const val TURN_LIGHT_RIGHT = "turn_lights_right"
+const val TURN_LIGHT_LEFT = "turn_lights_left"
+const val TURN_LIGHT_STRAIGHT = "turn_lights_straight"
+var turnLights: String
+    set(value) {
+        doBlockingRequest("http://$serverIp:$serverPort/" +
+                "set_direction_lights?" +
+                "direction=$value")
+    }
+    get() = doBlockingRequest("http://$serverIp:$serverPort/" +
+            "get_direction_lights")
+
+
 
 /////////
 // General use

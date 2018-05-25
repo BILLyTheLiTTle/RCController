@@ -216,6 +216,41 @@ class RCControllerActivity : AppCompatActivity() {
             }
         }
 
+        //////
+        // setup left turn lights
+        //////
+        leftTurn_imageView. apply {
+            setOnLongClickListener { _ ->
+                // If, for any reason, engine is stopped I should not do anything
+                if(isEngineStarted) {
+                    turnLights = TURN_LIGHT_LEFT
+                }
+                changeTurnLightsInteractiveItemsStatus()
+                true
+            }
+            setOnClickListener {_ ->
+                Toast.makeText(context, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
+                true
+            }
+        }
+        //////
+        // setup right turn lights
+        //////
+        rightTurn_imageView. apply {
+            setOnLongClickListener { _ ->
+                // If, for any reason, engine is stopped I should not do anything
+                if(isEngineStarted) {
+                    turnLights = TURN_LIGHT_RIGHT
+                }
+                changeTurnLightsInteractiveItemsStatus()
+                true
+            }
+            setOnClickListener {_ ->
+                Toast.makeText(context, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
+                true
+            }
+        }
+
         steering_seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 seekBar.progress = resources.getInteger(R.integer.default_steering)
@@ -351,11 +386,12 @@ class RCControllerActivity : AppCompatActivity() {
         }
 
         changeMotionInteractiveIconsStatus()
+        changeTurnLightsInteractiveItemsStatus()
     }
     /* Motion interactive actions must be depending on each other.
         Their states on the server should be changed by set methods.
         This function here should get these states which must be as I want,
-        but if they don't check the set functions between client-server.
+        and if they don't check the set functions between client-server.
      */
     private fun changeMotionInteractiveIconsStatus(){
         if(isParkingBrakeActive)
@@ -367,6 +403,32 @@ class RCControllerActivity : AppCompatActivity() {
             handbrake_imageView.setImageResource(R.drawable.handbrake_on)
         else
             handbrake_imageView.setImageResource(R.drawable.handbrake_off)
+    }
+
+    /* Turn lights interactive items must be depending on each other.
+        Their states on the server should be changed by set methods.
+        This function here should get these states which must be as I want,
+        and if they don't check the set functions between client-server.
+     */
+    private fun changeTurnLightsInteractiveItemsStatus() {
+        when (turnLights) {
+            TURN_LIGHT_STRAIGHT -> {
+                leftTurn_imageView.setImageResource(R.drawable.turn_light_off)
+                rightTurn_imageView.setImageResource(R.drawable.turn_light_off)
+            }
+            TURN_LIGHT_LEFT -> {
+                rightTurn_imageView.setImageResource(R.drawable.turn_light_off)
+                leftTurn_imageView.setImageResource(R.drawable.turn_light_on)
+            }
+            TURN_LIGHT_RIGHT -> {
+                leftTurn_imageView.setImageResource(R.drawable.turn_light_off)
+                rightTurn_imageView.setImageResource(R.drawable.turn_light_on)
+            }
+            else -> {
+                leftTurn_imageView.setImageResource(R.drawable.turn_light_on)
+                rightTurn_imageView.setImageResource(R.drawable.turn_light_on)
+            }
+        }
     }
 
     override fun onPause() {
