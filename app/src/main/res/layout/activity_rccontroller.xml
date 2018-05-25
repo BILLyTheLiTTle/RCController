@@ -202,8 +202,7 @@
         android:layout_marginTop="@dimen/margin_above_imageViews_feedback_area_info"
         android:scaleType="fitCenter"
         app:layout_constraintStart_toStartOf="@+id/feedback_area_info"
-        app:layout_constraintTop_toTopOf="@+id/feedback_area_info"
-        app:srcCompat="@drawable/turn_light_off" />
+        app:layout_constraintTop_toTopOf="@+id/feedback_area_info"/>
 
     <ImageView
         android:id="@+id/emergency_imageView"
@@ -227,7 +226,6 @@
         android:scaleType="fitCenter"
         app:layout_constraintStart_toEndOf="@+id/emergency_imageView"
         app:layout_constraintTop_toTopOf="@+id/feedback_area_info"
-        app:srcCompat="@drawable/turn_light_off"
         android:rotation="180"/>
 
     <ImageView

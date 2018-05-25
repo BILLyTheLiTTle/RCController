@@ -1,5 +1,6 @@
 package car.rccontroller
 
+import android.graphics.drawable.AnimationDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -22,6 +23,9 @@ class RCControllerActivity : AppCompatActivity() {
 
     private var doubleBackToExitPressedOnce = false
     private var cruiseControlActive = false
+
+    private val leftTurnLightAnimation = AnimationDrawable()
+    private val rightTurnLightAnimation= AnimationDrawable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -219,7 +223,11 @@ class RCControllerActivity : AppCompatActivity() {
         //////
         // setup left turn lights
         //////
+        leftTurnLightAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_off),400)
+        leftTurnLightAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_on),400)
+        leftTurnLightAnimation.isOneShot = false
         leftTurn_imageView. apply {
+            setBackgroundDrawable(leftTurnLightAnimation)
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted) {
@@ -236,7 +244,11 @@ class RCControllerActivity : AppCompatActivity() {
         //////
         // setup right turn lights
         //////
+        rightTurnLightAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_off),400)
+        rightTurnLightAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_on),400)
+        rightTurnLightAnimation.isOneShot = false
         rightTurn_imageView. apply {
+            setBackgroundDrawable(rightTurnLightAnimation)
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted) {
@@ -413,20 +425,26 @@ class RCControllerActivity : AppCompatActivity() {
     private fun changeTurnLightsInteractiveItemsStatus() {
         when (turnLights) {
             TURN_LIGHT_STRAIGHT -> {
-                leftTurn_imageView.setImageResource(R.drawable.turn_light_off)
-                rightTurn_imageView.setImageResource(R.drawable.turn_light_off)
+                leftTurnLightAnimation.stop()
+                leftTurnLightAnimation.selectDrawable(0)
+                rightTurnLightAnimation.stop()
+                rightTurnLightAnimation.selectDrawable(0)
             }
             TURN_LIGHT_LEFT -> {
-                rightTurn_imageView.setImageResource(R.drawable.turn_light_off)
-                leftTurn_imageView.setImageResource(R.drawable.turn_light_on)
+                rightTurnLightAnimation.stop()
+                rightTurnLightAnimation.selectDrawable(0)
+                leftTurnLightAnimation.start()
             }
             TURN_LIGHT_RIGHT -> {
-                leftTurn_imageView.setImageResource(R.drawable.turn_light_off)
-                rightTurn_imageView.setImageResource(R.drawable.turn_light_on)
+                leftTurnLightAnimation.stop()
+                leftTurnLightAnimation.selectDrawable(0)
+                rightTurnLightAnimation.start()
             }
             else -> {
-                leftTurn_imageView.setImageResource(R.drawable.turn_light_on)
-                rightTurn_imageView.setImageResource(R.drawable.turn_light_on)
+                leftTurnLightAnimation.stop()
+                leftTurnLightAnimation.selectDrawable(1)
+                rightTurnLightAnimation.stop()
+                rightTurnLightAnimation.selectDrawable(1)
             }
         }
     }
