@@ -13,7 +13,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 import android.net.wifi.WifiManager
 import android.text.format.Formatter
-import android.util.Log
 
 
 const val OK_DATA = "OK"
@@ -47,9 +46,8 @@ fun startEngine(context: Context, serverIp: String?, serverPort: Int?): String{
     car.rccontroller.network.serverPort = serverPort
     car.rccontroller.network.context = context
 
-    Log.e("IP", myIP)
+    if(::androidWebServer.isInitialized) androidWebServer.stop()
     androidWebServer = if (myIP == "0.0.0.0") Server() else Server(myIP, 8080)
-
     androidWebServer.start()
 
     //TODO add the nanohttp ip and port when needed as argument to the handshake
@@ -187,9 +185,9 @@ var mainLightsState: String
 /////////
 // Turn Lights (Left/Right/Straight)
 /////////
-const val TURN_LIGHT_RIGHT = "turn_lights_right"
-const val TURN_LIGHT_LEFT = "turn_lights_left"
-const val TURN_LIGHT_STRAIGHT = "turn_lights_straight"
+const val TURN_LIGHTS_RIGHT = "turn_lights_right"
+const val TURN_LIGHTS_LEFT = "turn_lights_left"
+const val TURN_LIGHTS_STRAIGHT = "turn_lights_straight"
 var turnLights: String
     set(value) {
         doBlockingRequest("http://$serverIp:$serverPort/" +

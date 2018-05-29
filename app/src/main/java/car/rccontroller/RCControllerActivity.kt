@@ -231,7 +231,7 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted) {
-                    turnLights = TURN_LIGHT_LEFT
+                    turnLights = TURN_LIGHTS_LEFT
                 }
                 changeTurnLightsInteractiveItemsStatus()
                 true
@@ -252,7 +252,7 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted) {
-                    turnLights = TURN_LIGHT_RIGHT
+                    turnLights = TURN_LIGHTS_RIGHT
                 }
                 changeTurnLightsInteractiveItemsStatus()
                 true
@@ -277,7 +277,10 @@ class RCControllerActivity : AppCompatActivity() {
                     20 -> setSteering(ACTION_TURN_LEFT, progress+40) //60% left
                     30 -> setSteering(ACTION_TURN_LEFT, progress+10) //40% left
                     40 -> setSteering(ACTION_TURN_LEFT, progress-20) //20% left
-                    50 -> setSteering(ACTION_STRAIGHT) //0% means straight
+                    50 -> {
+                        setSteering(ACTION_STRAIGHT)
+                        changeTurnLightsInteractiveItemsStatus()
+                    } //0% means straight
                     60 -> setSteering(ACTION_TURN_RIGHT, progress-40) //20% right
                     70 -> setSteering(ACTION_TURN_RIGHT, progress-30) //40% right
                     80 -> setSteering(ACTION_TURN_RIGHT, progress-20) //60% right
@@ -424,18 +427,18 @@ class RCControllerActivity : AppCompatActivity() {
      */
     private fun changeTurnLightsInteractiveItemsStatus() {
         when (turnLights) {
-            TURN_LIGHT_STRAIGHT -> {
+            TURN_LIGHTS_STRAIGHT -> {
                 leftTurnLightAnimation.stop()
                 leftTurnLightAnimation.selectDrawable(0)
                 rightTurnLightAnimation.stop()
                 rightTurnLightAnimation.selectDrawable(0)
             }
-            TURN_LIGHT_LEFT -> {
+            TURN_LIGHTS_LEFT -> {
                 rightTurnLightAnimation.stop()
                 rightTurnLightAnimation.selectDrawable(0)
                 leftTurnLightAnimation.start()
             }
-            TURN_LIGHT_RIGHT -> {
+            TURN_LIGHTS_RIGHT -> {
                 leftTurnLightAnimation.stop()
                 leftTurnLightAnimation.selectDrawable(0)
                 rightTurnLightAnimation.start()
