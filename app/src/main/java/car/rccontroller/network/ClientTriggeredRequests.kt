@@ -11,9 +11,9 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
-import android.content.Context.WIFI_SERVICE
 import android.net.wifi.WifiManager
 import android.text.format.Formatter
+import android.util.Log
 
 
 const val OK_DATA = "OK"
@@ -22,6 +22,8 @@ const val NO_DATA = "NULL"
 var serverIp: String? = null
 var serverPort: Int? = null
 var context: Context? = null
+
+private lateinit var androidWebServer:Server
 
 /////////
 // Engine
@@ -45,11 +47,16 @@ fun startEngine(context: Context, serverIp: String?, serverPort: Int?): String{
     car.rccontroller.network.serverPort = serverPort
     car.rccontroller.network.context = context
 
+    Log.e("IP", myIP)
+    androidWebServer = if (myIP == "0.0.0.0") Server() else Server(myIP, 8080)
+
+    androidWebServer.start()
+
     //TODO add the nanohttp ip and port when needed as argument to the handshake
     return doBlockingRequest("http://${car.rccontroller.network.serverIp}:" +
             "${car.rccontroller.network.serverPort}/start_engine?" +
-            "nanohttp_client_ip=$myIP" +
-            "&nanohttp_client_port=${-1}")
+            "nanohttp_client_ip=${androidWebServer.ip}" +
+            "&nanohttp_client_port=${androidWebServer.port}")
 }
 
 fun stopEngine(): String {
@@ -60,6 +67,8 @@ fun stopEngine(): String {
         serverIp = null
         serverPort = null
     }
+
+    androidWebServer.stop()
 
     return msg
 }
@@ -235,7 +244,7 @@ private fun doRequest(url: String): String {
 
 val myIP:String
     get() {
-        val wifiMgr = context?.getSystemService(WIFI_SERVICE) as WifiManager?
+        val wifiMgr = context?.getSystemService(Context.WIFI_SERVICE) as WifiManager?
         val wifiInfo = wifiMgr?.connectionInfo
         return if (wifiInfo != null) {
             Formatter.formatIpAddress(wifiInfo.ipAddress)
