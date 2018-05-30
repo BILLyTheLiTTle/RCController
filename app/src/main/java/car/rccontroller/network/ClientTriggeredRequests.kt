@@ -198,6 +198,20 @@ var turnLights: String
             "get_direction_lights")
 
 
+/////////
+// Emergency Lights
+/////////
+const val EMERGENCY_LIGHTS = "emergency_lights"
+var emergencyLights: Boolean
+    set(value) {
+        doBlockingRequest("http://$serverIp:$serverPort/" +
+                "set_emergency_lights_state?" +
+                "state=$value")
+    }
+    get() = doBlockingRequest("http://$serverIp:$serverPort/" +
+            "get_emergency_lights_state").toBoolean()
+
+
 
 /////////
 // General use

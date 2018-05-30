@@ -26,6 +26,7 @@ class RCControllerActivity : AppCompatActivity() {
 
     private val leftTurnLightAnimation = AnimationDrawable()
     private val rightTurnLightAnimation= AnimationDrawable()
+    private val emergencyLightsAnimation= AnimationDrawable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -263,6 +264,28 @@ class RCControllerActivity : AppCompatActivity() {
             }
         }
 
+        //////
+        // setup emergency lights
+        //////
+        emergencyLightsAnimation.addFrame(resources.getDrawable(R.drawable.emergency_lights_off),400)
+        emergencyLightsAnimation.addFrame(resources.getDrawable(R.drawable.emergency_lights_on),400)
+        emergencyLightsAnimation.isOneShot = false
+        emergency_imageView. apply {
+            setBackgroundDrawable(emergencyLightsAnimation)
+            setOnLongClickListener { _ ->
+                // If, for any reason, engine is stopped I should not do anything
+                if (isEngineStarted) {
+                    emergencyLights = !emergencyLights
+                }
+                changeInteractiveUIItemsStatus()
+                true
+            }
+            setOnClickListener {_ ->
+                Toast.makeText(context, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
+                true
+            }
+        }
+
         steering_seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 seekBar.progress = resources.getInteger(R.integer.default_steering)
@@ -384,6 +407,14 @@ class RCControllerActivity : AppCompatActivity() {
                 POSITION_LIGHTS -> lights_imageView.setImageResource(R.drawable.lights_position)
                 LIGHTS_OFF -> lights_imageView.setImageResource(R.drawable.lights_off)
             }
+
+            if (emergencyLights) {
+                emergencyLightsAnimation.start()
+            }
+            else {
+                emergencyLightsAnimation.stop()
+                emergencyLightsAnimation.selectDrawable(0)
+            }
         }
         else {
             engineStartStop_imageView.setImageResource(R.drawable.engine_stopped_start_action)
@@ -398,6 +429,9 @@ class RCControllerActivity : AppCompatActivity() {
             cc_imageView.setImageResource(R.drawable.cruise_control_off)
 
             lights_imageView.setImageResource(R.drawable.lights_off)
+
+            emergencyLightsAnimation.stop()
+            emergencyLightsAnimation.selectDrawable(0)
         }
 
         changeMotionInteractiveIconsStatus()
