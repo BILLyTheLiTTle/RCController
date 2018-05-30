@@ -87,7 +87,7 @@ class RCControllerActivity : AppCompatActivity() {
                 if(isEngineStarted) {
                     val status = activateParkingBrake(!isParkingBrakeActive)
                     if (status == OK_DATA) {
-                        changeMotionInteractiveIconsStatus()
+                        changeMotionInteractiveUIItemsStatus()
                     } else {
                         Toast.makeText(context, status, Toast.LENGTH_LONG).show()
                     }
@@ -123,7 +123,7 @@ class RCControllerActivity : AppCompatActivity() {
             //The blocking actions should not interfere with driving,
             // that's why they are on different listener
             setOnClickListener {_ ->
-                changeMotionInteractiveIconsStatus()
+                changeMotionInteractiveUIItemsStatus()
                 true
             }
         }
@@ -238,7 +238,7 @@ class RCControllerActivity : AppCompatActivity() {
                 if(isEngineStarted) {
                     turnLights = TURN_LIGHTS_LEFT
                 }
-                changeTurnLightsInteractiveItemsStatus()
+                changeTurnLightsInteractiveUIItemsStatus()
                 true
             }
             setOnClickListener {_ ->
@@ -259,7 +259,7 @@ class RCControllerActivity : AppCompatActivity() {
                 if(isEngineStarted) {
                     turnLights = TURN_LIGHTS_RIGHT
                 }
-                changeTurnLightsInteractiveItemsStatus()
+                changeTurnLightsInteractiveUIItemsStatus()
                 true
             }
             setOnClickListener {_ ->
@@ -312,7 +312,7 @@ class RCControllerActivity : AppCompatActivity() {
                     40 -> setSteering(ACTION_TURN_LEFT, progress-20) //20% left
                     50 -> {
                         setSteering(ACTION_STRAIGHT)
-                        changeTurnLightsInteractiveItemsStatus()
+                        changeTurnLightsInteractiveUIItemsStatus()
                     } //0% means straight
                     60 -> setSteering(ACTION_TURN_RIGHT, progress-40) //20% right
                     70 -> setSteering(ACTION_TURN_RIGHT, progress-30) //40% right
@@ -336,7 +336,7 @@ class RCControllerActivity : AppCompatActivity() {
                 activateParkingBrake(false)
                 setBrakingStill()// or setNeutral()? TODO Will see in action
 
-                changeMotionInteractiveIconsStatus()
+                changeMotionInteractiveUIItemsStatus()
             }
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean){
                 val direction = if (reverseIntention) ACTION_MOVE_BACKWARD else ACTION_MOVE_FORWARD
@@ -433,9 +433,9 @@ class RCControllerActivity : AppCompatActivity() {
             emergencyLightsAnimation.selectDrawable(0)
         }
 
-        changeMotionInteractiveIconsStatus()
+        changeMotionInteractiveUIItemsStatus()
         changeMainLightsInteractiveUIItemsStatus()
-        changeTurnLightsInteractiveItemsStatus()
+        changeTurnLightsInteractiveUIItemsStatus()
     }
 
     /* Motion interactive actions must be depending on each other.
@@ -443,7 +443,7 @@ class RCControllerActivity : AppCompatActivity() {
         This function here should get these states which must be as I want,
         and if they don't check the set functions between client-server.
      */
-    private fun changeMotionInteractiveIconsStatus(){
+    private fun changeMotionInteractiveUIItemsStatus(){
         if(isParkingBrakeActive)
             parkingBrake_imageView.setImageResource(R.drawable.parking_brake_on)
         else
@@ -480,7 +480,7 @@ class RCControllerActivity : AppCompatActivity() {
         This function here should get these states which must be as I want,
         and if they don't check the set functions between client-server.
      */
-    private fun changeTurnLightsInteractiveItemsStatus() {
+    private fun changeTurnLightsInteractiveUIItemsStatus() {
         when (turnLights) {
             TURN_LIGHTS_STRAIGHT -> {
                 leftTurnLightsAnimation.stop()
