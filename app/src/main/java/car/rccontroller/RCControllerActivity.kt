@@ -50,8 +50,12 @@ class RCControllerActivity : AppCompatActivity() {
                 if(isEngineStarted) {
                     val status = stopEngine()
                     if (status == OK_DATA) {
-                        /* This function works even after I set the server ip and port to null
+                        /* This code block works even after I set the server ip and port to null
                             because "bullshit".toBoolean() equals false!
+
+                            A problem is when the client waits real String data
+                            (for example lights_off). In these situation I fall into the
+                            "else" code blocks.
 
                             TODO or not TODO, that's the question
                             1. There will be another function which resets the states of the variables
