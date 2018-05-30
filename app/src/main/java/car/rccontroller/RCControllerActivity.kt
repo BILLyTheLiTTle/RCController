@@ -92,9 +92,6 @@ class RCControllerActivity : AppCompatActivity() {
                         Toast.makeText(context, status, Toast.LENGTH_LONG).show()
                     }
                 }
-                else {
-                    changeInteractiveUIItemsStatus()
-                }
                 true
             }
             setOnClickListener {_ ->
@@ -126,7 +123,7 @@ class RCControllerActivity : AppCompatActivity() {
             //The blocking actions should not interfere with driving,
             // that's why they are on different listener
             setOnClickListener {_ ->
-                changeInteractiveUIItemsStatus()
+                changeMotionInteractiveIconsStatus()
                 true
             }
         }
@@ -284,7 +281,13 @@ class RCControllerActivity : AppCompatActivity() {
                 if (isEngineStarted) {
                     emergencyLights = !emergencyLights
                 }
-                changeInteractiveUIItemsStatus()
+                if (emergencyLights) {
+                    emergencyLightsAnimation.start()
+                }
+                else {
+                    emergencyLightsAnimation.stop()
+                    emergencyLightsAnimation.selectDrawable(0)
+                }
                 true
             }
             setOnClickListener {_ ->
@@ -298,7 +301,7 @@ class RCControllerActivity : AppCompatActivity() {
                 seekBar.progress = resources.getInteger(R.integer.default_steering)
             }
             override fun onStartTrackingTouch(seekBar: SeekBar) {
-                changeInteractiveUIItemsStatus()
+                //changeInteractiveUIItemsStatus()
             }
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 when (progress) {
@@ -333,7 +336,7 @@ class RCControllerActivity : AppCompatActivity() {
                 activateParkingBrake(false)
                 setBrakingStill()// or setNeutral()? TODO Will see in action
 
-				changeInteractiveUIItemsStatus()
+                changeMotionInteractiveIconsStatus()
             }
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean){
                 val direction = if (reverseIntention) ACTION_MOVE_BACKWARD else ACTION_MOVE_FORWARD
@@ -386,6 +389,9 @@ class RCControllerActivity : AppCompatActivity() {
     /* After every interaction with interactive actions all icons must get
         their state from the server for client to be up-to-date with
         server's data.
+
+        This function should be called for initial set-up at the beginning and
+        resetting at the end.
      */
     private fun changeInteractiveUIItemsStatus(){
         if (isEngineStarted) {
@@ -402,11 +408,6 @@ class RCControllerActivity : AppCompatActivity() {
                 reverse_imageView.setImageResource(R.drawable.reverse_on)
             else
                 reverse_imageView.setImageResource(R.drawable.reverse_off)
-
-            if (cruiseControlActive)
-                cc_imageView.setImageResource(R.drawable.cruise_control_on)
-            else
-                cc_imageView.setImageResource(R.drawable.cruise_control_off)
 
             if (emergencyLights) {
                 emergencyLightsAnimation.start()
@@ -452,6 +453,11 @@ class RCControllerActivity : AppCompatActivity() {
             handbrake_imageView.setImageResource(R.drawable.handbrake_on)
         else
             handbrake_imageView.setImageResource(R.drawable.handbrake_off)
+
+        if (cruiseControlActive)
+            cc_imageView.setImageResource(R.drawable.cruise_control_on)
+        else
+            cc_imageView.setImageResource(R.drawable.cruise_control_off)
     }
 
     /* Main lights interactive actions must be depending on each other.

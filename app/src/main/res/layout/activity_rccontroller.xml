@@ -213,8 +213,7 @@
         android:layout_marginTop="@dimen/margin_above_imageViews_feedback_area_info"
         android:scaleType="fitCenter"
         app:layout_constraintStart_toEndOf="@+id/leftTurn_imageView"
-        app:layout_constraintTop_toTopOf="@+id/feedback_area_info"
-        app:srcCompat="@drawable/emergency_lights_off" />
+        app:layout_constraintTop_toTopOf="@+id/feedback_area_info"/>
 
     <ImageView
         android:id="@+id/rightTurn_imageView"
