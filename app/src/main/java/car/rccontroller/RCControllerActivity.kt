@@ -24,8 +24,8 @@ class RCControllerActivity : AppCompatActivity() {
     private var doubleBackToExitPressedOnce = false
     private var cruiseControlActive = false
 
-    private val leftTurnLightAnimation = AnimationDrawable()
-    private val rightTurnLightAnimation= AnimationDrawable()
+    private val leftTurnLightsAnimation = AnimationDrawable()
+    private val rightTurnLightsAnimation= AnimationDrawable()
     private val emergencyLightsAnimation= AnimationDrawable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -231,11 +231,11 @@ class RCControllerActivity : AppCompatActivity() {
         //////
         // setup left turn lights
         //////
-        leftTurnLightAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_off),400)
-        leftTurnLightAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_on),400)
-        leftTurnLightAnimation.isOneShot = false
+        leftTurnLightsAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_off),400)
+        leftTurnLightsAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_on),400)
+        leftTurnLightsAnimation.isOneShot = false
         leftTurn_imageView. apply {
-            setBackgroundDrawable(leftTurnLightAnimation)
+            setBackgroundDrawable(leftTurnLightsAnimation)
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted) {
@@ -252,11 +252,11 @@ class RCControllerActivity : AppCompatActivity() {
         //////
         // setup right turn lights
         //////
-        rightTurnLightAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_off),400)
-        rightTurnLightAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_on),400)
-        rightTurnLightAnimation.isOneShot = false
+        rightTurnLightsAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_off),400)
+        rightTurnLightsAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_on),400)
+        rightTurnLightsAnimation.isOneShot = false
         rightTurn_imageView. apply {
-            setBackgroundDrawable(rightTurnLightAnimation)
+            setBackgroundDrawable(rightTurnLightsAnimation)
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted) {
@@ -477,26 +477,26 @@ class RCControllerActivity : AppCompatActivity() {
     private fun changeTurnLightsInteractiveItemsStatus() {
         when (turnLights) {
             TURN_LIGHTS_STRAIGHT -> {
-                leftTurnLightAnimation.stop()
-                leftTurnLightAnimation.selectDrawable(0)
-                rightTurnLightAnimation.stop()
-                rightTurnLightAnimation.selectDrawable(0)
+                leftTurnLightsAnimation.stop()
+                leftTurnLightsAnimation.selectDrawable(0)
+                rightTurnLightsAnimation.stop()
+                rightTurnLightsAnimation.selectDrawable(0)
             }
             TURN_LIGHTS_LEFT -> {
-                rightTurnLightAnimation.stop()
-                rightTurnLightAnimation.selectDrawable(0)
-                leftTurnLightAnimation.start()
+                rightTurnLightsAnimation.stop()
+                rightTurnLightsAnimation.selectDrawable(0)
+                leftTurnLightsAnimation.start()
             }
             TURN_LIGHTS_RIGHT -> {
-                leftTurnLightAnimation.stop()
-                leftTurnLightAnimation.selectDrawable(0)
-                rightTurnLightAnimation.start()
+                leftTurnLightsAnimation.stop()
+                leftTurnLightsAnimation.selectDrawable(0)
+                rightTurnLightsAnimation.start()
             }
             else -> {
-                leftTurnLightAnimation.stop()
-                leftTurnLightAnimation.selectDrawable(1)
-                rightTurnLightAnimation.stop()
-                rightTurnLightAnimation.selectDrawable(1)
+                leftTurnLightsAnimation.stop()
+                leftTurnLightsAnimation.selectDrawable(1)
+                rightTurnLightsAnimation.stop()
+                rightTurnLightsAnimation.selectDrawable(1)
             }
         }
     }
