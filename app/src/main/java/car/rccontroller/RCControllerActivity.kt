@@ -140,7 +140,10 @@ class RCControllerActivity : AppCompatActivity() {
                 if(isEngineStarted) {
                     reverseIntention = !reverseIntention
                 }
-                changeInteractiveUIItemsStatus()
+                if (reverseIntention)
+                    reverse_imageView.setImageResource(R.drawable.reverse_on)
+                else
+                    reverse_imageView.setImageResource(R.drawable.reverse_off)
                 true
             }
             setOnClickListener {_ ->
@@ -161,7 +164,11 @@ class RCControllerActivity : AppCompatActivity() {
                     }
                     cruiseControlActive = true
                 }
-                changeInteractiveUIItemsStatus()
+                if (cruiseControlActive)
+                    cc_imageView.setImageResource(R.drawable.cruise_control_on)
+                else
+                    cc_imageView.setImageResource(R.drawable.cruise_control_off)
+
                 true
             }
             setOnClickListener {_ ->
@@ -187,7 +194,7 @@ class RCControllerActivity : AppCompatActivity() {
                                     Toast.LENGTH_SHORT).show()
                         }
                         // update the icon using server info for verification
-                        changeInteractiveUIItemsStatus()
+                        changeMainLightsInteractiveUIItemsStatus()
                     }
                     return true
                 }
@@ -204,7 +211,7 @@ class RCControllerActivity : AppCompatActivity() {
                                     Toast.LENGTH_SHORT).show()
                         }
                         // update the icon using server info for verification
-                        changeInteractiveUIItemsStatus()
+                        changeMainLightsInteractiveUIItemsStatus()
                     }
                     return true
                 }
@@ -216,7 +223,7 @@ class RCControllerActivity : AppCompatActivity() {
                 if(isEngineStarted) {
                     mainLightsState = LONG_RANGE_SIGNAL_LIGHTS
                 }
-                changeInteractiveUIItemsStatus()
+                changeMainLightsInteractiveUIItemsStatus()
                 true
             }
         }
@@ -401,13 +408,6 @@ class RCControllerActivity : AppCompatActivity() {
             else
                 cc_imageView.setImageResource(R.drawable.cruise_control_off)
 
-            when (mainLightsState) {
-                LONG_RANGE_LIGHTS -> lights_imageView.setImageResource(R.drawable.lights_long_range)
-                DRIVING_LIGHTS -> lights_imageView.setImageResource(R.drawable.lights_driving)
-                POSITION_LIGHTS -> lights_imageView.setImageResource(R.drawable.lights_position)
-                LIGHTS_OFF -> lights_imageView.setImageResource(R.drawable.lights_off)
-            }
-
             if (emergencyLights) {
                 emergencyLightsAnimation.start()
             }
@@ -428,15 +428,15 @@ class RCControllerActivity : AppCompatActivity() {
             cruiseControlActive = false
             cc_imageView.setImageResource(R.drawable.cruise_control_off)
 
-            lights_imageView.setImageResource(R.drawable.lights_off)
-
             emergencyLightsAnimation.stop()
             emergencyLightsAnimation.selectDrawable(0)
         }
 
         changeMotionInteractiveIconsStatus()
+        changeMainLightsInteractiveUIItemsStatus()
         changeTurnLightsInteractiveItemsStatus()
     }
+
     /* Motion interactive actions must be depending on each other.
         Their states on the server should be changed by set methods.
         This function here should get these states which must be as I want,
@@ -452,6 +452,21 @@ class RCControllerActivity : AppCompatActivity() {
             handbrake_imageView.setImageResource(R.drawable.handbrake_on)
         else
             handbrake_imageView.setImageResource(R.drawable.handbrake_off)
+    }
+
+    /* Main lights interactive actions must be depending on each other.
+        Their states on the server should be changed by set methods.
+        This function here should get these states which must be as I want,
+        and if they don't check the set functions between client-server.
+     */
+    private fun changeMainLightsInteractiveUIItemsStatus(){
+        when (mainLightsState) {
+            LONG_RANGE_LIGHTS -> lights_imageView.setImageResource(R.drawable.lights_long_range)
+            DRIVING_LIGHTS -> lights_imageView.setImageResource(R.drawable.lights_driving)
+            POSITION_LIGHTS -> lights_imageView.setImageResource(R.drawable.lights_position)
+            LIGHTS_OFF -> lights_imageView.setImageResource(R.drawable.lights_off)
+            else -> lights_imageView.setImageResource(R.drawable.lights_off)
+        }
     }
 
     /* Turn lights interactive items must be depending on each other.
