@@ -49,7 +49,7 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener { _ ->
                 if(isEngineStarted) {
                     val status = stopEngine()
-                    if (status == OK_DATA) {
+                    if (status == OK_STRING) {
                         /* This code block works even after I set the server ip and port to null
                             because "bullshit".toBoolean() equals false!
 
@@ -71,7 +71,7 @@ class RCControllerActivity : AppCompatActivity() {
                 }
                 else {
                     //start the engine
-                    showServerConnectionDialog()
+                    showServerConnectionDialog(this@RCControllerActivity)
                 }
 
                 true
@@ -90,7 +90,7 @@ class RCControllerActivity : AppCompatActivity() {
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted) {
                     val status = activateParkingBrake(!isParkingBrakeActive)
-                    if (status == OK_DATA) {
+                    if (status == OK_STRING) {
                         changeMotionInteractiveUIItemsStatus()
                     } else {
                         Toast.makeText(context, status, Toast.LENGTH_LONG).show()
@@ -362,7 +362,7 @@ class RCControllerActivity : AppCompatActivity() {
         })
     }
 
-    private fun showServerConnectionDialog(){
+    private fun showServerConnectionDialog(activity: RCControllerActivity){
         val alert = AlertDialog.Builder(this)
         val inflater = this.layoutInflater
         val dialogView = inflater.inflate(R.layout.dialog_server_connection, null)
@@ -376,8 +376,8 @@ class RCControllerActivity : AppCompatActivity() {
                 val serverPort = dialogView.findViewById<EditText>(R.id.serverPort_editText2).text
                         .toString().toIntOrNull()
 
-                val status = startEngine(context, serverIp, serverPort)
-                if (status == OK_DATA) {
+                val status = startEngine(activity, serverIp, serverPort)
+                if (status == OK_STRING) {
                     changeInteractiveUIItemsStatus()
                 } else {
                     Toast.makeText(context, status, Toast.LENGTH_LONG).show()
@@ -440,6 +440,7 @@ class RCControllerActivity : AppCompatActivity() {
         changeMotionInteractiveUIItemsStatus()
         changeMainLightsInteractiveUIItemsStatus()
         changeTurnLightsInteractiveUIItemsStatus()
+        updateTempUIItems()
     }
 
     /* Motion interactive actions must be depending on each other.
@@ -511,10 +512,21 @@ class RCControllerActivity : AppCompatActivity() {
         }
     }
 
+    fun updateTempUIItems(rearLeftMotor: String = Server.WARNING_TYPE_NOTHING) {
+        if(rearLeftMotor == Server.WARNING_TYPE_NORMAL)
+            rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_normal)
+        else if(rearLeftMotor == Server.WARNING_TYPE_MEDIUM)
+            rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_medium)
+        else if(rearLeftMotor == Server.WARNING_TYPE_HIGH)
+            rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_high)
+        else
+            rearLeftMotorTemps_imageView.setImageResource(android.R.color.transparent)
+    }
+
     override fun onPause() {
         super.onPause()
         val status = activateParkingBrake(true)
-        if(status == OK_DATA)
+        if(status == OK_STRING)
             parkingBrake_imageView.setImageResource(R.drawable.parking_brake_on)
     }
 

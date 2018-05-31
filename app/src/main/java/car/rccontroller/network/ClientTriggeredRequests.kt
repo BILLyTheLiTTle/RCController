@@ -13,14 +13,15 @@ import java.net.HttpURLConnection
 import java.net.URL
 import android.net.wifi.WifiManager
 import android.text.format.Formatter
+import car.rccontroller.RCControllerActivity
 
 
-const val OK_DATA = "OK"
-const val NO_DATA = "NULL"
+const val OK_STRING = "OK"
+const val EMPTY_STRING = "NULL"
 
 var serverIp: String? = null
 var serverPort: Int? = null
-var context: Context? = null
+var context: RCControllerActivity? = null
 
 private lateinit var androidWebServer:Server
 
@@ -31,7 +32,7 @@ val isEngineStarted: Boolean
 get() = doBlockingRequest("http://${car.rccontroller.network.serverIp}:" +
             "${car.rccontroller.network.serverPort}/get_engine_state").toBoolean()
 
-fun startEngine(context: Context, serverIp: String?, serverPort: Int?): String{
+fun startEngine(context: RCControllerActivity, serverIp: String?, serverPort: Int?): String{
     //reset and get ready for new requests
     throttleBrakeActionId = context.resources.getInteger(R.integer.default_throttleBrakeActionId)
     steeringDirectionId = context.resources.getInteger(R.integer.default_steeringDirectionId)
@@ -47,7 +48,7 @@ fun startEngine(context: Context, serverIp: String?, serverPort: Int?): String{
     car.rccontroller.network.context = context
 
     if(::androidWebServer.isInitialized) androidWebServer.stop()
-    androidWebServer = if (myIP == "0.0.0.0") Server() else Server(myIP, 8080)
+    androidWebServer = if (myIP == "0.0.0.0") Server(context) else Server(context, myIP, 8080)
     androidWebServer.start()
 
     //TODO add the nanohttp ip and port when needed as argument to the handshake
@@ -61,7 +62,7 @@ fun stopEngine(): String {
     val msg = doBlockingRequest("http://$serverIp:" +
             "$serverPort/stop_engine")
 
-    if(msg == OK_DATA) {
+    if(msg == OK_STRING) {
         serverIp = null
         serverPort = null
     }
@@ -249,18 +250,18 @@ private fun doRequest(url: String): String {
         bufferReader.close()
     } catch (e: IOException) {
         //handle the exception !
-        sb.append(e.message ?: NO_DATA)
+        sb.append(e.message ?: EMPTY_STRING)
     }
     return sb.toString()
 }
 
 val myIP:String
     get() {
-        val wifiMgr = context?.getSystemService(Context.WIFI_SERVICE) as WifiManager?
+        val wifiMgr = context?.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager?
         val wifiInfo = wifiMgr?.connectionInfo
         return if (wifiInfo != null) {
             Formatter.formatIpAddress(wifiInfo.ipAddress)
         }
         else
-            NO_DATA
+            EMPTY_STRING
     }
