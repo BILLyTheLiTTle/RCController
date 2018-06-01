@@ -17,6 +17,7 @@ class Server(
 
     private val MOTOR_REAR_LEFT_TEMP = "motor_rear_left_temp"
     private val MOTOR_REAR_RIGHT_TEMP = "motor_rear_right_temp"
+    private val MOTOR_FRONT_LEFT_TEMP = "motor_front_left_temp"
 
     override fun serve(session: IHTTPSession): Response {
         val params = session.parms
@@ -29,6 +30,8 @@ class Server(
                         rearLeftMotor = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
                     MOTOR_REAR_RIGHT_TEMP -> activity.updateTempUIItems(
                         rearRightMotor = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
+                    MOTOR_FRONT_LEFT_TEMP -> activity.updateTempUIItems(
+                        frontLeftMotor = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
                 }
             }
         }

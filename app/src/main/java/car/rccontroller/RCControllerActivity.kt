@@ -423,7 +423,8 @@ class RCControllerActivity : AppCompatActivity() {
 
             updateTempUIItems(
                 rearLeftMotor = Server.WARNING_TYPE_UNCHANGED,
-                rearRightMotor = Server.WARNING_TYPE_UNCHANGED
+                rearRightMotor = Server.WARNING_TYPE_UNCHANGED,
+                frontLeftMotor = Server.WARNING_TYPE_UNCHANGED
                 )
         }
         else {
@@ -443,7 +444,8 @@ class RCControllerActivity : AppCompatActivity() {
 
             updateTempUIItems(
                 rearLeftMotor = Server.WARNING_TYPE_NOTHING,
-                rearRightMotor = Server.WARNING_TYPE_NOTHING
+                rearRightMotor = Server.WARNING_TYPE_NOTHING,
+                frontLeftMotor = Server.WARNING_TYPE_NOTHING
             )
         }
 
@@ -526,11 +528,13 @@ class RCControllerActivity : AppCompatActivity() {
      */
     fun updateTempUIItems(
         rearLeftMotor: String = Server.WARNING_TYPE_UNCHANGED,
-        rearRightMotor: String = Server.WARNING_TYPE_UNCHANGED
+        rearRightMotor: String = Server.WARNING_TYPE_UNCHANGED,
+        frontLeftMotor: String = Server.WARNING_TYPE_UNCHANGED
     ) {
         runOnUiThread {
             if (rearLeftMotor != Server.WARNING_TYPE_NOTHING &&
-                rearRightMotor != Server.WARNING_TYPE_NOTHING)
+                rearRightMotor != Server.WARNING_TYPE_NOTHING &&
+                frontLeftMotor != Server.WARNING_TYPE_NOTHING)
                 carTemps_imageView.setImageResource(R.drawable.car_temps_on)
             else
                 carTemps_imageView.setImageResource(R.drawable.car_temps_off)
@@ -555,6 +559,17 @@ class RCControllerActivity : AppCompatActivity() {
                     rearRightMotorTemps_imageView.setImageResource(R.drawable.motor_temp_high)
                 Server.WARNING_TYPE_NOTHING ->
                     rearRightMotorTemps_imageView.setImageResource(android.R.color.transparent)
+            }
+
+            when (frontLeftMotor) {
+                Server.WARNING_TYPE_NORMAL ->
+                    frontLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_normal)
+                Server.WARNING_TYPE_MEDIUM ->
+                    frontLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_medium)
+                Server.WARNING_TYPE_HIGH ->
+                    frontLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_high)
+                Server.WARNING_TYPE_NOTHING ->
+                    frontLeftMotorTemps_imageView.setImageResource(android.R.color.transparent)
             }
         }
     }
