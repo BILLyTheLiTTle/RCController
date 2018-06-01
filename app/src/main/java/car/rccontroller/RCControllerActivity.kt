@@ -440,7 +440,7 @@ class RCControllerActivity : AppCompatActivity() {
         changeMotionInteractiveUIItemsStatus()
         changeMainLightsInteractiveUIItemsStatus()
         changeTurnLightsInteractiveUIItemsStatus()
-        updateTempUIItems()
+        updateTempUIItems(rearLeftMotor = Server.WARNING_TYPE_NOTHING)
     }
 
     /* Motion interactive actions must be depending on each other.
@@ -512,15 +512,22 @@ class RCControllerActivity : AppCompatActivity() {
         }
     }
 
-    fun updateTempUIItems(rearLeftMotor: String = Server.WARNING_TYPE_NOTHING) {
-        if(rearLeftMotor == Server.WARNING_TYPE_NORMAL)
-            rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_normal)
-        else if(rearLeftMotor == Server.WARNING_TYPE_MEDIUM)
-            rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_medium)
-        else if(rearLeftMotor == Server.WARNING_TYPE_HIGH)
-            rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_high)
+    fun updateTempUIItems(rearLeftMotor: String = Server.WARNING_TYPE_UNCHANGED) {
+        if (rearLeftMotor != Server.WARNING_TYPE_NOTHING)
+            carTemps_imageView.setImageResource(R.drawable.car_temps_on)
         else
-            rearLeftMotorTemps_imageView.setImageResource(android.R.color.transparent)
+            carTemps_imageView.setImageResource(R.drawable.car_temps_off)
+
+        when (rearLeftMotor) {
+            Server.WARNING_TYPE_NORMAL ->
+                rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_normal)
+            Server.WARNING_TYPE_MEDIUM ->
+                rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_medium)
+            Server.WARNING_TYPE_HIGH ->
+                rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_high)
+            Server.WARNING_TYPE_NOTHING ->
+                rearLeftMotorTemps_imageView.setImageResource(android.R.color.transparent)
+        }
     }
 
     override fun onPause() {
