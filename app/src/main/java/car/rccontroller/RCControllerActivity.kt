@@ -421,7 +421,10 @@ class RCControllerActivity : AppCompatActivity() {
                 emergencyLightsAnimation.selectDrawable(0)
             }
 
-            updateTempUIItems(rearLeftMotor = Server.WARNING_TYPE_UNCHANGED)
+            updateTempUIItems(
+                rearLeftMotor = Server.WARNING_TYPE_UNCHANGED,
+                rearRightMotor = Server.WARNING_TYPE_UNCHANGED
+                )
         }
         else {
             engineStartStop_imageView.setImageResource(R.drawable.engine_stopped_start_action)
@@ -438,7 +441,10 @@ class RCControllerActivity : AppCompatActivity() {
             emergencyLightsAnimation.stop()
             emergencyLightsAnimation.selectDrawable(0)
 
-            updateTempUIItems(rearLeftMotor = Server.WARNING_TYPE_NOTHING)
+            updateTempUIItems(
+                rearLeftMotor = Server.WARNING_TYPE_NOTHING,
+                rearRightMotor = Server.WARNING_TYPE_NOTHING
+            )
         }
 
         updateMotionUIItems()
@@ -518,21 +524,38 @@ class RCControllerActivity : AppCompatActivity() {
     /* Temperature interactive items should be controlled in a separate function.
         This function is for setting and resetting purposes.
      */
-    fun updateTempUIItems(rearLeftMotor: String = Server.WARNING_TYPE_UNCHANGED) {
-        if (rearLeftMotor != Server.WARNING_TYPE_NOTHING)
-            carTemps_imageView.setImageResource(R.drawable.car_temps_on)
-        else
-            carTemps_imageView.setImageResource(R.drawable.car_temps_off)
+    fun updateTempUIItems(
+        rearLeftMotor: String = Server.WARNING_TYPE_UNCHANGED,
+        rearRightMotor: String = Server.WARNING_TYPE_UNCHANGED
+    ) {
+        runOnUiThread {
+            if (rearLeftMotor != Server.WARNING_TYPE_NOTHING &&
+                rearRightMotor != Server.WARNING_TYPE_NOTHING)
+                carTemps_imageView.setImageResource(R.drawable.car_temps_on)
+            else
+                carTemps_imageView.setImageResource(R.drawable.car_temps_off)
 
-        when (rearLeftMotor) {
-            Server.WARNING_TYPE_NORMAL ->
-                rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_normal)
-            Server.WARNING_TYPE_MEDIUM ->
-                rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_medium)
-            Server.WARNING_TYPE_HIGH ->
-                rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_high)
-            Server.WARNING_TYPE_NOTHING ->
-                rearLeftMotorTemps_imageView.setImageResource(android.R.color.transparent)
+            when (rearLeftMotor) {
+                Server.WARNING_TYPE_NORMAL ->
+                    rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_normal)
+                Server.WARNING_TYPE_MEDIUM ->
+                    rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_medium)
+                Server.WARNING_TYPE_HIGH ->
+                    rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_high)
+                Server.WARNING_TYPE_NOTHING ->
+                    rearLeftMotorTemps_imageView.setImageResource(android.R.color.transparent)
+            }
+
+            when (rearRightMotor) {
+                Server.WARNING_TYPE_NORMAL ->
+                    rearRightMotorTemps_imageView.setImageResource(R.drawable.motor_temp_normal)
+                Server.WARNING_TYPE_MEDIUM ->
+                    rearRightMotorTemps_imageView.setImageResource(R.drawable.motor_temp_medium)
+                Server.WARNING_TYPE_HIGH ->
+                    rearRightMotorTemps_imageView.setImageResource(R.drawable.motor_temp_high)
+                Server.WARNING_TYPE_NOTHING ->
+                    rearRightMotorTemps_imageView.setImageResource(android.R.color.transparent)
+            }
         }
     }
 

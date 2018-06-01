@@ -1,11 +1,14 @@
 package car.rccontroller.network
 
-import android.util.Log
 import car.rccontroller.RCControllerActivity
 import fi.iki.elonen.NanoHTTPD
 
 // constructor default parameters are for emulator
-class Server(private val activity: RCControllerActivity, val ip: String = "localhost", val port: Int = 8081) : NanoHTTPD(ip, port) {
+class Server(
+    private val activity: RCControllerActivity,
+    val ip: String = "localhost",
+    val port: Int = 8081
+) : NanoHTTPD(ip, port) {
 
     private val TEMP_URI = "/temp"
     private val TEMP_PARAM_KEY_ITEM = "item"
@@ -13,18 +16,19 @@ class Server(private val activity: RCControllerActivity, val ip: String = "local
     private val TEMP_PARAM_KEY_VALUE = "value"
 
     private val MOTOR_REAR_LEFT_TEMP = "motor_rear_left_temp"
+    private val MOTOR_REAR_RIGHT_TEMP = "motor_rear_right_temp"
 
     override fun serve(session: IHTTPSession): Response {
         val params = session.parms
         val uri = session.uri
-        Log.e("PARMS", "${params[TEMP_PARAM_KEY_ITEM]}, ${params[TEMP_PARAM_KEY_WARNING]}, ${params[TEMP_PARAM_KEY_VALUE]}")
-        Log.e("URI", "${session.uri}")
 
         when (uri) {
             TEMP_URI -> {
                 when (params[TEMP_PARAM_KEY_ITEM]) {
                     MOTOR_REAR_LEFT_TEMP -> activity.updateTempUIItems(
                         rearLeftMotor = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
+                    MOTOR_REAR_RIGHT_TEMP -> activity.updateTempUIItems(
+                        rearRightMotor = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
                 }
             }
         }
