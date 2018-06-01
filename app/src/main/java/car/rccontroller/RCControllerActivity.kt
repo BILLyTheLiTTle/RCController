@@ -420,6 +420,8 @@ class RCControllerActivity : AppCompatActivity() {
                 emergencyLightsAnimation.stop()
                 emergencyLightsAnimation.selectDrawable(0)
             }
+
+            updateTempUIItems(rearLeftMotor = Server.WARNING_TYPE_UNCHANGED)
         }
         else {
             engineStartStop_imageView.setImageResource(R.drawable.engine_stopped_start_action)
@@ -435,12 +437,13 @@ class RCControllerActivity : AppCompatActivity() {
 
             emergencyLightsAnimation.stop()
             emergencyLightsAnimation.selectDrawable(0)
+
+            updateTempUIItems(rearLeftMotor = Server.WARNING_TYPE_NOTHING)
         }
 
         updateMotionUIItems()
         updateMainLightsUIItems()
         updateTurnLightsUIItems()
-        updateTempUIItems(rearLeftMotor = Server.WARNING_TYPE_NOTHING)
     }
 
     /* Motion interactive actions must be depending on each other.
