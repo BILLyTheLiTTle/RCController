@@ -420,15 +420,6 @@ class RCControllerActivity : AppCompatActivity() {
                 emergencyLightsAnimation.stop()
                 emergencyLightsAnimation.selectDrawable(0)
             }
-
-            updateTempUIItems(
-                rearLeftMotor = Server.WARNING_TYPE_UNCHANGED,
-                rearRightMotor = Server.WARNING_TYPE_UNCHANGED,
-                frontLeftMotor = Server.WARNING_TYPE_UNCHANGED,
-                frontRightMotor = Server.WARNING_TYPE_UNCHANGED,
-                rearHBridge = Server.WARNING_TYPE_UNCHANGED,
-                frontHBridge = Server.WARNING_TYPE_UNCHANGED
-                )
         }
         else {
             engineStartStop_imageView.setImageResource(R.drawable.engine_stopped_start_action)
@@ -451,7 +442,8 @@ class RCControllerActivity : AppCompatActivity() {
                 frontLeftMotor = Server.WARNING_TYPE_NOTHING,
                 frontRightMotor = Server.WARNING_TYPE_NOTHING,
                 rearHBridge = Server.WARNING_TYPE_NOTHING,
-                frontHBridge = Server.WARNING_TYPE_NOTHING
+                frontHBridge = Server.WARNING_TYPE_NOTHING,
+                raspberryPi = Server.WARNING_TYPE_NOTHING
             )
         }
 
@@ -538,18 +530,18 @@ class RCControllerActivity : AppCompatActivity() {
         frontLeftMotor: String = Server.WARNING_TYPE_UNCHANGED,
         frontRightMotor: String = Server.WARNING_TYPE_UNCHANGED,
         rearHBridge: String = Server.WARNING_TYPE_UNCHANGED,
-        frontHBridge: String = Server.WARNING_TYPE_UNCHANGED
+        frontHBridge: String = Server.WARNING_TYPE_UNCHANGED,
+        raspberryPi: String = Server.WARNING_TYPE_UNCHANGED
     ) {
         runOnUiThread {
-            if (rearLeftMotor != Server.WARNING_TYPE_NOTHING &&
-                rearRightMotor != Server.WARNING_TYPE_NOTHING &&
-                frontLeftMotor != Server.WARNING_TYPE_NOTHING &&
-                frontRightMotor != Server.WARNING_TYPE_NOTHING &&
-                rearHBridge != Server.WARNING_TYPE_NOTHING &&
-                frontHBridge != Server.WARNING_TYPE_NOTHING)
-                carTemps_imageView.setImageResource(R.drawable.car_temps_on)
-            else
+            if (rearLeftMotor == Server.WARNING_TYPE_NOTHING &&
+                rearRightMotor == Server.WARNING_TYPE_NOTHING &&
+                frontLeftMotor == Server.WARNING_TYPE_NOTHING &&
+                frontRightMotor == Server.WARNING_TYPE_NOTHING &&
+                rearHBridge == Server.WARNING_TYPE_NOTHING)
                 carTemps_imageView.setImageResource(R.drawable.car_temps_off)
+            else
+                carTemps_imageView.setImageResource(R.drawable.car_temps_on)
 
             when (rearLeftMotor) {
                 Server.WARNING_TYPE_NORMAL ->
@@ -615,6 +607,17 @@ class RCControllerActivity : AppCompatActivity() {
                     frontHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_high)
                 Server.WARNING_TYPE_NOTHING ->
                     frontHbridgeTemps_imageView.setImageResource(android.R.color.transparent)
+            }
+
+            when (raspberryPi) {
+                Server.WARNING_TYPE_NORMAL ->
+                    raspiTemp_imageView.setImageResource(R.drawable.raspi_temp_normal)
+                Server.WARNING_TYPE_MEDIUM ->
+                    raspiTemp_imageView.setImageResource(R.drawable.raspi_temp_medium)
+                Server.WARNING_TYPE_HIGH ->
+                    raspiTemp_imageView.setImageResource(R.drawable.raspi_temp_high)
+                Server.WARNING_TYPE_NOTHING ->
+                    raspiTemp_imageView.setImageResource(R.drawable.raspi_temp_off)
             }
         }
     }

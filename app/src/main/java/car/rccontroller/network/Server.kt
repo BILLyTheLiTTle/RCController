@@ -21,6 +21,7 @@ class Server(
     private val MOTOR_FRONT_RIGHT_TEMP = "motor_front_right_temp"
     private val H_BRIDGE_REAR_TEMP = "h_bridge_rear_temp"
     private val H_BRIDGE_FRONT_TEMP = "h_bridge_front_temp"
+    private val RASPBERRY_PI_TEMP = "raspberry_pi_temp"
 
     override fun serve(session: IHTTPSession): Response {
         val params = session.parms
@@ -41,6 +42,8 @@ class Server(
                         rearHBridge = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
                     H_BRIDGE_FRONT_TEMP -> activity.updateTempUIItems(
                         frontHBridge = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
+                    RASPBERRY_PI_TEMP -> activity.updateTempUIItems(
+                        raspberryPi = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
                 }
             }
         }
