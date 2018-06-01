@@ -425,7 +425,9 @@ class RCControllerActivity : AppCompatActivity() {
                 rearLeftMotor = Server.WARNING_TYPE_UNCHANGED,
                 rearRightMotor = Server.WARNING_TYPE_UNCHANGED,
                 frontLeftMotor = Server.WARNING_TYPE_UNCHANGED,
-                frontRightMotor = Server.WARNING_TYPE_UNCHANGED
+                frontRightMotor = Server.WARNING_TYPE_UNCHANGED,
+                rearHBridge = Server.WARNING_TYPE_UNCHANGED,
+                frontHBridge = Server.WARNING_TYPE_UNCHANGED
                 )
         }
         else {
@@ -447,7 +449,9 @@ class RCControllerActivity : AppCompatActivity() {
                 rearLeftMotor = Server.WARNING_TYPE_NOTHING,
                 rearRightMotor = Server.WARNING_TYPE_NOTHING,
                 frontLeftMotor = Server.WARNING_TYPE_NOTHING,
-                frontRightMotor = Server.WARNING_TYPE_NOTHING
+                frontRightMotor = Server.WARNING_TYPE_NOTHING,
+                rearHBridge = Server.WARNING_TYPE_NOTHING,
+                frontHBridge = Server.WARNING_TYPE_NOTHING
             )
         }
 
@@ -532,13 +536,17 @@ class RCControllerActivity : AppCompatActivity() {
         rearLeftMotor: String = Server.WARNING_TYPE_UNCHANGED,
         rearRightMotor: String = Server.WARNING_TYPE_UNCHANGED,
         frontLeftMotor: String = Server.WARNING_TYPE_UNCHANGED,
-        frontRightMotor: String = Server.WARNING_TYPE_UNCHANGED
+        frontRightMotor: String = Server.WARNING_TYPE_UNCHANGED,
+        rearHBridge: String = Server.WARNING_TYPE_UNCHANGED,
+        frontHBridge: String = Server.WARNING_TYPE_UNCHANGED
     ) {
         runOnUiThread {
             if (rearLeftMotor != Server.WARNING_TYPE_NOTHING &&
                 rearRightMotor != Server.WARNING_TYPE_NOTHING &&
                 frontLeftMotor != Server.WARNING_TYPE_NOTHING &&
-                frontRightMotor != Server.WARNING_TYPE_NOTHING)
+                frontRightMotor != Server.WARNING_TYPE_NOTHING &&
+                rearHBridge != Server.WARNING_TYPE_NOTHING &&
+                frontHBridge != Server.WARNING_TYPE_NOTHING)
                 carTemps_imageView.setImageResource(R.drawable.car_temps_on)
             else
                 carTemps_imageView.setImageResource(R.drawable.car_temps_off)
@@ -585,6 +593,28 @@ class RCControllerActivity : AppCompatActivity() {
                     frontRightMotorTemps_imageView.setImageResource(R.drawable.motor_temp_high)
                 Server.WARNING_TYPE_NOTHING ->
                     frontRightMotorTemps_imageView.setImageResource(android.R.color.transparent)
+            }
+
+            when (rearHBridge) {
+                Server.WARNING_TYPE_NORMAL ->
+                    rearHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_normal)
+                Server.WARNING_TYPE_MEDIUM ->
+                    rearHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_medium)
+                Server.WARNING_TYPE_HIGH ->
+                    rearHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_high)
+                Server.WARNING_TYPE_NOTHING ->
+                    rearHbridgeTemps_imageView.setImageResource(android.R.color.transparent)
+            }
+
+            when (frontHBridge) {
+                Server.WARNING_TYPE_NORMAL ->
+                    frontHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_normal)
+                Server.WARNING_TYPE_MEDIUM ->
+                    frontHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_medium)
+                Server.WARNING_TYPE_HIGH ->
+                    frontHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_high)
+                Server.WARNING_TYPE_NOTHING ->
+                    frontHbridgeTemps_imageView.setImageResource(android.R.color.transparent)
             }
         }
     }
