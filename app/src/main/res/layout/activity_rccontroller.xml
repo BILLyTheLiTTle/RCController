@@ -166,9 +166,21 @@
         android:layout_marginRight="@dimen/margin_after_imageViews_feedback_area_critical"
         android:layout_marginTop="@dimen/margin_above_imageViews_feedback_area_critical"
         android:scaleType="fitCenter"
-        app:layout_constraintEnd_toStartOf="@+id/raspiTemp_imageView"
+        app:layout_constraintEnd_toStartOf="@+id/shiftRegisterTemp_imageView"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/batteries_temp_off" />
+
+    <ImageView
+        android:id="@+id/shiftRegisterTemp_imageView"
+        android:layout_width="@dimen/width_imageViews_feedback_area_critical"
+        android:layout_height="@dimen/height_imageViews_feedback_area_critical"
+        android:layout_marginEnd="@dimen/margin_after_imageViews_feedback_area_critical"
+        android:layout_marginRight="@dimen/margin_after_imageViews_feedback_area_critical"
+        android:layout_marginTop="@dimen/margin_above_imageViews_feedback_area_critical"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toStartOf="@+id/raspiTemp_imageView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/shift_register_temp_off" />
 
     <ImageView
         android:id="@+id/raspiTemp_imageView"
