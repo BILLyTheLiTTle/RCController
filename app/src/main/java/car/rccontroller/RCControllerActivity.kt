@@ -443,7 +443,8 @@ class RCControllerActivity : AppCompatActivity() {
                 frontRightMotor = Server.WARNING_TYPE_NOTHING,
                 rearHBridge = Server.WARNING_TYPE_NOTHING,
                 frontHBridge = Server.WARNING_TYPE_NOTHING,
-                raspberryPi = Server.WARNING_TYPE_NOTHING
+                raspberryPi = Server.WARNING_TYPE_NOTHING,
+                batteries = Server.WARNING_TYPE_NOTHING
             )
         }
 
@@ -531,7 +532,8 @@ class RCControllerActivity : AppCompatActivity() {
         frontRightMotor: String = Server.WARNING_TYPE_UNCHANGED,
         rearHBridge: String = Server.WARNING_TYPE_UNCHANGED,
         frontHBridge: String = Server.WARNING_TYPE_UNCHANGED,
-        raspberryPi: String = Server.WARNING_TYPE_UNCHANGED
+        raspberryPi: String = Server.WARNING_TYPE_UNCHANGED,
+        batteries: String = Server.WARNING_TYPE_UNCHANGED
     ) {
         runOnUiThread {
             if (rearLeftMotor == Server.WARNING_TYPE_NOTHING &&
@@ -618,6 +620,17 @@ class RCControllerActivity : AppCompatActivity() {
                     raspiTemp_imageView.setImageResource(R.drawable.raspi_temp_high)
                 Server.WARNING_TYPE_NOTHING ->
                     raspiTemp_imageView.setImageResource(R.drawable.raspi_temp_off)
+            }
+
+            when (batteries) {
+                Server.WARNING_TYPE_NORMAL ->
+                    batteryTemp_imageView.setImageResource(R.drawable.batteries_temp_normal)
+                Server.WARNING_TYPE_MEDIUM ->
+                    batteryTemp_imageView.setImageResource(R.drawable.batteries_temp_medium)
+                Server.WARNING_TYPE_HIGH ->
+                    batteryTemp_imageView.setImageResource(R.drawable.batteries_temp_high)
+                Server.WARNING_TYPE_NOTHING ->
+                    batteryTemp_imageView.setImageResource(R.drawable.batteries_temp_off)
             }
         }
     }
