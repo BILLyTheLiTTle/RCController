@@ -23,6 +23,7 @@ class Server(
     private val H_BRIDGE_FRONT_TEMP = "h_bridge_front_temp"
     private val RASPBERRY_PI_TEMP = "raspberry_pi_temp"
     private val BATTERIES_TEMP = "batteries_temp"
+    private val SHIFT_REGISTERS_TEMP = "shift_registers_temp"
 
     override fun serve(session: IHTTPSession): Response {
         val params = session.parms
@@ -47,6 +48,8 @@ class Server(
                         raspberryPi = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
                     BATTERIES_TEMP -> activity.updateTempUIItems(
                         batteries = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
+                    SHIFT_REGISTERS_TEMP -> activity.updateTempUIItems(
+                        shiftRegisters = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
                 }
             }
         }

@@ -444,7 +444,8 @@ class RCControllerActivity : AppCompatActivity() {
                 rearHBridge = Server.WARNING_TYPE_NOTHING,
                 frontHBridge = Server.WARNING_TYPE_NOTHING,
                 raspberryPi = Server.WARNING_TYPE_NOTHING,
-                batteries = Server.WARNING_TYPE_NOTHING
+                batteries = Server.WARNING_TYPE_NOTHING,
+                shiftRegisters = Server.WARNING_TYPE_NOTHING
             )
         }
 
@@ -533,7 +534,8 @@ class RCControllerActivity : AppCompatActivity() {
         rearHBridge: String = Server.WARNING_TYPE_UNCHANGED,
         frontHBridge: String = Server.WARNING_TYPE_UNCHANGED,
         raspberryPi: String = Server.WARNING_TYPE_UNCHANGED,
-        batteries: String = Server.WARNING_TYPE_UNCHANGED
+        batteries: String = Server.WARNING_TYPE_UNCHANGED,
+        shiftRegisters: String = Server.WARNING_TYPE_UNCHANGED
     ) {
         runOnUiThread {
             if (rearLeftMotor == Server.WARNING_TYPE_NOTHING &&
@@ -631,6 +633,21 @@ class RCControllerActivity : AppCompatActivity() {
                     batteryTemp_imageView.setImageResource(R.drawable.batteries_temp_high)
                 Server.WARNING_TYPE_NOTHING ->
                     batteryTemp_imageView.setImageResource(R.drawable.batteries_temp_off)
+            }
+
+            when (shiftRegisters) {
+                Server.WARNING_TYPE_NORMAL ->
+                    shiftRegisterTemp_imageView.
+                        setImageResource(R.drawable.shift_register_temp_normal)
+                Server.WARNING_TYPE_MEDIUM ->
+                    shiftRegisterTemp_imageView.
+                        setImageResource(R.drawable.shift_register_temp_medium)
+                Server.WARNING_TYPE_HIGH ->
+                    shiftRegisterTemp_imageView.
+                        setImageResource(R.drawable.shift_register_temp_high)
+                Server.WARNING_TYPE_NOTHING ->
+                    shiftRegisterTemp_imageView.
+                        setImageResource(R.drawable.shift_register_temp_off)
             }
         }
     }
