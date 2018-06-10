@@ -8,7 +8,7 @@ import fi.iki.elonen.NanoHTTPD
 class Server(
     private val activity: RCControllerActivity,
     val ip: String = "localhost",
-    val port: Int = 8081
+    val port: Int = 8090
 ) : NanoHTTPD(ip, port) {
 
     private val TEMP_URI = "/temp"
