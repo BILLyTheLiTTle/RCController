@@ -1,5 +1,6 @@
 package car.rccontroller.network
 
+import android.util.Log
 import car.rccontroller.RCControllerActivity
 import fi.iki.elonen.NanoHTTPD
 
@@ -14,7 +15,6 @@ class Server(
     private val TEMP_PARAM_KEY_ITEM = "item"
     private val TEMP_PARAM_KEY_WARNING = "warning"
     private val TEMP_PARAM_KEY_VALUE = "value"
-
     private val MOTOR_REAR_LEFT_TEMP = "motor_rear_left_temp"
     private val MOTOR_REAR_RIGHT_TEMP = "motor_rear_right_temp"
     private val MOTOR_FRONT_LEFT_TEMP = "motor_front_left_temp"
@@ -24,6 +24,11 @@ class Server(
     private val RASPBERRY_PI_TEMP = "raspberry_pi_temp"
     private val BATTERIES_TEMP = "batteries_temp"
     private val SHIFT_REGISTERS_TEMP = "shift_registers_temp"
+
+    private val SPEED_URI = "/speed"
+    private val SPEED_PARAM_KEY_VALUE = "value"
+    private var receivedSpeed: String? = "0"
+    private var publishedSpeed = "0"
 
     override fun serve(session: IHTTPSession): Response {
         val params = session.parms
@@ -51,6 +56,11 @@ class Server(
                     SHIFT_REGISTERS_TEMP -> activity.updateTempUIItems(
                         shiftRegisters = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
                 }
+            }
+            SPEED_URI -> {
+                receivedSpeed = params[SPEED_PARAM_KEY_VALUE]
+                publishedSpeed = receivedSpeed ?: publishedSpeed
+                activity.updateSpeedUIItem(publishedSpeed)
             }
         }
 

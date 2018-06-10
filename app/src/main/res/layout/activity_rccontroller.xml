@@ -335,7 +335,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:keepScreenOn="true"
-        android:text="@string/tachometer"
+        android:text="@string/tachometer_unit"
         android:textColor="@color/textColor_vehicle_speed_textView"
         android:textSize="@dimen/textSize_vehicle_speed_textView"
         android:textStyle="bold"

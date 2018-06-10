@@ -426,6 +426,8 @@ class RCControllerActivity : AppCompatActivity() {
                 emergencyLightsAnimation.stop()
                 emergencyLightsAnimation.selectDrawable(0)
             }
+
+            updateSpeedUIItem("${resources.getString(R.string.tachometer_value)}")
         }
         else {
             engineStartStop_imageView.setImageResource(R.drawable.engine_stopped_start_action)
@@ -453,6 +455,8 @@ class RCControllerActivity : AppCompatActivity() {
                 batteries = Server.WARNING_TYPE_NOTHING,
                 shiftRegisters = Server.WARNING_TYPE_NOTHING
             )
+
+            updateSpeedUIItem("-/-")
         }
 
         updateMotionUIItems()
@@ -529,8 +533,7 @@ class RCControllerActivity : AppCompatActivity() {
         }
     }
 
-    /* Temperature interactive items should be controlled in a separate function.
-        This function is for setting and resetting purposes.
+    /* This function is for setting and resetting purposes.
      */
     fun updateTempUIItems(
         rearLeftMotor: String = Server.WARNING_TYPE_UNCHANGED,
@@ -655,6 +658,14 @@ class RCControllerActivity : AppCompatActivity() {
                     shiftRegisterTemp_imageView.
                         setImageResource(R.drawable.shift_register_temp_off)
             }
+        }
+    }
+
+    /* This function is for setting and resetting purposes.
+    */
+    fun updateSpeedUIItem(speed: String){
+        runOnUiThread {
+            vehicle_speed_textView.text = "$speed ${resources.getString(R.string.tachometer_unit)}"
         }
     }
 

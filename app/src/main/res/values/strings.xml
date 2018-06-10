@@ -2,7 +2,8 @@
     <string name="app_name">RCController</string>
 
     <string name="exit_info">Please click BACK again to exit</string>
-    <string name="tachometer">0 km/h</string>
+    <string name="tachometer_value">0</string>
+    <string name="tachometer_unit">km/h</string>
 
     <string name="long_click_info">Long-click to interact</string>
     <string name="cruise_control_info">Cruise Control activated.\nUse throttle to deactivate it</string>
