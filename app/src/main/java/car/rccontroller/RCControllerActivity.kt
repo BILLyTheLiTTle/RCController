@@ -1,6 +1,7 @@
 package car.rccontroller
 
 import android.graphics.drawable.AnimationDrawable
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -371,8 +372,13 @@ class RCControllerActivity : AppCompatActivity() {
             setTitle(getString(R.string.server_dialog_title))
             setMessage(getString(R.string.server_dialog_msg))
             setPositiveButton(getString(R.string.server_dialog_ok_button)){ _, _ ->
-                val serverIp =  dialogView.findViewById<EditText>(R.id.serverIp_editText).text
-                        .toString()
+                val serverIp =
+                        if (Build.FINGERPRINT.contains("generic"))
+                            "10.0.0.2"
+                        else
+                            dialogView.findViewById<EditText>(R.id.serverIp_editText).text
+                                    .toString()
+                Log.e("IP", serverIp)
                 val serverPort = dialogView.findViewById<EditText>(R.id.serverPort_editText2).text
                         .toString().toIntOrNull()
 
