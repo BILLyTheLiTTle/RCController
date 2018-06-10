@@ -67,7 +67,7 @@ fun stopEngine(): String {
         serverPort = null
     }
 
-    androidWebServer.stop()
+    if(::androidWebServer.isInitialized) androidWebServer.stop()
 
     return msg
 }
