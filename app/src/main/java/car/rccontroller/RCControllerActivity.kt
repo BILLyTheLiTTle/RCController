@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_rccontroller.*
 import car.rccontroller.network.*
 
 
+val RUN_ON_EMULATOR = Build.FINGERPRINT.contains("generic")
 /**
  * An full-screen activity in landscape mode.
  */
@@ -113,12 +114,12 @@ class RCControllerActivity : AppCompatActivity() {
                 if (event.action == android.view.MotionEvent.ACTION_DOWN) {
                     /* Use the serverIp variable to check if the engine is running.
                        I use the serverIp because I did not want to use a blocking network request. */
-                    if(serverIp != null) {
+                    if(raspiServerIp != null) {
                         handbrake_imageView.setImageResource(R.drawable.handbrake_on)
                         activateHandbrake(true)
                     }
                 } else if (event.action == android.view.MotionEvent.ACTION_UP) {
-                    if(serverIp != null) {
+                    if(raspiServerIp != null) {
                         handbrake_imageView.setImageResource(R.drawable.handbrake_off)
                         activateHandbrake(false)
                     }
@@ -372,17 +373,16 @@ class RCControllerActivity : AppCompatActivity() {
             setTitle(getString(R.string.server_dialog_title))
             setMessage(getString(R.string.server_dialog_msg))
             setPositiveButton(getString(R.string.server_dialog_ok_button)){ _, _ ->
-                val serverIp =
-                        if (Build.FINGERPRINT.contains("generic"))
-                            "10.0.0.2"
+                val raspiServerIp =
+                        if (RUN_ON_EMULATOR)
+                            "10.0.2.2"
                         else
                             dialogView.findViewById<EditText>(R.id.serverIp_editText).text
                                     .toString()
-                Log.e("IP", serverIp)
-                val serverPort = dialogView.findViewById<EditText>(R.id.serverPort_editText2).text
+                val raspiServerPort = dialogView.findViewById<EditText>(R.id.serverPort_editText).text
                         .toString().toIntOrNull()
 
-                val status = startEngine(activity, serverIp, serverPort)
+                val status = startEngine(activity, raspiServerIp, raspiServerPort)
                 if (status == OK_STRING) {
                     resetUI()
                 } else {

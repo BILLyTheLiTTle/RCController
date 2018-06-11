@@ -15,7 +15,7 @@
         android:hint="@string/server_ip_hint" />
 
     <EditText
-        android:id="@+id/serverPort_editText2"
+        android:id="@+id/serverPort_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
