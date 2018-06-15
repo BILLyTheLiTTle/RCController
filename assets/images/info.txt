@@ -5,6 +5,8 @@ off state = 555555
 idle state = ffffff
 
 
+auto setup = ffffff
+manual setup = beb0f9
 temp normal = 0ef609
 temp medium = f5a615
 temp high = f61f09

@@ -26,7 +26,7 @@
     <dimen name="margin_after_imageViews_feedback_area_info">2dp</dimen>
 
     <dimen name="width_steering_seekBar">300dp</dimen>
-    <dimen name="margin_below_steering_seekBar">100dp</dimen>
+    <dimen name="margin_below_steering_seekBar">66dp</dimen>
     <dimen name="margin_before_steering_seekBar">16dp</dimen>
 
     <dimen name="textSize_vehicle_speed_textView">50sp</dimen>
@@ -38,4 +38,13 @@
     <dimen name="margin_after_throttleNbrake_mySeekBar">16dp</dimen>
     <dimen name="margin_above_throttleNbrake_mySeekBar">10dp</dimen>
     <dimen name="margin_below_throttleNbrake_mySeekBar">10dp</dimen>
+
+    <dimen name="width_setup_area_info">350dp</dimen>
+    <dimen name="height_setup_area_info">44dp</dimen>
+
+    <dimen name="width_imageViews_setup_area_info">50dp</dimen>
+    <dimen name="height_imageViews_setup_area_info">40dp</dimen>
+    <dimen name="margin_before_imageViews_setup_area_info">2dp</dimen>
+    <dimen name="margin_above_imageViews_setup_area_info">2dp</dimen>
+    <dimen name="margin_after_imageViews_setup_area_info">2dp</dimen>
 </resources>

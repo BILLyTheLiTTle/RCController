@@ -327,7 +327,7 @@
         android:progress="@integer/default_steering"
         android:enabled="false"
         android:progressTint="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/setup_area_info"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -370,5 +370,87 @@
             android:splitTrack="false"
             app:seekBarRotation="CW270" /><!-- Rotation: CW90 or CW270 -->
     </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+    <View
+        android:id="@+id/setup_area_info"
+        android:layout_width="@dimen/width_setup_area_info"
+        android:layout_height="@dimen/height_setup_area_info"
+        android:background="@color/black_overlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:id="@+id/suspension_front_imageView"
+        android:layout_width="@dimen/width_imageViews_setup_area_info"
+        android:layout_height="@dimen/height_imageViews_setup_area_info"
+        android:layout_marginLeft="@dimen/margin_before_imageViews_setup_area_info"
+        android:layout_marginStart="@dimen/margin_before_imageViews_setup_area_info"
+        android:layout_marginTop="@dimen/margin_above_imageViews_setup_area_info"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="@+id/setup_area_info"
+        app:layout_constraintTop_toTopOf="@+id/setup_area_info"
+        app:srcCompat="@drawable/suspension_front_off" />
+
+    <ImageView
+        android:id="@+id/suspension_rear_imageView"
+        android:layout_width="@dimen/width_imageViews_setup_area_info"
+        android:layout_height="@dimen/height_imageViews_setup_area_info"
+        android:layout_marginLeft="@dimen/margin_before_imageViews_setup_area_info"
+        android:layout_marginStart="@dimen/margin_before_imageViews_setup_area_info"
+        android:layout_marginTop="@dimen/margin_above_imageViews_setup_area_info"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toEndOf="@+id/suspension_front_imageView"
+        app:layout_constraintTop_toTopOf="@+id/setup_area_info"
+        app:srcCompat="@drawable/suspension_rear_off" />
+
+    <ImageView
+        android:id="@+id/motor_speed_limiter_imageView"
+        android:layout_width="@dimen/width_imageViews_setup_area_info"
+        android:layout_height="@dimen/height_imageViews_setup_area_info"
+        android:layout_marginLeft="@dimen/margin_before_imageViews_setup_area_info"
+        android:layout_marginStart="@dimen/margin_before_imageViews_setup_area_info"
+        android:layout_marginTop="@dimen/margin_above_imageViews_setup_area_info"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toEndOf="@+id/suspension_rear_imageView"
+        app:layout_constraintTop_toTopOf="@+id/setup_area_info"
+        app:srcCompat="@drawable/speed_limiter_off" />
+
+    <ImageView
+        android:id="@+id/differential_slippery_limiter_front_imageView"
+        android:layout_width="@dimen/width_imageViews_setup_area_info"
+        android:layout_height="@dimen/height_imageViews_setup_area_info"
+        android:layout_marginLeft="@dimen/margin_before_imageViews_setup_area_info"
+        android:layout_marginStart="@dimen/margin_before_imageViews_setup_area_info"
+        android:layout_marginTop="@dimen/margin_above_imageViews_setup_area_info"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toEndOf="@+id/motor_speed_limiter_imageView"
+        app:layout_constraintTop_toTopOf="@+id/setup_area_info"
+        app:srcCompat="@drawable/differential_front_off" />
+
+    <ImageView
+        android:id="@+id/differential_slippery_limiter_rear_imageView"
+        android:layout_width="@dimen/width_imageViews_setup_area_info"
+        android:layout_height="@dimen/height_imageViews_setup_area_info"
+        android:layout_marginLeft="@dimen/margin_before_imageViews_setup_area_info"
+        android:layout_marginStart="@dimen/margin_before_imageViews_setup_area_info"
+        android:layout_marginTop="@dimen/margin_above_imageViews_setup_area_info"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toEndOf="@+id/differential_slippery_limiter_front_imageView"
+        app:layout_constraintTop_toTopOf="@+id/setup_area_info"
+        app:srcCompat="@drawable/differential_rear_off" />
+
+    <ImageView
+        android:id="@+id/handling_assistance_imageView"
+        android:layout_width="@dimen/width_imageViews_setup_area_info"
+        android:layout_height="@dimen/height_imageViews_setup_area_info"
+        android:layout_marginLeft="@dimen/margin_before_imageViews_setup_area_info"
+        android:layout_marginStart="@dimen/margin_before_imageViews_setup_area_info"
+        android:layout_marginTop="@dimen/margin_above_imageViews_setup_area_info"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="@+id/setup_area_info"
+        app:layout_constraintTop_toTopOf="@+id/setup_area_info"
+        app:srcCompat="@drawable/handling_assistance_off" />
 
 </android.support.constraint.ConstraintLayout>
