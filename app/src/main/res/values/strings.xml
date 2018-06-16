@@ -9,7 +9,7 @@
     <string name="cruise_control_info">Cruise Control activated.\nUse throttle to deactivate it</string>
 
 
-    <string name="lights_off_warning">Double click to turn lights on</string>
+    <string name="lights_off_warning">Long-click to turn lights on</string>
     <string name="long_range_lights_warning">Single click to lower the light beam</string>
 
     <string name="server_dialog_title">Server IP and Port</string>

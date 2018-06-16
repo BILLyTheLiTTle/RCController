@@ -187,18 +187,11 @@ class RCControllerActivity : AppCompatActivity() {
         val gestureDetector = GestureDetector(this,
             object: GestureDetector.SimpleOnGestureListener(){
                 override fun onDoubleTap(e: MotionEvent): Boolean {
-                    if (isEngineStarted){
-                        when (mainLightsState) {
-                            LIGHTS_OFF -> mainLightsState = POSITION_LIGHTS
-                            POSITION_LIGHTS -> mainLightsState = DRIVING_LIGHTS
-                            DRIVING_LIGHTS -> mainLightsState = LONG_RANGE_LIGHTS
-                            LONG_RANGE_LIGHTS -> Toast.makeText(context,
-                                    getString(R.string.long_range_lights_warning),
-                                    Toast.LENGTH_SHORT).show()
-                        }
-                        // update the icon using server info for verification
-                        updateMainLightsUIItems()
+                    // If, for any reason, engine is stopped I should not do anything
+                    if(isEngineStarted) {
+                        mainLightsState = LONG_RANGE_SIGNAL_LIGHTS
                     }
+                    updateMainLightsUIItems()
                     return true
                 }
 
@@ -222,11 +215,18 @@ class RCControllerActivity : AppCompatActivity() {
         lights_imageView. apply {
             setOnTouchListener{_, event -> gestureDetector.onTouchEvent(event);}
             setOnLongClickListener { _ ->
-                // If, for any reason, engine is stopped I should not do anything
-                if(isEngineStarted) {
-                    mainLightsState = LONG_RANGE_SIGNAL_LIGHTS
+                if (isEngineStarted){
+                    when (mainLightsState) {
+                        LIGHTS_OFF -> mainLightsState = POSITION_LIGHTS
+                        POSITION_LIGHTS -> mainLightsState = DRIVING_LIGHTS
+                        DRIVING_LIGHTS -> mainLightsState = LONG_RANGE_LIGHTS
+                        LONG_RANGE_LIGHTS -> Toast.makeText(car.rccontroller.network.context,
+                                getString(R.string.long_range_lights_warning),
+                                Toast.LENGTH_SHORT).show()
+                    }
+                    // update the icon using server info for verification
+                    updateMainLightsUIItems()
                 }
-                updateMainLightsUIItems()
                 true
             }
         }
