@@ -214,6 +214,22 @@ var emergencyLights: Boolean
             "get_emergency_lights_state").toBoolean()
 
 
+/////////
+// Handling Assistance
+/////////
+const val ASSISTANCE_NULL = EMPTY_STRING
+const val ASSISTANCE_NONE = "assistance_none"
+const val ASSISTANCE_WARNING = "assistance_warning"
+const val ASSISTANCE_FULL = "assistance_full"
+var handlingAssistanceState: String
+    set(value) {
+        doBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+                "set_handling_assistance?" +
+                "state=$value")
+    }
+    get() = doBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+            "get_handling_assistance_state")
+
 
 /////////
 // General use

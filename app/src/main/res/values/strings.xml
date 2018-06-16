@@ -12,6 +12,9 @@
     <string name="lights_off_warning">Long-click to turn lights on</string>
     <string name="long_range_lights_warning">Single click to lower the light beam</string>
 
+    <string name="handling_assistance_full_warning">Single click to lower assistance</string>
+    <string name="handling_assistance_none_warning">Long-click to increase assistance</string>
+
     <string name="server_dialog_title">Server IP and Port</string>
     <string name="server_dialog_msg">Set IP and port</string>
     <string name="server_dialog_ok_button">OK</string>

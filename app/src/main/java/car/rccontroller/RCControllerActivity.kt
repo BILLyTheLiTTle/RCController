@@ -302,6 +302,39 @@ class RCControllerActivity : AppCompatActivity() {
             }
         }
 
+        //////
+        // setup handling assistance
+        //////
+        handling_assistance_imageView.apply {
+            setOnLongClickListener { _ ->
+                // If, for any reason, engine is stopped I should not do anything
+                if(isEngineStarted) {
+                    when (handlingAssistanceState) {
+                        ASSISTANCE_NONE -> handlingAssistanceState = ASSISTANCE_WARNING
+                        ASSISTANCE_WARNING -> handlingAssistanceState = ASSISTANCE_FULL
+                        ASSISTANCE_FULL ->
+                            Toast.makeText(context,
+                                    getString(R.string.handling_assistance_full_warning),
+                                    Toast.LENGTH_SHORT).show()
+                    }
+                    updateHandlingAssistanceUIItems()
+                }
+                true
+            }
+            setOnClickListener {_ ->
+                when (handlingAssistanceState) {
+                    ASSISTANCE_FULL -> handlingAssistanceState = ASSISTANCE_WARNING
+                    ASSISTANCE_WARNING -> handlingAssistanceState = ASSISTANCE_NONE
+                    ASSISTANCE_NONE ->
+                        Toast.makeText(context,
+                                getString(R.string.handling_assistance_none_warning),
+                                Toast.LENGTH_SHORT).show()
+                }
+                updateHandlingAssistanceUIItems()
+                true
+            }
+        }
+
         steering_seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 seekBar.progress = resources.getInteger(R.integer.default_steering)
@@ -462,6 +495,7 @@ class RCControllerActivity : AppCompatActivity() {
         updateMotionUIItems()
         updateMainLightsUIItems()
         updateTurnLightsUIItems()
+        updateHandlingAssistanceUIItems()
     }
 
     /* Motion interactive actions must be depending on each other.
@@ -484,6 +518,24 @@ class RCControllerActivity : AppCompatActivity() {
             cc_imageView.setImageResource(R.drawable.cruise_control_on)
         else
             cc_imageView.setImageResource(R.drawable.cruise_control_off)
+    }
+
+    /* Handling assistance interactive actions must be depending on each other.
+        Their states on the server should be changed by set methods.
+        This function here should get these states which must be as I want,
+        and if they don't check the set functions between client-server.
+     */
+    private fun updateHandlingAssistanceUIItems(){
+        when (handlingAssistanceState) {
+            ASSISTANCE_FULL -> handling_assistance_imageView.
+                    setImageResource(R.drawable.handling_assistance_full)
+            ASSISTANCE_WARNING -> handling_assistance_imageView.
+                    setImageResource(R.drawable.handling_assistance_warning)
+            ASSISTANCE_NONE -> handling_assistance_imageView.
+                    setImageResource(R.drawable.handling_assistance_manual)
+            else -> handling_assistance_imageView.
+                    setImageResource(R.drawable.handling_assistance_off)
+        }
     }
 
     /* Main lights interactive actions must be depending on each other.
