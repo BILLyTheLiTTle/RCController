@@ -317,7 +317,7 @@ class RCControllerActivity : AppCompatActivity() {
                                     getString(R.string.handling_assistance_full_warning),
                                     Toast.LENGTH_SHORT).show()
                     }
-                    updateHandlingAssistanceUIItems()
+                    updateHandlingAssistanceUIItem()
                 }
                 true
             }
@@ -330,7 +330,7 @@ class RCControllerActivity : AppCompatActivity() {
                                 getString(R.string.handling_assistance_none_warning),
                                 Toast.LENGTH_SHORT).show()
                 }
-                updateHandlingAssistanceUIItems()
+                updateHandlingAssistanceUIItem()
                 true
             }
         }
@@ -495,7 +495,7 @@ class RCControllerActivity : AppCompatActivity() {
         updateMotionUIItems()
         updateMainLightsUIItems()
         updateTurnLightsUIItems()
-        updateHandlingAssistanceUIItems()
+        updateHandlingAssistanceUIItem()
     }
 
     /* Motion interactive actions must be depending on each other.
@@ -525,7 +525,7 @@ class RCControllerActivity : AppCompatActivity() {
         This function here should get these states which must be as I want,
         and if they don't check the set functions between client-server.
      */
-    private fun updateHandlingAssistanceUIItems(){
+    private fun updateHandlingAssistanceUIItem(){
         when (handlingAssistanceState) {
             ASSISTANCE_FULL -> handling_assistance_imageView.
                     setImageResource(R.drawable.handling_assistance_full)

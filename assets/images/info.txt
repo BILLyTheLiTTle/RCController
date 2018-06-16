@@ -1,21 +1,18 @@
 on state = f5a615
-
 off state = 555555
-
 idle state = ffffff
 
-
-auto setup = ffffff
+auto setup = eeeee0
 manual setup = beb0f9
+
 temp normal = 0ef609
 temp medium = f5a615
 temp high = f61f09
-howto = apply color to base signal, black to alpha, reapply color to base signal
 
+howto = apply color to base signal, black to alpha, reapply color to base signal
 
 small image width = 30
 
 big image width = 60
-
 
 small car's items (motors, h-bridges) temps width = 10
