@@ -4,6 +4,7 @@ idle state = ffffff
 
 auto setup = eeeee0
 manual setup = beb0f9
+manual selection = 7fffd4
 
 temp normal = 0ef609
 temp medium = f5a615
