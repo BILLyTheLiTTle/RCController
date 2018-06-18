@@ -232,6 +232,27 @@ var handlingAssistanceState: String
 
 
 /////////
+// Motor Speed Limiter
+/////////
+const val MOTOR_SPEED_LIMITER_NO_SPEED = 0.00
+const val MOTOR_SPEED_LIMITER_SLOW_SPEED_1 = 0.20
+const val MOTOR_SPEED_LIMITER_SLOW_SPEED_2 = 0.40
+const val MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1 = 0.60
+const val MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2 = 0.70
+const val MOTOR_SPEED_LIMITER_FAST_SPEED_1 = 0.80
+const val MOTOR_SPEED_LIMITER_FAST_SPEED_2 = 0.90
+const val MOTOR_SPEED_LIMITER_FULL_SPEED = 1.00
+var motorSpeedLimiter: Double?
+    set(value) {
+        doBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+                "set_motor_speed_limiter?" +
+                "value=$value")
+    }
+    get() = doBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+            "get_motor_speed_limiter").toDoubleOrNull()
+
+
+/////////
 // General use
 /////////
 private fun doNonBlockingRequest(url:String) = launch { doRequest(url) }

@@ -335,6 +335,67 @@ class RCControllerActivity : AppCompatActivity() {
             }
         }
 
+        //////
+        // setup motor speed limiter
+        //////
+        motor_speed_limiter_imageView.apply {
+            setOnLongClickListener { _ ->
+                // If, for any reason, engine is stopped I should not do anything
+                if(isEngineStarted && handlingAssistanceState != ASSISTANCE_FULL) {
+                    when (motorSpeedLimiter) {
+                        MOTOR_SPEED_LIMITER_NO_SPEED ->
+                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_SLOW_SPEED_1
+                        MOTOR_SPEED_LIMITER_SLOW_SPEED_1 ->
+                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_SLOW_SPEED_2
+                        MOTOR_SPEED_LIMITER_SLOW_SPEED_2 ->
+                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1
+                        MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1 ->
+                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2
+                        MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2 ->
+                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_FAST_SPEED_1
+                        MOTOR_SPEED_LIMITER_FAST_SPEED_1 ->
+                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_FAST_SPEED_2
+                        MOTOR_SPEED_LIMITER_FAST_SPEED_2 ->
+                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_FULL_SPEED
+                        MOTOR_SPEED_LIMITER_FULL_SPEED -> Toast.
+                            makeText(context,
+                            getString(R.string.motor_speed_limiter_full_warning),
+                            Toast.LENGTH_SHORT
+                            ).show()
+                    }
+                    updateMotorSpeedLimiterUIItem()
+                }
+                true
+            }
+            setOnClickListener {_ ->
+                if(isEngineStarted && handlingAssistanceState != ASSISTANCE_FULL) {
+                    when (motorSpeedLimiter) {
+                        MOTOR_SPEED_LIMITER_FULL_SPEED ->
+                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_FAST_SPEED_2
+                        MOTOR_SPEED_LIMITER_FAST_SPEED_2 ->
+                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_FAST_SPEED_1
+                        MOTOR_SPEED_LIMITER_FAST_SPEED_1 ->
+                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2
+                        MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2 ->
+                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1
+                        MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1 ->
+                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_SLOW_SPEED_2
+                        MOTOR_SPEED_LIMITER_SLOW_SPEED_2 ->
+                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_SLOW_SPEED_1
+                        MOTOR_SPEED_LIMITER_SLOW_SPEED_1 ->
+                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_NO_SPEED
+                        MOTOR_SPEED_LIMITER_NO_SPEED -> Toast.
+                            makeText(context,
+                                getString(R.string.motor_speed_limiter_none_warning),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                    }
+                    updateMotorSpeedLimiterUIItem()
+                }
+                true
+            }
+        }
+
         steering_seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 seekBar.progress = resources.getInteger(R.integer.default_steering)
@@ -496,6 +557,7 @@ class RCControllerActivity : AppCompatActivity() {
         updateMainLightsUIItems()
         updateTurnLightsUIItems()
         updateHandlingAssistanceUIItem()
+        updateMotorSpeedLimiterUIItem()
     }
 
     /* Motion interactive actions must be depending on each other.
@@ -518,6 +580,36 @@ class RCControllerActivity : AppCompatActivity() {
             cc_imageView.setImageResource(R.drawable.cruise_control_on)
         else
             cc_imageView.setImageResource(R.drawable.cruise_control_off)
+    }
+
+    /* Motor speed limiter interactive actions must be depending on each other.
+        Their states on the server should be changed by set methods.
+        This function here should get these states which must be as I want,
+        and if they don't check the set functions between client-server.
+     */
+    private fun updateMotorSpeedLimiterUIItem(){
+        when (motorSpeedLimiter) {
+            MOTOR_SPEED_LIMITER_FULL_SPEED -> motor_speed_limiter_imageView.
+                    setImageResource(R.drawable.speed_limiter_manual_100)
+            MOTOR_SPEED_LIMITER_FAST_SPEED_2 -> motor_speed_limiter_imageView.
+                setImageResource(R.drawable.speed_limiter_manual_090)
+            MOTOR_SPEED_LIMITER_FAST_SPEED_1 -> motor_speed_limiter_imageView.
+                setImageResource(R.drawable.speed_limiter_manual_080)
+            MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2 -> motor_speed_limiter_imageView.
+                setImageResource(R.drawable.speed_limiter_manual_070)
+            MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1 -> motor_speed_limiter_imageView.
+                setImageResource(R.drawable.speed_limiter_manual_060)
+            MOTOR_SPEED_LIMITER_SLOW_SPEED_2 -> motor_speed_limiter_imageView.
+                setImageResource(R.drawable.speed_limiter_manual_040)
+            MOTOR_SPEED_LIMITER_SLOW_SPEED_1 -> motor_speed_limiter_imageView.
+                setImageResource(R.drawable.speed_limiter_manual_020)
+            MOTOR_SPEED_LIMITER_NO_SPEED -> motor_speed_limiter_imageView.
+                setImageResource(R.drawable.speed_limiter_manual_000)
+            null -> motor_speed_limiter_imageView.
+                setImageResource(R.drawable.speed_limiter_off)
+            else -> motor_speed_limiter_imageView.
+                setImageResource(R.drawable.speed_limiter_off)
+        }
     }
 
     /* Handling assistance interactive actions must be depending on each other.
