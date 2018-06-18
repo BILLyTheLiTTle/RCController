@@ -710,9 +710,9 @@ class RCControllerActivity : AppCompatActivity() {
         updateMotionUIItems()
         updateMainLightsUIItems()
         updateTurnLightsUIItems()
+        // The following function is updating some other ImageViews and more
         updateHandlingAssistanceUIItem()
         updateMotorSpeedLimiterUIItem()
-        updateFrontDifferentialSlipperyLimiterUIItem()
     }
 
     /* Motion interactive actions must be depending on each other.
@@ -823,6 +823,10 @@ class RCControllerActivity : AppCompatActivity() {
         Their states on the server should be changed by set methods.
         This function here should get these states which must be as I want,
         and if they don't check the set functions between client-server.
+
+        Also, here are updated the ImageViews of the items, which are connected
+        to handling assistance (ex. differential, suspension) and some of their
+        functionality values.
      */
     private fun updateHandlingAssistanceUIItem(){
         when (handlingAssistanceState) {
