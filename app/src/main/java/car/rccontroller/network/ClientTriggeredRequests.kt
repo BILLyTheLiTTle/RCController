@@ -274,7 +274,8 @@ var currentFrontDifferentialSlipperyLimiter: Int?
             "get_front_differential_slippery_limiter").toIntOrNull()
 
 //---- Rear ----
-var rearDifferentialSlipperyLimiter: Int?
+var previousRearDifferentialSlipperyLimiter: Int? = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
+var currentRearDifferentialSlipperyLimiter: Int?
     set(value) {
         doBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
                 "set_rear_differential_slippery_limiter?" +

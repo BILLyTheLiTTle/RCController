@@ -473,6 +473,83 @@ class RCControllerActivity : AppCompatActivity() {
             }
         }
 
+        //////
+        // setup rear differential slippery limiter
+        //////
+        differential_slippery_limiter_rear_imageView.apply {
+            setOnLongClickListener { _ ->
+                // If, for any reason, engine is stopped I should not do anything
+                if(isEngineStarted) {
+                    if (handlingAssistanceState != ASSISTANCE_FULL) {
+                        when (currentRearDifferentialSlipperyLimiter) {
+                            DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED ->
+                                currentRearDifferentialSlipperyLimiter =
+                                        DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2
+                            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2 ->
+                                currentRearDifferentialSlipperyLimiter =
+                                        DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1
+                            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1 ->
+                                currentRearDifferentialSlipperyLimiter =
+                                        DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0
+                            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 ->
+                                currentRearDifferentialSlipperyLimiter =
+                                        DIFFERENTIAL_SLIPPERY_LIMITER_OPEN
+                            DIFFERENTIAL_SLIPPERY_LIMITER_OPEN -> Toast.makeText(
+                                context,
+                                getString(R.string.differential_slippery_limiter_open_warning),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        previousRearDifferentialSlipperyLimiter =
+                                currentRearDifferentialSlipperyLimiter
+                    }
+                    else {
+                        Toast.makeText(
+                            context, getString(R.string.auto_to_manual_warning),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    updateRearDifferentialSlipperyLimiterUIItem()
+                }
+                true
+            }
+            setOnClickListener {_ ->
+                if(isEngineStarted) {
+                    if (handlingAssistanceState != ASSISTANCE_FULL) {
+                        when (currentRearDifferentialSlipperyLimiter) {
+                            DIFFERENTIAL_SLIPPERY_LIMITER_OPEN ->
+                                currentRearDifferentialSlipperyLimiter =
+                                        DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0
+                            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 ->
+                                currentRearDifferentialSlipperyLimiter =
+                                        DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1
+                            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1 ->
+                                currentRearDifferentialSlipperyLimiter =
+                                        DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2
+                            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2 ->
+                                currentRearDifferentialSlipperyLimiter =
+                                        DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
+                            DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED -> Toast.makeText(
+                                context,
+                                getString(R.string.differential_speed_limiter_locked_warning),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        previousRearDifferentialSlipperyLimiter =
+                                currentRearDifferentialSlipperyLimiter
+                    }
+                    else {
+                        Toast.makeText(
+                            context, getString(R.string.auto_to_manual_warning),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    updateRearDifferentialSlipperyLimiterUIItem()
+                }
+                true
+            }
+        }
+
         steering_seekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 seekBar.progress = resources.getInteger(R.integer.default_steering)
@@ -660,7 +737,33 @@ class RCControllerActivity : AppCompatActivity() {
             cc_imageView.setImageResource(R.drawable.cruise_control_off)
     }
 
-    /* Motor speed limiter interactive actions must be depending on each other.
+    /* Rear differential slippery limiter interactive actions must be depending on each other.
+        Their states on the server should be changed by set methods.
+        This function here should get these states which must be as I want,
+        and if they don't check the set functions between client-server.
+     */
+    private fun updateRearDifferentialSlipperyLimiterUIItem(){
+        when (currentRearDifferentialSlipperyLimiter) {
+            DIFFERENTIAL_SLIPPERY_LIMITER_OPEN -> differential_slippery_limiter_rear_imageView.
+                setImageResource(R.drawable.differential_front_manual_0_open)
+            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 -> differential_slippery_limiter_rear_imageView.
+                setImageResource(R.drawable.differential_front_manual_1_medi)
+            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1 -> differential_slippery_limiter_rear_imageView.
+                setImageResource(R.drawable.differential_front_manual_2_medi)
+            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2 -> differential_slippery_limiter_rear_imageView.
+                setImageResource(R.drawable.differential_front_manual_3_medi)
+            DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED -> differential_slippery_limiter_rear_imageView.
+                setImageResource(R.drawable.differential_front_manual_4_locked)
+            DIFFERENTIAL_SLIPPERY_LIMITER_AUTO -> differential_slippery_limiter_rear_imageView.
+                setImageResource(R.drawable.differential_front_auto)
+        //null -> differential_slippery_limiter_rear_imageView.
+        //   setImageResource(R.drawable.differential_front_off)
+            else -> differential_slippery_limiter_rear_imageView.
+                setImageResource(R.drawable.differential_front_off)
+        }
+    }
+
+    /* Front differential slippery limiter interactive actions must be depending on each other.
         Their states on the server should be changed by set methods.
         This function here should get these states which must be as I want,
         and if they don't check the set functions between client-server.
@@ -725,16 +828,19 @@ class RCControllerActivity : AppCompatActivity() {
         when (handlingAssistanceState) {
             ASSISTANCE_FULL -> {
                 currentFrontDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_AUTO
+                currentRearDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_AUTO
                 handling_assistance_imageView.
                     setImageResource(R.drawable.handling_assistance_full)
             }
             ASSISTANCE_WARNING -> {
                 currentFrontDifferentialSlipperyLimiter = previousFrontDifferentialSlipperyLimiter
+                currentRearDifferentialSlipperyLimiter = previousRearDifferentialSlipperyLimiter
                 handling_assistance_imageView.
                     setImageResource(R.drawable.handling_assistance_warning)
             }
             ASSISTANCE_NONE -> {
                 currentFrontDifferentialSlipperyLimiter = previousFrontDifferentialSlipperyLimiter
+                currentRearDifferentialSlipperyLimiter = previousRearDifferentialSlipperyLimiter
                 handling_assistance_imageView.
                     setImageResource(R.drawable.handling_assistance_manual)
             }
@@ -742,6 +848,7 @@ class RCControllerActivity : AppCompatActivity() {
                     setImageResource(R.drawable.handling_assistance_off)
         }
         updateFrontDifferentialSlipperyLimiterUIItem()
+        updateRearDifferentialSlipperyLimiterUIItem()
     }
 
     /* Main lights interactive actions must be depending on each other.
