@@ -6,8 +6,8 @@
     <string name="tachometer_unit">km/h</string>
 
     <string name="long_click_info">Long-click to interact</string>
-    <string name="cruise_control_info">Cruise Control activated.\nUse throttle to deactivate it</string>
-
+    <string name="cruise_control_info">Cruise Control activated.\nUse throttle to deactivate
+        it</string>
 
     <string name="lights_off_warning">Long-click to turn lights on</string>
     <string name="long_range_lights_warning">Single click to lower the light beam</string>
@@ -15,8 +15,19 @@
     <string name="handling_assistance_full_warning">Single click to lower assistance</string>
     <string name="handling_assistance_none_warning">Long-click to increase assistance</string>
 
-    <string name="motor_speed_limiter_full_warning">Single click to lower maximum vehicle\'s speed</string>
-    <string name="motor_speed_limiter_none_warning">Long-click to increase maximum vehicle\'s speed</string>
+    <string name="motor_speed_limiter_full_warning">Single click to lower maximum vehicle\'s
+        speed</string>
+    <string name="motor_speed_limiter_none_warning">Long-click to increase maximum vehicle\'s
+        speed</string>
+
+
+    <string name="differential_slippery_limiter_open_warning">Single click to move to a more locked
+        diff</string>
+    <string name="differential_speed_limiter_locked_warning">Long-click to move to a more open
+        diff</string>
+
+    <string name="auto_to_manual_warning">Not possible option due to \"Handling Assistance\"
+        settings</string>
 
     <string name="server_dialog_title">Server IP and Port</string>
     <string name="server_dialog_msg">Set IP and port</string>

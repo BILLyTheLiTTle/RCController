@@ -253,6 +253,38 @@ var motorSpeedLimiter: Double?
 
 
 /////////
+// Differential Slippery Limiter
+/////////
+const val DIFFERENTIAL_SLIPPERY_LIMITER_OPEN = 0
+const val DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 = 1
+const val DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1 = 2
+const val DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2 = 3
+const val DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED = 4
+const val DIFFERENTIAL_SLIPPERY_LIMITER_AUTO = 10
+
+//---- Front ----
+var previousFrontDifferentialSlipperyLimiter: Int? = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
+var currentFrontDifferentialSlipperyLimiter: Int?
+    set(value) {
+        doBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+                "set_front_differential_slippery_limiter?" +
+                "value=$value")
+    }
+    get() = doBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+            "get_front_differential_slippery_limiter").toIntOrNull()
+
+//---- Rear ----
+var rearDifferentialSlipperyLimiter: Int?
+    set(value) {
+        doBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+                "set_rear_differential_slippery_limiter?" +
+                "value=$value")
+    }
+    get() = doBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+            "get_rear_differential_slippery_limiter").toIntOrNull()
+
+
+/////////
 // General use
 /////////
 private fun doNonBlockingRequest(url:String) = launch { doRequest(url) }
