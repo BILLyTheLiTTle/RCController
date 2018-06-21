@@ -745,21 +745,21 @@ class RCControllerActivity : AppCompatActivity() {
     private fun updateRearDifferentialSlipperyLimiterUIItem(){
         when (currentRearDifferentialSlipperyLimiter) {
             DIFFERENTIAL_SLIPPERY_LIMITER_OPEN -> differential_slippery_limiter_rear_imageView.
-                setImageResource(R.drawable.differential_front_manual_0_open)
+                setImageResource(R.drawable.differential_rear_manual_0_open)
             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 -> differential_slippery_limiter_rear_imageView.
-                setImageResource(R.drawable.differential_front_manual_1_medi)
+                setImageResource(R.drawable.differential_rear_manual_1_medi)
             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1 -> differential_slippery_limiter_rear_imageView.
-                setImageResource(R.drawable.differential_front_manual_2_medi)
+                setImageResource(R.drawable.differential_rear_manual_2_medi)
             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2 -> differential_slippery_limiter_rear_imageView.
-                setImageResource(R.drawable.differential_front_manual_3_medi)
+                setImageResource(R.drawable.differential_rear_manual_3_medi)
             DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED -> differential_slippery_limiter_rear_imageView.
-                setImageResource(R.drawable.differential_front_manual_4_locked)
+                setImageResource(R.drawable.differential_rear_manual_4_locked)
             DIFFERENTIAL_SLIPPERY_LIMITER_AUTO -> differential_slippery_limiter_rear_imageView.
-                setImageResource(R.drawable.differential_front_auto)
+                setImageResource(R.drawable.differential_rear_auto)
         //null -> differential_slippery_limiter_rear_imageView.
-        //   setImageResource(R.drawable.differential_front_off)
+        //   setImageResource(R.drawable.differential_rear_off)
             else -> differential_slippery_limiter_rear_imageView.
-                setImageResource(R.drawable.differential_front_off)
+                setImageResource(R.drawable.differential_rear_off)
         }
     }
 
