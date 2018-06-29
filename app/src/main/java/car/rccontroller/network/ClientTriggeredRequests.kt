@@ -68,6 +68,10 @@ fun stopEngine(): String {
         raspiServerPort = null
     }
 
+    // TODO if I don't want to save manual setup settings
+    previousFrontDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
+    previousRearDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
+
     if(::androidWebServer.isInitialized) androidWebServer.stop()
 
     return msg
