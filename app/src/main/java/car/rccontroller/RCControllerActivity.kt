@@ -31,6 +31,25 @@ class RCControllerActivity : AppCompatActivity() {
     private val emergencyLightsAnimation= AnimationDrawable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // declare local function
+        fun throttle(progress: Int){
+            val direction = if (reverseIntention) ACTION_MOVE_BACKWARD else ACTION_MOVE_FORWARD
+            when (progress) {
+                0 -> setBrakingStill()
+                10 -> setNeutral()
+                20 -> setThrottleBrake(direction, progress)
+                40 -> setThrottleBrake(direction, progress)
+                50 -> setThrottleBrake(direction, progress)
+                65 -> setThrottleBrake(direction, progress)
+                75 -> setThrottleBrake(direction, progress)
+                80 -> setThrottleBrake(direction, progress)
+                85 -> setThrottleBrake(direction, progress)
+                90 -> setThrottleBrake(direction, progress)
+                95 -> setThrottleBrake(direction, progress)
+                100 -> setThrottleBrake(direction, progress)
+            }
+        }
+
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_rccontroller)
@@ -122,6 +141,8 @@ class RCControllerActivity : AppCompatActivity() {
                     if(raspiServerIp != null) {
                         handbrake_imageView.setImageResource(R.drawable.handbrake_off)
                         activateHandbrake(false)
+                        // re-throttle automatically to start moving the rear wheels again
+                        throttle(throttleNbrake_mySeekBar.progress)
                     }
                 }
                 false;
@@ -593,21 +614,7 @@ class RCControllerActivity : AppCompatActivity() {
                 updateMotionUIItems()
             }
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean){
-                val direction = if (reverseIntention) ACTION_MOVE_BACKWARD else ACTION_MOVE_FORWARD
-                when (progress) {
-                    0 -> setBrakingStill()
-                    10 -> setNeutral()
-                    20 -> setThrottleBrake(direction, progress)
-                    40 -> setThrottleBrake(direction, progress)
-                    50 -> setThrottleBrake(direction, progress)
-                    65 -> setThrottleBrake(direction, progress)
-                    75 -> setThrottleBrake(direction, progress)
-                    80 -> setThrottleBrake(direction, progress)
-                    85 -> setThrottleBrake(direction, progress)
-                    90 -> setThrottleBrake(direction, progress)
-                    95 -> setThrottleBrake(direction, progress)
-                    100 -> setThrottleBrake(direction, progress)
-                }
+                throttle(progress)
             }
         })
     }
