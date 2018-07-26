@@ -1,11 +1,12 @@
-package car.rccontroller.network
+package car.rccontroller.network.server.feedback
 
-import android.util.Log
 import car.rccontroller.RCControllerActivity
+import car.rccontroller.network.EMPTY_STRING
+import car.rccontroller.network.OK_STRING
 import fi.iki.elonen.NanoHTTPD
 
 // constructor default parameters are for emulator
-class Server(
+class BasicSensorFeedbackServer(
     private val activity: RCControllerActivity,
     val ip: String = "localhost",
     val port: Int = 8090
@@ -38,23 +39,32 @@ class Server(
             TEMP_URI -> {
                 when (params[TEMP_PARAM_KEY_ITEM]) {
                     MOTOR_REAR_LEFT_TEMP -> activity.updateTempUIItems(
-                        rearLeftMotor = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
+                        rearLeftMotor = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED
+                    )
                     MOTOR_REAR_RIGHT_TEMP -> activity.updateTempUIItems(
-                        rearRightMotor = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
+                        rearRightMotor = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED
+                    )
                     MOTOR_FRONT_LEFT_TEMP -> activity.updateTempUIItems(
-                        frontLeftMotor = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
+                        frontLeftMotor = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED
+                    )
                     MOTOR_FRONT_RIGHT_TEMP -> activity.updateTempUIItems(
-                        frontRightMotor = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
+                        frontRightMotor = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED
+                    )
                     H_BRIDGE_REAR_TEMP -> activity.updateTempUIItems(
-                        rearHBridge = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
+                        rearHBridge = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED
+                    )
                     H_BRIDGE_FRONT_TEMP -> activity.updateTempUIItems(
-                        frontHBridge = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
+                        frontHBridge = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED
+                    )
                     RASPBERRY_PI_TEMP -> activity.updateTempUIItems(
-                        raspberryPi = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
+                        raspberryPi = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED
+                    )
                     BATTERIES_TEMP -> activity.updateTempUIItems(
-                        batteries = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
+                        batteries = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED
+                    )
                     SHIFT_REGISTERS_TEMP -> activity.updateTempUIItems(
-                        shiftRegisters = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED)
+                        shiftRegisters = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED
+                    )
                 }
             }
             SPEED_URI -> {

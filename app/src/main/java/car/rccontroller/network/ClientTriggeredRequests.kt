@@ -15,6 +15,7 @@ import android.net.wifi.WifiManager
 import android.text.format.Formatter
 import car.rccontroller.RCControllerActivity
 import car.rccontroller.RUN_ON_EMULATOR
+import car.rccontroller.network.server.feedback.BasicSensorFeedbackServer
 
 
 const val OK_STRING = "OK"
@@ -24,7 +25,7 @@ var raspiServerIp: String? = null
 var raspiServerPort: Int? = null
 var context: RCControllerActivity? = null
 
-private lateinit var androidWebServer:Server
+private lateinit var basicSensorFeedbackServer: BasicSensorFeedbackServer
 
 /////////
 // Engine
@@ -48,15 +49,19 @@ fun startEngine(context: RCControllerActivity, serverIp: String?, serverPort: In
     car.rccontroller.network.raspiServerPort = serverPort
     car.rccontroller.network.context = context
 
-    if(::androidWebServer.isInitialized) androidWebServer.stop()
-    androidWebServer = if (RUN_ON_EMULATOR) Server(context) else Server(context, myIP, 8080)
-    androidWebServer.start()
+    if(::basicSensorFeedbackServer.isInitialized) basicSensorFeedbackServer.stop()
+    basicSensorFeedbackServer = if (RUN_ON_EMULATOR) BasicSensorFeedbackServer(context) else BasicSensorFeedbackServer(
+        context,
+        myIP,
+        8080
+    )
+    basicSensorFeedbackServer.start()
 
     //TODO add the nanohttp ip and port when needed as argument to the handshake
     return doBlockingRequest("http://${car.rccontroller.network.raspiServerIp}:" +
             "${car.rccontroller.network.raspiServerPort}/start_engine?" +
-            "nanohttp_client_ip=${androidWebServer.ip}" +
-            "&nanohttp_client_port=${androidWebServer.port}")
+            "nanohttp_client_ip=${basicSensorFeedbackServer.ip}" +
+            "&nanohttp_client_port=${basicSensorFeedbackServer.port}")
 }
 
 fun stopEngine(): String {
@@ -72,7 +77,7 @@ fun stopEngine(): String {
     previousFrontDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
     previousRearDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
 
-    if(::androidWebServer.isInitialized) androidWebServer.stop()
+    if(::basicSensorFeedbackServer.isInitialized) basicSensorFeedbackServer.stop()
 
     return msg
 }
