@@ -10,10 +10,12 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_rccontroller.*
 import car.rccontroller.network.*
+import car.rccontroller.network.server.feedback.AdvancedSensorFeedbackServer
 import car.rccontroller.network.server.feedback.BasicSensorFeedbackServer
 
 
@@ -22,9 +24,6 @@ val RUN_ON_EMULATOR = Build.FINGERPRINT.contains("generic")
  * An full-screen activity in landscape mode.
  */
 class RCControllerActivity : AppCompatActivity() {
-
-    private val IDLE_STATE = "idle_state"
-    private val OFF_STATE = "off_state"
 
     private var doubleBackToExitPressedOnce = false
     private var cruiseControlActive = false
@@ -845,26 +844,46 @@ class RCControllerActivity : AppCompatActivity() {
                 currentRearDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_AUTO
                 handling_assistance_imageView.
                     setImageResource(R.drawable.handling_assistance_full)
-                resetAdvancedSensorUIItems(IDLE_STATE)
+                updateAdvancedSensorUIItems(tcmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
+                abmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
+                esmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
+                udmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
+                odmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
+                cdmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE)
             }
             ASSISTANCE_WARNING -> {
                 currentFrontDifferentialSlipperyLimiter = previousFrontDifferentialSlipperyLimiter
                 currentRearDifferentialSlipperyLimiter = previousRearDifferentialSlipperyLimiter
                 handling_assistance_imageView.
                     setImageResource(R.drawable.handling_assistance_warning)
-                resetAdvancedSensorUIItems(IDLE_STATE)
+                updateAdvancedSensorUIItems(tcmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
+                        abmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
+                        esmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
+                        udmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
+                        odmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
+                        cdmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE)
             }
             ASSISTANCE_NONE -> {
                 currentFrontDifferentialSlipperyLimiter = previousFrontDifferentialSlipperyLimiter
                 currentRearDifferentialSlipperyLimiter = previousRearDifferentialSlipperyLimiter
                 handling_assistance_imageView.
                     setImageResource(R.drawable.handling_assistance_manual)
-                resetAdvancedSensorUIItems(OFF_STATE)
+                updateAdvancedSensorUIItems(tcmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
+                        abmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
+                        esmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
+                        udmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
+                        odmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
+                        cdmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE)
             }
             else -> {
                 handling_assistance_imageView.
                         setImageResource(R.drawable.handling_assistance_off)
-                resetAdvancedSensorUIItems()
+                updateAdvancedSensorUIItems(tcmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
+                        abmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
+                        esmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
+                        udmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
+                        odmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
+                        cdmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE)
             }
         }
         updateFrontDifferentialSlipperyLimiterUIItem()
@@ -877,33 +896,46 @@ class RCControllerActivity : AppCompatActivity() {
         Also, here we update the ImageViews of the items, of the advanced sensors
         according to the initial (off, idle) state only.
      */
-    private fun resetAdvancedSensorUIItems(state: String = "error"){
-        when (state) {
-            IDLE_STATE -> {
-                tcs_imageView.setImageResource(R.drawable.tcs_idle)
-                abs_imageView.setImageResource(R.drawable.abs_idle)
-                esc_imageView.setImageResource(R.drawable.esc_idle)
-                understeer_imageView.setImageResource(R.drawable.understeer_idle)
-                oversteer_imageView.setImageResource(R.drawable.oversteer_idle)
-                cds_imageView.setImageResource(R.drawable.cds_idle)
-            }
-            OFF_STATE -> {
-                tcs_imageView.setImageResource(R.drawable.tcs_off)
-                abs_imageView.setImageResource(R.drawable.abs_off)
-                esc_imageView.setImageResource(R.drawable.esc_off)
-                understeer_imageView.setImageResource(R.drawable.understeer_off)
-                oversteer_imageView.setImageResource(R.drawable.oversteer_off)
-                cds_imageView.setImageResource(R.drawable.cds_off)
-            }
-            else -> {
-                tcs_imageView.visibility = View.INVISIBLE
-                abs_imageView.visibility = View.INVISIBLE
-                esc_imageView.visibility = View.INVISIBLE
-                understeer_imageView.visibility = View.INVISIBLE
-                oversteer_imageView.visibility = View.INVISIBLE
-                cds_imageView.visibility = View.INVISIBLE
+    fun updateAdvancedSensorUIItems(
+            tcmState: String = AdvancedSensorFeedbackServer.MODULE_UNCHANGED_STATE,
+            abmState: String = AdvancedSensorFeedbackServer.MODULE_UNCHANGED_STATE,
+            esmState: String = AdvancedSensorFeedbackServer.MODULE_UNCHANGED_STATE,
+            udmState: String = AdvancedSensorFeedbackServer.MODULE_UNCHANGED_STATE,
+            odmState: String = AdvancedSensorFeedbackServer.MODULE_UNCHANGED_STATE,
+            cdmState: String = AdvancedSensorFeedbackServer.MODULE_UNCHANGED_STATE){
+
+        fun updateItems(
+                moduleState: String,
+                moduleUI: ImageView,
+                moduleOnDrawable: Int,
+                moduleIdleDrawable: Int,
+                moduleOffDrawable: Int) {
+            runOnUiThread {
+                when (moduleState) {
+                    AdvancedSensorFeedbackServer.MODULE_ON_STATE ->
+                        moduleUI.setImageResource(moduleOnDrawable)
+                    AdvancedSensorFeedbackServer.MODULE_IDLE_STATE ->
+                        moduleUI.setImageResource(moduleIdleDrawable)
+                    AdvancedSensorFeedbackServer.MODULE_OFF_STATE ->
+                        moduleUI.setImageResource(moduleOffDrawable)
+                    AdvancedSensorFeedbackServer.MODULE_NOTHING_STATE ->
+                        moduleUI.visibility = View.INVISIBLE
+                }
             }
         }
+
+        updateItems(tcmState, tcm_imageView,
+                R.drawable.tcm_on, R.drawable.tcm_idle, R.drawable.tcm_off)
+        updateItems(abmState, abm_imageView,
+                R.drawable.abm_on, R.drawable.abm_idle, R.drawable.abm_off)
+        updateItems(esmState, esm_imageView,
+                R.drawable.esm_on, R.drawable.esm_idle, R.drawable.esm_off)
+        updateItems(udmState, udm_imageView,
+                R.drawable.udm_on, R.drawable.udm_idle, R.drawable.udm_off)
+        updateItems(odmState, odm_imageView,
+                R.drawable.odm_on, R.drawable.odm_idle, R.drawable.odm_off)
+        updateItems(cdmState, cdm_imageView,
+                R.drawable.cdm_on, R.drawable.cdm_idle, R.drawable.cdm_off)
     }
 
     /* Main lights interactive actions must be depending on each other.

@@ -15,17 +15,20 @@ import android.net.wifi.WifiManager
 import android.text.format.Formatter
 import car.rccontroller.RCControllerActivity
 import car.rccontroller.RUN_ON_EMULATOR
+import car.rccontroller.network.server.feedback.AdvancedSensorFeedbackServer
 import car.rccontroller.network.server.feedback.BasicSensorFeedbackServer
 
 
 const val OK_STRING = "OK"
 const val EMPTY_STRING = "NULL"
+const val basicSensorFeedbackServerPort= 8080
 
 var raspiServerIp: String? = null
 var raspiServerPort: Int? = null
 var context: RCControllerActivity? = null
 
 private lateinit var basicSensorFeedbackServer: BasicSensorFeedbackServer
+private lateinit var advancedSensorFeedbackServer: AdvancedSensorFeedbackServer
 
 /////////
 // Engine
@@ -53,9 +56,16 @@ fun startEngine(context: RCControllerActivity, serverIp: String?, serverPort: In
     basicSensorFeedbackServer = if (RUN_ON_EMULATOR) BasicSensorFeedbackServer(context) else BasicSensorFeedbackServer(
         context,
         myIP,
-        8080
+        basicSensorFeedbackServerPort
     )
     basicSensorFeedbackServer.start()
+    if(::advancedSensorFeedbackServer.isInitialized) advancedSensorFeedbackServer.stop()
+    advancedSensorFeedbackServer = if (RUN_ON_EMULATOR) AdvancedSensorFeedbackServer(context) else AdvancedSensorFeedbackServer(
+            context,
+            myIP,
+            basicSensorFeedbackServerPort + 1
+    )
+    advancedSensorFeedbackServer.start()
 
     //TODO add the nanohttp ip and port when needed as argument to the handshake
     return doBlockingRequest("http://${car.rccontroller.network.raspiServerIp}:" +
@@ -78,6 +88,8 @@ fun stopEngine(): String {
     previousRearDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
 
     if(::basicSensorFeedbackServer.isInitialized) basicSensorFeedbackServer.stop()
+    if(::advancedSensorFeedbackServer.isInitialized) advancedSensorFeedbackServer.stop()
+
 
     return msg
 }

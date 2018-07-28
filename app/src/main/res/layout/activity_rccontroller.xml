@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/tcs_imageView"
+        android:id="@+id/tcm_imageView"
         android:layout_width="@dimen/width_imageViews_feedback_area_critical"
         android:layout_height="@dimen/height_imageViews_feedback_area_critical"
         android:layout_marginLeft="@dimen/margin_before_imageViews_feedback_area_critical"
@@ -27,67 +27,67 @@
         android:scaleType="fitCenter"
         app:layout_constraintStart_toStartOf="@+id/feedback_area_critical"
         app:layout_constraintTop_toTopOf="@+id/feedback_area_critical"
-        app:srcCompat="@drawable/tcs_off" />
+        app:srcCompat="@drawable/tcm_off" />
 
     <ImageView
-        android:id="@+id/abs_imageView"
+        android:id="@+id/abm_imageView"
         android:layout_width="@dimen/width_imageViews_feedback_area_critical"
         android:layout_height="@dimen/height_imageViews_feedback_area_critical"
         android:layout_marginLeft="@dimen/margin_before_imageViews_feedback_area_critical"
         android:layout_marginStart="@dimen/margin_before_imageViews_feedback_area_critical"
         android:layout_marginTop="@dimen/margin_above_imageViews_feedback_area_critical"
         android:scaleType="fitCenter"
-        app:layout_constraintStart_toEndOf="@+id/tcs_imageView"
+        app:layout_constraintStart_toEndOf="@+id/tcm_imageView"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/abs_off" />
+        app:srcCompat="@drawable/abm_off" />
 
     <ImageView
-        android:id="@+id/esc_imageView"
+        android:id="@+id/esm_imageView"
         android:layout_width="@dimen/width_imageViews_feedback_area_critical"
         android:layout_height="@dimen/height_imageViews_feedback_area_critical"
         android:layout_marginLeft="@dimen/margin_before_imageViews_feedback_area_critical"
         android:layout_marginStart="@dimen/margin_before_imageViews_feedback_area_critical"
         android:layout_marginTop="@dimen/margin_above_imageViews_feedback_area_critical"
         android:scaleType="fitCenter"
-        app:layout_constraintStart_toEndOf="@+id/abs_imageView"
+        app:layout_constraintStart_toEndOf="@+id/abm_imageView"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/esc_off" />
+        app:srcCompat="@drawable/esm_off" />
 
     <ImageView
-        android:id="@+id/understeer_imageView"
+        android:id="@+id/udm_imageView"
         android:layout_width="@dimen/width_imageViews_feedback_area_critical"
         android:layout_height="@dimen/height_imageViews_feedback_area_critical"
         android:layout_marginLeft="@dimen/margin_before_imageViews_feedback_area_critical"
         android:layout_marginStart="@dimen/margin_before_imageViews_feedback_area_critical"
         android:layout_marginTop="@dimen/margin_above_imageViews_feedback_area_critical"
         android:scaleType="fitCenter"
-        app:layout_constraintStart_toEndOf="@+id/esc_imageView"
+        app:layout_constraintStart_toEndOf="@+id/esm_imageView"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/understeer_off" />
+        app:srcCompat="@drawable/udm_off" />
 
     <ImageView
-        android:id="@+id/oversteer_imageView"
+        android:id="@+id/odm_imageView"
         android:layout_width="@dimen/width_imageViews_feedback_area_critical"
         android:layout_height="@dimen/height_imageViews_feedback_area_critical"
         android:layout_marginLeft="@dimen/margin_before_imageViews_feedback_area_critical"
         android:layout_marginStart="@dimen/margin_before_imageViews_feedback_area_critical"
         android:layout_marginTop="@dimen/margin_above_imageViews_feedback_area_critical"
         android:scaleType="fitCenter"
-        app:layout_constraintStart_toEndOf="@+id/understeer_imageView"
+        app:layout_constraintStart_toEndOf="@+id/udm_imageView"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/oversteer_off" />
+        app:srcCompat="@drawable/odm_off" />
 
     <ImageView
-        android:id="@+id/cds_imageView"
+        android:id="@+id/cdm_imageView"
         android:layout_width="@dimen/width_imageViews_feedback_area_critical"
         android:layout_height="@dimen/height_imageViews_feedback_area_critical"
         android:layout_marginLeft="@dimen/margin_before_imageViews_feedback_area_critical"
         android:layout_marginStart="@dimen/margin_before_imageViews_feedback_area_critical"
         android:layout_marginTop="@dimen/margin_above_imageViews_feedback_area_critical"
         android:scaleType="fitCenter"
-        app:layout_constraintStart_toEndOf="@+id/oversteer_imageView"
+        app:layout_constraintStart_toEndOf="@+id/odm_imageView"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/cds_off" />
+        app:srcCompat="@drawable/cdm_off" />
 
     <ImageView
         android:id="@+id/carTemps_imageView"
