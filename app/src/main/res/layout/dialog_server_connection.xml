@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
-        android:text="192.168.1.7"
+        android:text="192.168.1.8"
         android:hint="@string/server_ip_hint" />
 
     <EditText

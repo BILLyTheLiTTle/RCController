@@ -8,6 +8,7 @@ import android.os.Handler
 import android.support.v7.app.AlertDialog
 import android.view.GestureDetector
 import android.view.MotionEvent
+import android.view.View
 import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.Toast
@@ -21,6 +22,9 @@ val RUN_ON_EMULATOR = Build.FINGERPRINT.contains("generic")
  * An full-screen activity in landscape mode.
  */
 class RCControllerActivity : AppCompatActivity() {
+
+    private val IDLE_STATE = "idle_state"
+    private val OFF_STATE = "off_state"
 
     private var doubleBackToExitPressedOnce = false
     private var cruiseControlActive = false
@@ -841,24 +845,65 @@ class RCControllerActivity : AppCompatActivity() {
                 currentRearDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_AUTO
                 handling_assistance_imageView.
                     setImageResource(R.drawable.handling_assistance_full)
+                resetAdvancedSensorUIItems(IDLE_STATE)
             }
             ASSISTANCE_WARNING -> {
                 currentFrontDifferentialSlipperyLimiter = previousFrontDifferentialSlipperyLimiter
                 currentRearDifferentialSlipperyLimiter = previousRearDifferentialSlipperyLimiter
                 handling_assistance_imageView.
                     setImageResource(R.drawable.handling_assistance_warning)
+                resetAdvancedSensorUIItems(IDLE_STATE)
             }
             ASSISTANCE_NONE -> {
                 currentFrontDifferentialSlipperyLimiter = previousFrontDifferentialSlipperyLimiter
                 currentRearDifferentialSlipperyLimiter = previousRearDifferentialSlipperyLimiter
                 handling_assistance_imageView.
                     setImageResource(R.drawable.handling_assistance_manual)
+                resetAdvancedSensorUIItems(OFF_STATE)
             }
-            else -> handling_assistance_imageView.
-                    setImageResource(R.drawable.handling_assistance_off)
+            else -> {
+                handling_assistance_imageView.
+                        setImageResource(R.drawable.handling_assistance_off)
+                resetAdvancedSensorUIItems()
+            }
         }
         updateFrontDifferentialSlipperyLimiterUIItem()
         updateRearDifferentialSlipperyLimiterUIItem()
+    }
+
+    /* Advanced sensor non-interactive images are updated by server actions
+        which are sent to the client when the Raspi have to.
+
+        Also, here we update the ImageViews of the items, of the advanced sensors
+        according to the initial (off, idle) state only.
+     */
+    private fun resetAdvancedSensorUIItems(state: String = "error"){
+        when (state) {
+            IDLE_STATE -> {
+                tcs_imageView.setImageResource(R.drawable.tcs_idle)
+                abs_imageView.setImageResource(R.drawable.abs_idle)
+                esc_imageView.setImageResource(R.drawable.esc_idle)
+                understeer_imageView.setImageResource(R.drawable.understeer_idle)
+                oversteer_imageView.setImageResource(R.drawable.oversteer_idle)
+                cds_imageView.setImageResource(R.drawable.cds_idle)
+            }
+            OFF_STATE -> {
+                tcs_imageView.setImageResource(R.drawable.tcs_off)
+                abs_imageView.setImageResource(R.drawable.abs_off)
+                esc_imageView.setImageResource(R.drawable.esc_off)
+                understeer_imageView.setImageResource(R.drawable.understeer_off)
+                oversteer_imageView.setImageResource(R.drawable.oversteer_off)
+                cds_imageView.setImageResource(R.drawable.cds_off)
+            }
+            else -> {
+                tcs_imageView.visibility = View.INVISIBLE
+                abs_imageView.visibility = View.INVISIBLE
+                esc_imageView.visibility = View.INVISIBLE
+                understeer_imageView.visibility = View.INVISIBLE
+                oversteer_imageView.visibility = View.INVISIBLE
+                cds_imageView.visibility = View.INVISIBLE
+            }
+        }
     }
 
     /* Main lights interactive actions must be depending on each other.
