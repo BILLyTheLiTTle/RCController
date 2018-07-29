@@ -17,8 +17,8 @@ class AdvancedSensorFeedbackServer(
     private val TRACTION_CONTROL_MODULE = "TCM"
     private val ANTILOCK_BRAKING_MODULE = "ABM"
     private val ELECTRONIC_STABILITY_MODULE = "ESM"
-    private val UNDERSTEER_DETECTOR_MODULE = "UDM"
-    private val OVERSTEER_DETECTOR_MODULE = "ODM"
+    private val UNDERSTEER_DETECTION_MODULE = "UDM"
+    private val OVERSTEER_DETECTION_MODULE = "ODM"
     private val COLLISION_DETECTION_MODULE = "CDM"
 
     override fun serve(session: IHTTPSession): Response {
@@ -37,10 +37,10 @@ class AdvancedSensorFeedbackServer(
                     ELECTRONIC_STABILITY_MODULE -> activity.updateAdvancedSensorUIItems(
                             esmState = params[ECU_PARAM_KEY_VALUE] ?: MODULE_UNCHANGED_STATE
                     )
-                    UNDERSTEER_DETECTOR_MODULE -> activity.updateAdvancedSensorUIItems(
+                    UNDERSTEER_DETECTION_MODULE -> activity.updateAdvancedSensorUIItems(
                             udmState = params[ECU_PARAM_KEY_VALUE] ?: MODULE_UNCHANGED_STATE
                     )
-                    OVERSTEER_DETECTOR_MODULE -> activity.updateAdvancedSensorUIItems(
+                    OVERSTEER_DETECTION_MODULE -> activity.updateAdvancedSensorUIItems(
                             odmState = params[ECU_PARAM_KEY_VALUE] ?: MODULE_UNCHANGED_STATE
                     )
                     COLLISION_DETECTION_MODULE -> activity.updateAdvancedSensorUIItems(
