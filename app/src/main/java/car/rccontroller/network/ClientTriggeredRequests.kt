@@ -15,8 +15,7 @@ import android.net.wifi.WifiManager
 import android.text.format.Formatter
 import car.rccontroller.RCControllerActivity
 import car.rccontroller.RUN_ON_EMULATOR
-import car.rccontroller.network.server.feedback.AdvancedSensorFeedbackServer
-import car.rccontroller.network.server.feedback.BasicSensorFeedbackServer
+import car.rccontroller.network.server.feedback.SensorFeedbackServer
 
 
 const val OK_STRING = "OK"
@@ -27,8 +26,7 @@ var raspiServerIp: String? = null
 var raspiServerPort: Int? = null
 var context: RCControllerActivity? = null
 
-private lateinit var basicSensorFeedbackServer: BasicSensorFeedbackServer
-private lateinit var advancedSensorFeedbackServer: AdvancedSensorFeedbackServer
+private lateinit var sensorFeedbackServer: SensorFeedbackServer
 
 /////////
 // Engine
@@ -52,26 +50,19 @@ fun startEngine(context: RCControllerActivity, serverIp: String?, serverPort: In
     car.rccontroller.network.raspiServerPort = serverPort
     car.rccontroller.network.context = context
 
-    if(::basicSensorFeedbackServer.isInitialized) basicSensorFeedbackServer.stop()
-    basicSensorFeedbackServer = if (RUN_ON_EMULATOR) BasicSensorFeedbackServer(context) else BasicSensorFeedbackServer(
+    if(::sensorFeedbackServer.isInitialized) sensorFeedbackServer.stop()
+    sensorFeedbackServer = if (RUN_ON_EMULATOR) SensorFeedbackServer(context) else SensorFeedbackServer(
         context,
         myIP,
         basicSensorFeedbackServerPort
     )
-    basicSensorFeedbackServer.start()
-    if(::advancedSensorFeedbackServer.isInitialized) advancedSensorFeedbackServer.stop()
-    advancedSensorFeedbackServer = if (RUN_ON_EMULATOR) AdvancedSensorFeedbackServer(context) else AdvancedSensorFeedbackServer(
-            context,
-            myIP,
-            basicSensorFeedbackServerPort + 1
-    )
-    advancedSensorFeedbackServer.start()
+    sensorFeedbackServer.start()
 
     //TODO add the nanohttp ip and port when needed as argument to the handshake
     return doBlockingRequest("http://${car.rccontroller.network.raspiServerIp}:" +
             "${car.rccontroller.network.raspiServerPort}/start_engine?" +
-            "nanohttp_client_ip=${basicSensorFeedbackServer.ip}" +
-            "&nanohttp_client_port=${basicSensorFeedbackServer.port}")
+            "nanohttp_client_ip=${sensorFeedbackServer.ip}" +
+            "&nanohttp_client_port=${sensorFeedbackServer.port}")
 }
 
 fun stopEngine(): String {
@@ -87,8 +78,7 @@ fun stopEngine(): String {
     previousFrontDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
     previousRearDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
 
-    if(::basicSensorFeedbackServer.isInitialized) basicSensorFeedbackServer.stop()
-    if(::advancedSensorFeedbackServer.isInitialized) advancedSensorFeedbackServer.stop()
+    if(::sensorFeedbackServer.isInitialized) sensorFeedbackServer.stop()
 
 
     return msg

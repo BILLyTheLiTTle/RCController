@@ -15,8 +15,7 @@ import android.widget.SeekBar
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_rccontroller.*
 import car.rccontroller.network.*
-import car.rccontroller.network.server.feedback.AdvancedSensorFeedbackServer
-import car.rccontroller.network.server.feedback.BasicSensorFeedbackServer
+import car.rccontroller.network.server.feedback.SensorFeedbackServer
 
 
 val RUN_ON_EMULATOR = Build.FINGERPRINT.contains("generic")
@@ -702,15 +701,15 @@ class RCControllerActivity : AppCompatActivity() {
             emergencyLightsAnimation.selectDrawable(0)
 
             updateTempUIItems(
-                rearLeftMotor = BasicSensorFeedbackServer.WARNING_TYPE_NOTHING,
-                rearRightMotor = BasicSensorFeedbackServer.WARNING_TYPE_NOTHING,
-                frontLeftMotor = BasicSensorFeedbackServer.WARNING_TYPE_NOTHING,
-                frontRightMotor = BasicSensorFeedbackServer.WARNING_TYPE_NOTHING,
-                rearHBridge = BasicSensorFeedbackServer.WARNING_TYPE_NOTHING,
-                frontHBridge = BasicSensorFeedbackServer.WARNING_TYPE_NOTHING,
-                raspberryPi = BasicSensorFeedbackServer.WARNING_TYPE_NOTHING,
-                batteries = BasicSensorFeedbackServer.WARNING_TYPE_NOTHING,
-                shiftRegisters = BasicSensorFeedbackServer.WARNING_TYPE_NOTHING
+                rearLeftMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
+                rearRightMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
+                frontLeftMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
+                frontRightMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
+                rearHBridge = SensorFeedbackServer.WARNING_TYPE_NOTHING,
+                frontHBridge = SensorFeedbackServer.WARNING_TYPE_NOTHING,
+                raspberryPi = SensorFeedbackServer.WARNING_TYPE_NOTHING,
+                batteries = SensorFeedbackServer.WARNING_TYPE_NOTHING,
+                shiftRegisters = SensorFeedbackServer.WARNING_TYPE_NOTHING
             )
 
             updateSpeedUIItem("-/-")
@@ -844,46 +843,46 @@ class RCControllerActivity : AppCompatActivity() {
                 currentRearDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_AUTO
                 handling_assistance_imageView.
                     setImageResource(R.drawable.handling_assistance_full)
-                updateAdvancedSensorUIItems(tcmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
-                abmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
-                esmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
-                udmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
-                odmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
-                cdmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE)
+                updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_IDLE_STATE,
+                abmState = SensorFeedbackServer.MODULE_IDLE_STATE,
+                esmState = SensorFeedbackServer.MODULE_IDLE_STATE,
+                udmState = SensorFeedbackServer.MODULE_IDLE_STATE,
+                odmState = SensorFeedbackServer.MODULE_IDLE_STATE,
+                cdmState = SensorFeedbackServer.MODULE_IDLE_STATE)
             }
             ASSISTANCE_WARNING -> {
                 currentFrontDifferentialSlipperyLimiter = previousFrontDifferentialSlipperyLimiter
                 currentRearDifferentialSlipperyLimiter = previousRearDifferentialSlipperyLimiter
                 handling_assistance_imageView.
                     setImageResource(R.drawable.handling_assistance_warning)
-                updateAdvancedSensorUIItems(tcmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
-                        abmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
-                        esmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
-                        udmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
-                        odmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE,
-                        cdmState = AdvancedSensorFeedbackServer.MODULE_IDLE_STATE)
+                updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_IDLE_STATE,
+                        abmState = SensorFeedbackServer.MODULE_IDLE_STATE,
+                        esmState = SensorFeedbackServer.MODULE_IDLE_STATE,
+                        udmState = SensorFeedbackServer.MODULE_IDLE_STATE,
+                        odmState = SensorFeedbackServer.MODULE_IDLE_STATE,
+                        cdmState = SensorFeedbackServer.MODULE_IDLE_STATE)
             }
             ASSISTANCE_NONE -> {
                 currentFrontDifferentialSlipperyLimiter = previousFrontDifferentialSlipperyLimiter
                 currentRearDifferentialSlipperyLimiter = previousRearDifferentialSlipperyLimiter
                 handling_assistance_imageView.
                     setImageResource(R.drawable.handling_assistance_manual)
-                updateAdvancedSensorUIItems(tcmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
-                        abmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
-                        esmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
-                        udmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
-                        odmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
-                        cdmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE)
+                updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_OFF_STATE,
+                        abmState = SensorFeedbackServer.MODULE_OFF_STATE,
+                        esmState = SensorFeedbackServer.MODULE_OFF_STATE,
+                        udmState = SensorFeedbackServer.MODULE_OFF_STATE,
+                        odmState = SensorFeedbackServer.MODULE_OFF_STATE,
+                        cdmState = SensorFeedbackServer.MODULE_OFF_STATE)
             }
             else -> {
                 handling_assistance_imageView.
                         setImageResource(R.drawable.handling_assistance_off)
-                updateAdvancedSensorUIItems(tcmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
-                        abmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
-                        esmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
-                        udmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
-                        odmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE,
-                        cdmState = AdvancedSensorFeedbackServer.MODULE_OFF_STATE)
+                updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_OFF_STATE,
+                        abmState = SensorFeedbackServer.MODULE_OFF_STATE,
+                        esmState = SensorFeedbackServer.MODULE_OFF_STATE,
+                        udmState = SensorFeedbackServer.MODULE_OFF_STATE,
+                        odmState = SensorFeedbackServer.MODULE_OFF_STATE,
+                        cdmState = SensorFeedbackServer.MODULE_OFF_STATE)
             }
         }
         updateFrontDifferentialSlipperyLimiterUIItem()
@@ -897,12 +896,12 @@ class RCControllerActivity : AppCompatActivity() {
         according to the initial (off, idle) state only.
      */
     fun updateAdvancedSensorUIItems(
-            tcmState: String = AdvancedSensorFeedbackServer.MODULE_UNCHANGED_STATE,
-            abmState: String = AdvancedSensorFeedbackServer.MODULE_UNCHANGED_STATE,
-            esmState: String = AdvancedSensorFeedbackServer.MODULE_UNCHANGED_STATE,
-            udmState: String = AdvancedSensorFeedbackServer.MODULE_UNCHANGED_STATE,
-            odmState: String = AdvancedSensorFeedbackServer.MODULE_UNCHANGED_STATE,
-            cdmState: String = AdvancedSensorFeedbackServer.MODULE_UNCHANGED_STATE){
+            tcmState: String = SensorFeedbackServer.MODULE_UNCHANGED_STATE,
+            abmState: String = SensorFeedbackServer.MODULE_UNCHANGED_STATE,
+            esmState: String = SensorFeedbackServer.MODULE_UNCHANGED_STATE,
+            udmState: String = SensorFeedbackServer.MODULE_UNCHANGED_STATE,
+            odmState: String = SensorFeedbackServer.MODULE_UNCHANGED_STATE,
+            cdmState: String = SensorFeedbackServer.MODULE_UNCHANGED_STATE){
 
         fun updateItems(
                 moduleState: String,
@@ -912,13 +911,13 @@ class RCControllerActivity : AppCompatActivity() {
                 moduleOffDrawable: Int) {
             runOnUiThread {
                 when (moduleState) {
-                    AdvancedSensorFeedbackServer.MODULE_ON_STATE ->
+                    SensorFeedbackServer.MODULE_ON_STATE ->
                         moduleUI.setImageResource(moduleOnDrawable)
-                    AdvancedSensorFeedbackServer.MODULE_IDLE_STATE ->
+                    SensorFeedbackServer.MODULE_IDLE_STATE ->
                         moduleUI.setImageResource(moduleIdleDrawable)
-                    AdvancedSensorFeedbackServer.MODULE_OFF_STATE ->
+                    SensorFeedbackServer.MODULE_OFF_STATE ->
                         moduleUI.setImageResource(moduleOffDrawable)
-                    AdvancedSensorFeedbackServer.MODULE_NOTHING_STATE ->
+                    SensorFeedbackServer.MODULE_NOTHING_STATE ->
                         moduleUI.visibility = View.INVISIBLE
                 }
             }
@@ -988,125 +987,125 @@ class RCControllerActivity : AppCompatActivity() {
     /* This function is for setting and resetting purposes.
      */
     fun updateTempUIItems(
-        rearLeftMotor: String = BasicSensorFeedbackServer.WARNING_TYPE_UNCHANGED,
-        rearRightMotor: String = BasicSensorFeedbackServer.WARNING_TYPE_UNCHANGED,
-        frontLeftMotor: String = BasicSensorFeedbackServer.WARNING_TYPE_UNCHANGED,
-        frontRightMotor: String = BasicSensorFeedbackServer.WARNING_TYPE_UNCHANGED,
-        rearHBridge: String = BasicSensorFeedbackServer.WARNING_TYPE_UNCHANGED,
-        frontHBridge: String = BasicSensorFeedbackServer.WARNING_TYPE_UNCHANGED,
-        raspberryPi: String = BasicSensorFeedbackServer.WARNING_TYPE_UNCHANGED,
-        batteries: String = BasicSensorFeedbackServer.WARNING_TYPE_UNCHANGED,
-        shiftRegisters: String = BasicSensorFeedbackServer.WARNING_TYPE_UNCHANGED
+        rearLeftMotor: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
+        rearRightMotor: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
+        frontLeftMotor: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
+        frontRightMotor: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
+        rearHBridge: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
+        frontHBridge: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
+        raspberryPi: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
+        batteries: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
+        shiftRegisters: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED
     ) {
         runOnUiThread {
-            if (rearLeftMotor == BasicSensorFeedbackServer.WARNING_TYPE_NOTHING &&
-                rearRightMotor == BasicSensorFeedbackServer.WARNING_TYPE_NOTHING &&
-                frontLeftMotor == BasicSensorFeedbackServer.WARNING_TYPE_NOTHING &&
-                frontRightMotor == BasicSensorFeedbackServer.WARNING_TYPE_NOTHING &&
-                rearHBridge == BasicSensorFeedbackServer.WARNING_TYPE_NOTHING)
+            if (rearLeftMotor == SensorFeedbackServer.WARNING_TYPE_NOTHING &&
+                rearRightMotor == SensorFeedbackServer.WARNING_TYPE_NOTHING &&
+                frontLeftMotor == SensorFeedbackServer.WARNING_TYPE_NOTHING &&
+                frontRightMotor == SensorFeedbackServer.WARNING_TYPE_NOTHING &&
+                rearHBridge == SensorFeedbackServer.WARNING_TYPE_NOTHING)
                 carTemps_imageView.setImageResource(R.drawable.car_temps_off)
             else
                 carTemps_imageView.setImageResource(R.drawable.car_temps_on)
 
             when (rearLeftMotor) {
-                BasicSensorFeedbackServer.WARNING_TYPE_NORMAL ->
+                SensorFeedbackServer.WARNING_TYPE_NORMAL ->
                     rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_normal)
-                BasicSensorFeedbackServer.WARNING_TYPE_MEDIUM ->
+                SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
                     rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_medium)
-                BasicSensorFeedbackServer.WARNING_TYPE_HIGH ->
+                SensorFeedbackServer.WARNING_TYPE_HIGH ->
                     rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_high)
-                BasicSensorFeedbackServer.WARNING_TYPE_NOTHING ->
+                SensorFeedbackServer.WARNING_TYPE_NOTHING ->
                     rearLeftMotorTemps_imageView.setImageResource(android.R.color.transparent)
             }
 
             when (rearRightMotor) {
-                BasicSensorFeedbackServer.WARNING_TYPE_NORMAL ->
+                SensorFeedbackServer.WARNING_TYPE_NORMAL ->
                     rearRightMotorTemps_imageView.setImageResource(R.drawable.motor_temp_normal)
-                BasicSensorFeedbackServer.WARNING_TYPE_MEDIUM ->
+                SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
                     rearRightMotorTemps_imageView.setImageResource(R.drawable.motor_temp_medium)
-                BasicSensorFeedbackServer.WARNING_TYPE_HIGH ->
+                SensorFeedbackServer.WARNING_TYPE_HIGH ->
                     rearRightMotorTemps_imageView.setImageResource(R.drawable.motor_temp_high)
-                BasicSensorFeedbackServer.WARNING_TYPE_NOTHING ->
+                SensorFeedbackServer.WARNING_TYPE_NOTHING ->
                     rearRightMotorTemps_imageView.setImageResource(android.R.color.transparent)
             }
 
             when (frontLeftMotor) {
-                BasicSensorFeedbackServer.WARNING_TYPE_NORMAL ->
+                SensorFeedbackServer.WARNING_TYPE_NORMAL ->
                     frontLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_normal)
-                BasicSensorFeedbackServer.WARNING_TYPE_MEDIUM ->
+                SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
                     frontLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_medium)
-                BasicSensorFeedbackServer.WARNING_TYPE_HIGH ->
+                SensorFeedbackServer.WARNING_TYPE_HIGH ->
                     frontLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_high)
-                BasicSensorFeedbackServer.WARNING_TYPE_NOTHING ->
+                SensorFeedbackServer.WARNING_TYPE_NOTHING ->
                     frontLeftMotorTemps_imageView.setImageResource(android.R.color.transparent)
             }
 
             when (frontRightMotor) {
-                BasicSensorFeedbackServer.WARNING_TYPE_NORMAL ->
+                SensorFeedbackServer.WARNING_TYPE_NORMAL ->
                     frontRightMotorTemps_imageView.setImageResource(R.drawable.motor_temp_normal)
-                BasicSensorFeedbackServer.WARNING_TYPE_MEDIUM ->
+                SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
                     frontRightMotorTemps_imageView.setImageResource(R.drawable.motor_temp_medium)
-                BasicSensorFeedbackServer.WARNING_TYPE_HIGH ->
+                SensorFeedbackServer.WARNING_TYPE_HIGH ->
                     frontRightMotorTemps_imageView.setImageResource(R.drawable.motor_temp_high)
-                BasicSensorFeedbackServer.WARNING_TYPE_NOTHING ->
+                SensorFeedbackServer.WARNING_TYPE_NOTHING ->
                     frontRightMotorTemps_imageView.setImageResource(android.R.color.transparent)
             }
 
             when (rearHBridge) {
-                BasicSensorFeedbackServer.WARNING_TYPE_NORMAL ->
+                SensorFeedbackServer.WARNING_TYPE_NORMAL ->
                     rearHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_normal)
-                BasicSensorFeedbackServer.WARNING_TYPE_MEDIUM ->
+                SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
                     rearHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_medium)
-                BasicSensorFeedbackServer.WARNING_TYPE_HIGH ->
+                SensorFeedbackServer.WARNING_TYPE_HIGH ->
                     rearHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_high)
-                BasicSensorFeedbackServer.WARNING_TYPE_NOTHING ->
+                SensorFeedbackServer.WARNING_TYPE_NOTHING ->
                     rearHbridgeTemps_imageView.setImageResource(android.R.color.transparent)
             }
 
             when (frontHBridge) {
-                BasicSensorFeedbackServer.WARNING_TYPE_NORMAL ->
+                SensorFeedbackServer.WARNING_TYPE_NORMAL ->
                     frontHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_normal)
-                BasicSensorFeedbackServer.WARNING_TYPE_MEDIUM ->
+                SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
                     frontHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_medium)
-                BasicSensorFeedbackServer.WARNING_TYPE_HIGH ->
+                SensorFeedbackServer.WARNING_TYPE_HIGH ->
                     frontHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_high)
-                BasicSensorFeedbackServer.WARNING_TYPE_NOTHING ->
+                SensorFeedbackServer.WARNING_TYPE_NOTHING ->
                     frontHbridgeTemps_imageView.setImageResource(android.R.color.transparent)
             }
 
             when (raspberryPi) {
-                BasicSensorFeedbackServer.WARNING_TYPE_NORMAL ->
+                SensorFeedbackServer.WARNING_TYPE_NORMAL ->
                     raspiTemp_imageView.setImageResource(R.drawable.raspi_temp_normal)
-                BasicSensorFeedbackServer.WARNING_TYPE_MEDIUM ->
+                SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
                     raspiTemp_imageView.setImageResource(R.drawable.raspi_temp_medium)
-                BasicSensorFeedbackServer.WARNING_TYPE_HIGH ->
+                SensorFeedbackServer.WARNING_TYPE_HIGH ->
                     raspiTemp_imageView.setImageResource(R.drawable.raspi_temp_high)
-                BasicSensorFeedbackServer.WARNING_TYPE_NOTHING ->
+                SensorFeedbackServer.WARNING_TYPE_NOTHING ->
                     raspiTemp_imageView.setImageResource(R.drawable.raspi_temp_off)
             }
 
             when (batteries) {
-                BasicSensorFeedbackServer.WARNING_TYPE_NORMAL ->
+                SensorFeedbackServer.WARNING_TYPE_NORMAL ->
                     batteryTemp_imageView.setImageResource(R.drawable.batteries_temp_normal)
-                BasicSensorFeedbackServer.WARNING_TYPE_MEDIUM ->
+                SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
                     batteryTemp_imageView.setImageResource(R.drawable.batteries_temp_medium)
-                BasicSensorFeedbackServer.WARNING_TYPE_HIGH ->
+                SensorFeedbackServer.WARNING_TYPE_HIGH ->
                     batteryTemp_imageView.setImageResource(R.drawable.batteries_temp_high)
-                BasicSensorFeedbackServer.WARNING_TYPE_NOTHING ->
+                SensorFeedbackServer.WARNING_TYPE_NOTHING ->
                     batteryTemp_imageView.setImageResource(R.drawable.batteries_temp_off)
             }
 
             when (shiftRegisters) {
-                BasicSensorFeedbackServer.WARNING_TYPE_NORMAL ->
+                SensorFeedbackServer.WARNING_TYPE_NORMAL ->
                     shiftRegisterTemp_imageView.
                         setImageResource(R.drawable.shift_register_temp_normal)
-                BasicSensorFeedbackServer.WARNING_TYPE_MEDIUM ->
+                SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
                     shiftRegisterTemp_imageView.
                         setImageResource(R.drawable.shift_register_temp_medium)
-                BasicSensorFeedbackServer.WARNING_TYPE_HIGH ->
+                SensorFeedbackServer.WARNING_TYPE_HIGH ->
                     shiftRegisterTemp_imageView.
                         setImageResource(R.drawable.shift_register_temp_high)
-                BasicSensorFeedbackServer.WARNING_TYPE_NOTHING ->
+                SensorFeedbackServer.WARNING_TYPE_NOTHING ->
                     shiftRegisterTemp_imageView.
                         setImageResource(R.drawable.shift_register_temp_off)
             }
