@@ -1,5 +1,6 @@
 package car.rccontroller.network
 
+import android.app.Application
 import android.content.Context
 import car.rccontroller.R
 import kotlinx.coroutines.experimental.CommonPool
@@ -35,10 +36,12 @@ val isEngineStarted: Boolean
 get() = doBlockingRequest("http://${car.rccontroller.network.raspiServerIp}:" +
             "${car.rccontroller.network.raspiServerPort}/get_engine_state").toBoolean()
 
-fun startEngine(context: RCControllerActivity, serverIp: String?, serverPort: Int?): String{
+fun startEngine(context: RCControllerActivity?, serverIp: String?, serverPort: Int?): String{
     //reset and get ready for new requests
-    throttleBrakeActionId = context.resources.getInteger(R.integer.default_throttleBrakeActionId)
-    steeringDirectionId = context.resources.getInteger(R.integer.default_steeringDirectionId)
+    if(context != null) {
+        throttleBrakeActionId = context.resources.getInteger(R.integer.default_throttleBrakeActionId)
+        steeringDirectionId = context.resources.getInteger(R.integer.default_steeringDirectionId)
+    }
 
     /* The server will know when car is moving backward and not when the car is going to move
         backward in the next throttle action. The default state for this “ImageView” will be
@@ -50,19 +53,21 @@ fun startEngine(context: RCControllerActivity, serverIp: String?, serverPort: In
     car.rccontroller.network.raspiServerPort = serverPort
     car.rccontroller.network.context = context
 
-    if(::sensorFeedbackServer.isInitialized) sensorFeedbackServer.stop()
-    sensorFeedbackServer = if (RUN_ON_EMULATOR) SensorFeedbackServer(context) else SensorFeedbackServer(
-        context,
-        myIP,
-        basicSensorFeedbackServerPort
-    )
-    sensorFeedbackServer.start()
+    if (context != null) {
+        if (::sensorFeedbackServer.isInitialized) sensorFeedbackServer.stop()
+        sensorFeedbackServer = if (RUN_ON_EMULATOR) SensorFeedbackServer(context) else SensorFeedbackServer(
+                context,
+                myIP,
+                basicSensorFeedbackServerPort
+        )
+        sensorFeedbackServer.start()
+    }
 
     //TODO add the nanohttp ip and port when needed as argument to the handshake
     return doBlockingRequest("http://${car.rccontroller.network.raspiServerIp}:" +
             "${car.rccontroller.network.raspiServerPort}/start_engine?" +
-            "nanohttp_client_ip=${sensorFeedbackServer.ip}" +
-            "&nanohttp_client_port=${sensorFeedbackServer.port}")
+            "nanohttp_client_ip=${if (::sensorFeedbackServer.isInitialized) sensorFeedbackServer.ip else myIP}" +
+            "&nanohttp_client_port=${if (::sensorFeedbackServer.isInitialized) sensorFeedbackServer.port else basicSensorFeedbackServerPort}")
 }
 
 fun stopEngine(): String {
