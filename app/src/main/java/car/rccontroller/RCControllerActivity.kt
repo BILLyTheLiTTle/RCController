@@ -610,7 +610,11 @@ class RCControllerActivity : AppCompatActivity() {
 
                 activateHandbrake(false)
                 activateParkingBrake(false)
-                setBrakingStill()// or setNeutral()? TODO Will see in action
+		/* It would be better to let the car be at braking still status than neutral
+            		because the car may be stopped in uphill or downhill and could slide down
+			when the user touches the slider.
+         	*/
+                setBrakingStill()
 
                 updateMotionUIItems()
             }
