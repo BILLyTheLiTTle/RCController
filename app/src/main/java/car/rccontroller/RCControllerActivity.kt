@@ -88,7 +88,8 @@ class RCControllerActivity : AppCompatActivity() {
                          */
                         resetUI()
                     } else {
-                        Toast.makeText(context, status, Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "${resources.getString(R.string.error)}: $status",
+                                Toast.LENGTH_LONG).show()
                     }
                 }
                 else {
@@ -115,7 +116,8 @@ class RCControllerActivity : AppCompatActivity() {
                     if (status == OK_STRING) {
                         updateMotionUIItems()
                     } else {
-                        Toast.makeText(context, status, Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "${resources.getString(R.string.error)}: $status",
+                                Toast.LENGTH_LONG).show()
                     }
                 }
                 true
@@ -610,10 +612,10 @@ class RCControllerActivity : AppCompatActivity() {
 
                 activateHandbrake(false)
                 activateParkingBrake(false)
-		/* It would be better to let the car be at braking still status than neutral
-            		because the car may be stopped in uphill or downhill and could slide down
-			when the user touches the slider.
-         	*/
+                /* It would be better to let the car be at braking still status than neutral
+                    because the car may be stopped in uphill or downhill and could slide down
+                    when the user touches the slider.
+                */
                 setBrakingStill()
 
                 updateMotionUIItems()
@@ -646,7 +648,8 @@ class RCControllerActivity : AppCompatActivity() {
                 if (status == OK_STRING) {
                     resetUI()
                 } else {
-                    Toast.makeText(context, status, Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "${resources.getString(R.string.error)}: $status",
+                            Toast.LENGTH_LONG).show()
                 }
             }
             setNegativeButton(getString(R.string.server_dialog_cancel_button)) { _, _ ->
