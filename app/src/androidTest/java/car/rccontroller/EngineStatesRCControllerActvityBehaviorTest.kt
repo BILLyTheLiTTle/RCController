@@ -4,41 +4,22 @@ import android.content.Context
 import android.support.test.espresso.Espresso.*
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.*
-import android.support.test.espresso.matcher.RootMatchers
+import android.support.test.espresso.matcher.RootMatchers.*
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.filters.LargeTest
-import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
-import android.view.View
-import car.rccontroller.mymatchers.DrawableMatcher
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.hamcrest.Matcher
 import org.hamcrest.Matchers.*
 import car.rccontroller.network.isEngineStarted
-import android.content.Context.WIFI_SERVICE
 import android.net.wifi.WifiManager
 import android.support.test.InstrumentationRegistry
-
-
-
-
+import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
 
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class EngineStatesBehaviorTest {
-
-    private fun withDrawable(resourceId: Int): Matcher<View> {
-        return DrawableMatcher(resourceId)
-    }
-
-    @get:Rule
-    var activityRule: ActivityTestRule<RCControllerActivity> = ActivityTestRule(
-            RCControllerActivity::class.java,
-            false,
-            true)
+class EngineStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @Test
     fun showDialog_onEngineStart() {
@@ -65,8 +46,17 @@ class EngineStatesBehaviorTest {
                 .check(matches(isDisplayed()))
         onView(withText(R.string.server_dialog_ok_button))
                 .perform(click())
+        // TODO check every UI item
         onView(withId(R.id.engineStartStop_imageView))
                 .check(matches(withDrawable(R.drawable.engine_started_stop_action)))
+        onView(withId(R.id.steering_seekBar))
+                .check(matches(isEnabled()))
+        onView(withId(R.id.steering_seekBar))
+                .check(matches(withProgress(R.integer.default_steering)))
+        onView(withId(R.id.throttleNbrake_mySeekBar))
+                .check(matches(isEnabled()))
+        onView(withId(R.id.throttleNbrake_mySeekBar))
+                .check(matches(withProgress(R.integer.default_throttle_n_brake)))
 
     }
 
@@ -77,8 +67,13 @@ class EngineStatesBehaviorTest {
         }
         onView(withId(R.id.engineStartStop_imageView))
                 .perform(longClick())
+        // TODO check every UI item
         onView(withId(R.id.engineStartStop_imageView))
                 .check(matches(withDrawable(R.drawable.engine_stopped_start_action)))
+        onView(withId(R.id.steering_seekBar))
+                .check(matches(not(isEnabled())))
+        onView(withId(R.id.throttleNbrake_mySeekBar))
+                .check(matches(not(isEnabled())))
 
     }
 
@@ -95,10 +90,20 @@ class EngineStatesBehaviorTest {
         onView(withText(R.string.server_dialog_ok_button))
                 .perform(click())
         onView(withText(containsString(activityRule.activity.resources.getString(R.string.error))))
-                .inRoot(RootMatchers.withDecorView(not(`is`(activityRule.activity.window.decorView))))
+                .inRoot(withDecorView(not(activityRule.activity.window.decorView)))
                 .check(matches(isDisplayed()))
 
         wManager.isWifiEnabled = true
-        Thread.sleep(5000)
+        Thread.sleep(8000)
+    }
+
+    @Test
+    fun showToast_onClick() {
+        onView(withId(R.id.engineStartStop_imageView))
+                .perform(click())
+        onView(withText(containsString(activityRule.activity.resources.getString(R.string.long_click_info))))
+                .inRoot(withDecorView(not(activityRule.activity.window.decorView)))
+                .check(matches(isDisplayed()))
+
     }
 }

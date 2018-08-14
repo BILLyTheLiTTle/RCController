@@ -12,7 +12,7 @@ import org.hamcrest.TypeSafeMatcher
 class DrawableMatcher internal constructor(private val expectedId: Int) : TypeSafeMatcher<View>(View::class.java) {
     private var resourceName: String? = null
 
-    override fun matchesSafely(target: View): Boolean {
+    override fun matchesSafely(target: View?): Boolean {
         if (target !is ImageView) {
             return false
         }
@@ -22,7 +22,7 @@ class DrawableMatcher internal constructor(private val expectedId: Int) : TypeSa
         if (expectedId == ANY) {
             return target.drawable != null
         }
-        val resources = target.getContext().resources
+        val resources = target.context.resources
         val expectedDrawable = resources.getDrawable(expectedId)
         resourceName = resources.getResourceEntryName(expectedId)
 
@@ -43,13 +43,13 @@ class DrawableMatcher internal constructor(private val expectedId: Int) : TypeSa
         return bitmap
     }
 
-    override fun describeTo(description: Description) {
-        description.appendText("with drawable from resource id: ")
-        description.appendValue(expectedId)
+    override fun describeTo(description: Description?) {
+        description?.appendText("with drawable from resource id: ")
+        description?.appendValue(expectedId)
         if (resourceName != null) {
-            description.appendText("[")
-            description.appendText(resourceName)
-            description.appendText("]")
+            description?.appendText("[")
+            description?.appendText(resourceName)
+            description?.appendText("]")
         }
     }
 
