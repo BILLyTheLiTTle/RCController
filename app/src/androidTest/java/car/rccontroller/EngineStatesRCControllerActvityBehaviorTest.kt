@@ -19,7 +19,7 @@ import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class EngineStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
+class EngineStatesRCControllerActvityBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @Test
     fun showDialog_onEngineStart() {
@@ -57,6 +57,8 @@ class EngineStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
                 .check(matches(isEnabled()))
         onView(withId(R.id.throttleNbrake_mySeekBar))
                 .check(matches(withProgress(R.integer.default_throttle_n_brake)))
+        onView(withId(R.id.leftTurn_imageView))
+            .check(matches(withDrawable(R.drawable.turn_light_off)))
 
     }
 
@@ -74,6 +76,8 @@ class EngineStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
                 .check(matches(not(isEnabled())))
         onView(withId(R.id.throttleNbrake_mySeekBar))
                 .check(matches(not(isEnabled())))
+        onView(withId(R.id.leftTurn_imageView))
+            .check(matches(withDrawable(R.drawable.turn_light_on)))
 
     }
 

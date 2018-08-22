@@ -30,7 +30,7 @@ class DrawableMatcher internal constructor(private val expectedId: Int) : TypeSa
             return false
         }
 
-        val bitmap = getBitmap(target.drawable)
+        val bitmap = getBitmap(target.drawable ?: target.background)
         val otherBitmap = getBitmap(expectedDrawable)
         return bitmap.sameAs(otherBitmap)
     }
