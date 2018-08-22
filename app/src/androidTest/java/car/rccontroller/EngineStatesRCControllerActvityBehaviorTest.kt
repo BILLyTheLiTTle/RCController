@@ -59,16 +59,33 @@ class EngineStatesRCControllerActvityBehaviorTest: RCControllerActivityBehaviorT
                 .check(matches(withProgress(R.integer.default_throttle_n_brake)))
         onView(withId(R.id.leftTurn_imageView))
             .check(matches(withDrawable(R.drawable.turn_light_off)))
+        onView(withId(R.id.emergency_imageView))
+            .check(matches(withDrawable(R.drawable.emergency_lights_off)))
+        onView(withId(R.id.rightTurn_imageView))
+            .check(matches(withDrawable(R.drawable.turn_light_off)))
+        onView(withId(R.id.reverse_imageView))
+            .check(matches(withDrawable(R.drawable.reverse_off)))
+        onView(withId(R.id.lights_imageView))
+            .check(matches(withDrawable(R.drawable.lights_off)))
+        onView(withId(R.id.cruiseControl_imageView))
+            .check(matches(withDrawable(R.drawable.cruise_control_off)))
+        onView(withId(R.id.parkingBrake_imageView))
+            .check(matches(withDrawable(R.drawable.parking_brake_off)))
 
     }
 
     @Test
     fun stopEngine() {
         if (!isEngineStarted) {
-            startEngineFromDialog()
+            onView(withId(R.id.engineStartStop_imageView))
+                .perform(longClick())
+            onView(withId(R.id.server_connection_dialog_layout))
+                .check(matches(isDisplayed()))
+            onView(withText(R.string.server_dialog_ok_button))
+                .perform(click())
         }
         onView(withId(R.id.engineStartStop_imageView))
-                .perform(longClick())
+            .perform(longClick())
         // TODO check every UI item
         onView(withId(R.id.engineStartStop_imageView))
                 .check(matches(withDrawable(R.drawable.engine_stopped_start_action)))
@@ -78,6 +95,18 @@ class EngineStatesRCControllerActvityBehaviorTest: RCControllerActivityBehaviorT
                 .check(matches(not(isEnabled())))
         onView(withId(R.id.leftTurn_imageView))
             .check(matches(withDrawable(R.drawable.turn_light_on)))
+        onView(withId(R.id.emergency_imageView))
+            .check(matches(withDrawable(R.drawable.emergency_lights_off)))
+        onView(withId(R.id.rightTurn_imageView))
+            .check(matches(withDrawable(R.drawable.turn_light_on)))
+        onView(withId(R.id.reverse_imageView))
+            .check(matches(withDrawable(R.drawable.reverse_off)))
+        onView(withId(R.id.lights_imageView))
+            .check(matches(withDrawable(R.drawable.lights_off)))
+        onView(withId(R.id.cruiseControl_imageView))
+            .check(matches(withDrawable(R.drawable.cruise_control_off)))
+        onView(withId(R.id.parkingBrake_imageView))
+            .check(matches(withDrawable(R.drawable.parking_brake_off)))
 
     }
 

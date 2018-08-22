@@ -265,7 +265,7 @@
 
     <!-- cruise control -->
     <ImageView
-        android:id="@+id/cc_imageView"
+        android:id="@+id/cruiseControl_imageView"
         android:layout_width="@dimen/width_imageViews_feedback_area_info"
         android:layout_height="@dimen/height_imageViews_feedback_area_info"
         android:layout_marginLeft="@dimen/margin_before_imageViews_feedback_area_info"
@@ -284,7 +284,7 @@
         android:layout_marginStart="@dimen/margin_before_imageViews_feedback_area_info"
         android:layout_marginTop="@dimen/margin_above_imageViews_feedback_area_info"
         android:scaleType="fitCenter"
-        app:layout_constraintStart_toEndOf="@+id/cc_imageView"
+        app:layout_constraintStart_toEndOf="@+id/cruiseControl_imageView"
         app:layout_constraintTop_toTopOf="@+id/feedback_area_info"
         app:srcCompat="@drawable/engine_stopped_start_action" />
 

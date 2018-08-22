@@ -182,7 +182,7 @@ class RCControllerActivity : AppCompatActivity() {
         //////
         // setup cruise control
         //////
-        cc_imageView. apply {
+        cruiseControl_imageView. apply {
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted) {
@@ -192,9 +192,9 @@ class RCControllerActivity : AppCompatActivity() {
                     cruiseControlActive = true
                 }
                 if (cruiseControlActive)
-                    cc_imageView.setImageResource(R.drawable.cruise_control_on)
+                    cruiseControl_imageView.setImageResource(R.drawable.cruise_control_on)
                 else
-                    cc_imageView.setImageResource(R.drawable.cruise_control_off)
+                    cruiseControl_imageView.setImageResource(R.drawable.cruise_control_off)
 
                 true
             }
@@ -702,7 +702,7 @@ class RCControllerActivity : AppCompatActivity() {
 
             //reset the cruise control flag
             cruiseControlActive = false
-            cc_imageView.setImageResource(R.drawable.cruise_control_off)
+            cruiseControl_imageView.setImageResource(R.drawable.cruise_control_off)
 
             emergencyLightsAnimation.stop()
             emergencyLightsAnimation.selectDrawable(0)
@@ -747,9 +747,9 @@ class RCControllerActivity : AppCompatActivity() {
             handbrake_imageView.setImageResource(R.drawable.handbrake_off)
 
         if (cruiseControlActive)
-            cc_imageView.setImageResource(R.drawable.cruise_control_on)
+            cruiseControl_imageView.setImageResource(R.drawable.cruise_control_on)
         else
-            cc_imageView.setImageResource(R.drawable.cruise_control_off)
+            cruiseControl_imageView.setImageResource(R.drawable.cruise_control_off)
     }
 
     /* Rear differential slippery limiter interactive actions must be depending on each other.
