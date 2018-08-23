@@ -21,7 +21,7 @@ import car.rccontroller.network.server.feedback.SensorFeedbackServer
 
 const val OK_STRING = "OK"
 const val EMPTY_STRING = "NULL"
-const val basicSensorFeedbackServerPort= 8080
+const val sensorFeedbackServerPort= 8080
 
 var raspiServerIp: String? = null
 var raspiServerPort: Int? = null
@@ -58,7 +58,7 @@ fun startEngine(context: RCControllerActivity?, serverIp: String?, serverPort: I
         sensorFeedbackServer = if (RUN_ON_EMULATOR) SensorFeedbackServer(context) else SensorFeedbackServer(
                 context,
                 myIP,
-                basicSensorFeedbackServerPort
+                sensorFeedbackServerPort
         )
         sensorFeedbackServer.start()
     }
@@ -67,7 +67,7 @@ fun startEngine(context: RCControllerActivity?, serverIp: String?, serverPort: I
     return doBlockingRequest("http://${car.rccontroller.network.raspiServerIp}:" +
             "${car.rccontroller.network.raspiServerPort}/start_engine?" +
             "nanohttp_client_ip=${if (::sensorFeedbackServer.isInitialized) sensorFeedbackServer.ip else myIP}" +
-            "&nanohttp_client_port=${if (::sensorFeedbackServer.isInitialized) sensorFeedbackServer.port else basicSensorFeedbackServerPort}")
+            "&nanohttp_client_port=${if (::sensorFeedbackServer.isInitialized) sensorFeedbackServer.port else sensorFeedbackServerPort}")
 }
 
 fun stopEngine(): String {

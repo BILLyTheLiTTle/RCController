@@ -15,6 +15,7 @@ import car.rccontroller.network.isEngineStarted
 import android.net.wifi.WifiManager
 import android.support.test.InstrumentationRegistry
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
+import car.rccontroller.mymatchers.DrawableMatcher
 
 
 @RunWith(AndroidJUnit4::class)
@@ -48,7 +49,7 @@ class EngineStatesRCControllerActvityBehaviorTest: RCControllerActivityBehaviorT
                 .perform(click())
         // TODO check every UI item
         onView(withId(R.id.engineStartStop_imageView))
-                .check(matches(withDrawable(R.drawable.engine_started_stop_action)))
+                .check(matches(withTagValue(equalTo(R.drawable.engine_started_stop_action))))
         onView(withId(R.id.steering_seekBar))
                 .check(matches(isEnabled()))
         onView(withId(R.id.steering_seekBar))
@@ -64,14 +65,71 @@ class EngineStatesRCControllerActvityBehaviorTest: RCControllerActivityBehaviorT
         onView(withId(R.id.rightTurn_imageView))
             .check(matches(withDrawable(R.drawable.turn_light_off)))
         onView(withId(R.id.reverse_imageView))
-            .check(matches(withDrawable(R.drawable.reverse_off)))
+            .check(matches(withTagValue(equalTo(R.drawable.reverse_off))))
         onView(withId(R.id.lights_imageView))
-            .check(matches(withDrawable(R.drawable.lights_off)))
+            .check(matches(withTagValue(equalTo(R.drawable.lights_off))))
         onView(withId(R.id.cruiseControl_imageView))
-            .check(matches(withDrawable(R.drawable.cruise_control_off)))
+            .check(matches(withTagValue(equalTo(R.drawable.cruise_control_off))))
         onView(withId(R.id.parkingBrake_imageView))
-            .check(matches(withDrawable(R.drawable.parking_brake_off)))
+            .check(matches(withTagValue(equalTo(R.drawable.parking_brake_off))))
+        onView(withId(R.id.handbrake_imageView))
+            .check(matches(withTagValue(equalTo(R.drawable.handbrake_off))))
+        onView(withId(R.id.raspiTemp_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.raspi_temp_high)),
+                withTagValue(equalTo(R.drawable.raspi_temp_medium)),
+                withTagValue(equalTo(R.drawable.raspi_temp_normal)))))
+        onView(withId(R.id.shiftRegisterTemp_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.shift_register_temp_high)),
+                withTagValue(equalTo(R.drawable.shift_register_temp_medium)),
+                withTagValue(equalTo(R.drawable.shift_register_temp_normal)))))
+        onView(withId(R.id.batteryTemp_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.batteries_temp_high)),
+                withTagValue(equalTo(R.drawable.batteries_temp_medium)),
+                withTagValue(equalTo(R.drawable.batteries_temp_normal)))))
+        onView(withId(R.id.carTemps_imageView))
+            .check(matches(withTagValue(equalTo(R.drawable.car_temps_on))))
+        onView(withId(R.id.rearRightMotorTemps_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.motor_temp_high)),
+                withTagValue(equalTo(R.drawable.motor_temp_medium)),
+                withTagValue(equalTo(R.drawable.motor_temp_normal)))))
+        onView(withId(R.id.rearLeftMotorTemps_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.motor_temp_high)),
+                withTagValue(equalTo(R.drawable.motor_temp_medium)),
+                withTagValue(equalTo(R.drawable.motor_temp_normal)))))
+        onView(withId(R.id.rearHbridgeTemps_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.h_bridge_temp_high)),
+                withTagValue(equalTo(R.drawable.h_bridge_temp_medium)),
+                withTagValue(equalTo(R.drawable.h_bridge_temp_normal)))))
+        onView(withId(R.id.frontRightMotorTemps_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.motor_temp_high)),
+                withTagValue(equalTo(R.drawable.motor_temp_medium)),
+                withTagValue(equalTo(R.drawable.motor_temp_normal)))))
+        onView(withId(R.id.frontLeftMotorTemps_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.motor_temp_high)),
+                withTagValue(equalTo(R.drawable.motor_temp_medium)),
+                withTagValue(equalTo(R.drawable.motor_temp_normal)))))
+        onView(withId(R.id.frontHbridgeTemps_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.h_bridge_temp_high)),
+                withTagValue(equalTo(R.drawable.h_bridge_temp_medium)),
+                withTagValue(equalTo(R.drawable.h_bridge_temp_normal)))))
+        onView(withId(R.id.cdm_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.cdm_off)),
+                withTagValue(equalTo(R.drawable.cdm_idle)),
+                withTagValue(equalTo(R.drawable.cdm_on)))))
 
+        // stop the engine at the end
+        onView(withId(R.id.engineStartStop_imageView))
+            .perform(longClick())
     }
 
     @Test
@@ -88,7 +146,7 @@ class EngineStatesRCControllerActvityBehaviorTest: RCControllerActivityBehaviorT
             .perform(longClick())
         // TODO check every UI item
         onView(withId(R.id.engineStartStop_imageView))
-                .check(matches(withDrawable(R.drawable.engine_stopped_start_action)))
+                .check(matches(withTagValue(equalTo(R.drawable.engine_stopped_start_action))))
         onView(withId(R.id.steering_seekBar))
                 .check(matches(not(isEnabled())))
         onView(withId(R.id.throttleNbrake_mySeekBar))
@@ -100,14 +158,37 @@ class EngineStatesRCControllerActvityBehaviorTest: RCControllerActivityBehaviorT
         onView(withId(R.id.rightTurn_imageView))
             .check(matches(withDrawable(R.drawable.turn_light_on)))
         onView(withId(R.id.reverse_imageView))
-            .check(matches(withDrawable(R.drawable.reverse_off)))
+            .check(matches(withTagValue(equalTo(R.drawable.reverse_off))))
         onView(withId(R.id.lights_imageView))
-            .check(matches(withDrawable(R.drawable.lights_off)))
+            .check(matches(withTagValue(equalTo(R.drawable.lights_off))))
         onView(withId(R.id.cruiseControl_imageView))
-            .check(matches(withDrawable(R.drawable.cruise_control_off)))
+            .check(matches(withTagValue(equalTo(R.drawable.cruise_control_off))))
         onView(withId(R.id.parkingBrake_imageView))
-            .check(matches(withDrawable(R.drawable.parking_brake_off)))
-
+            .check(matches(withTagValue(equalTo(R.drawable.parking_brake_off))))
+        onView(withId(R.id.handbrake_imageView))
+            .check(matches(withTagValue(equalTo(R.drawable.handbrake_off))))
+        onView(withId(R.id.raspiTemp_imageView))
+            .check(matches(withTagValue(equalTo(R.drawable.raspi_temp_off))))
+        onView(withId(R.id.shiftRegisterTemp_imageView))
+            .check(matches(withTagValue(equalTo(R.drawable.shift_register_temp_off))))
+        onView(withId(R.id.batteryTemp_imageView))
+            .check(matches(withTagValue(equalTo(R.drawable.batteries_temp_off))))
+        onView(withId(R.id.carTemps_imageView))
+            .check(matches(withTagValue(equalTo(R.drawable.car_temps_off))))
+        onView(withId(R.id.rearRightMotorTemps_imageView))
+            .check(matches(withTagValue(equalTo(android.R.color.transparent))))
+        onView(withId(R.id.rearLeftMotorTemps_imageView))
+            .check(matches(withTagValue(equalTo(android.R.color.transparent))))
+        onView(withId(R.id.rearHbridgeTemps_imageView))
+            .check(matches(withTagValue(equalTo(android.R.color.transparent))))
+        onView(withId(R.id.frontRightMotorTemps_imageView))
+            .check(matches(withTagValue(equalTo(android.R.color.transparent))))
+        onView(withId(R.id.frontLeftMotorTemps_imageView))
+            .check(matches(withTagValue(equalTo(android.R.color.transparent))))
+        onView(withId(R.id.frontHbridgeTemps_imageView))
+            .check(matches(withTagValue(equalTo(android.R.color.transparent))))
+        onView(withId(R.id.cdm_imageView))
+            .check(matches(withTagValue(equalTo(R.drawable.cdm_off))))
     }
 
     @Test

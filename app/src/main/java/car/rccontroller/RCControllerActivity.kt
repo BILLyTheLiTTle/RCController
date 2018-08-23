@@ -137,12 +137,12 @@ class RCControllerActivity : AppCompatActivity() {
                     /* Use the serverIp variable to check if the engine is running.
                        I use the serverIp because I did not want to use a blocking network request. */
                     if(raspiServerIp != null) {
-                        handbrake_imageView.setImageResource(R.drawable.handbrake_on)
+                        handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_on)
                         activateHandbrake(true)
                     }
                 } else if (event.action == android.view.MotionEvent.ACTION_UP) {
                     if(raspiServerIp != null) {
-                        handbrake_imageView.setImageResource(R.drawable.handbrake_off)
+                        handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_off)
                         activateHandbrake(false)
                         // re-throttle automatically to start moving the rear wheels again
                         throttle(throttleNbrake_mySeekBar.progress)
@@ -168,9 +168,9 @@ class RCControllerActivity : AppCompatActivity() {
                     reverseIntention = !reverseIntention
                 }
                 if (reverseIntention)
-                    reverse_imageView.setImageResource(R.drawable.reverse_on)
+                    reverse_imageView.setImageResourceWithTag(R.drawable.reverse_on)
                 else
-                    reverse_imageView.setImageResource(R.drawable.reverse_off)
+                    reverse_imageView.setImageResourceWithTag(R.drawable.reverse_off)
                 true
             }
             setOnClickListener {_ ->
@@ -192,9 +192,9 @@ class RCControllerActivity : AppCompatActivity() {
                     cruiseControlActive = true
                 }
                 if (cruiseControlActive)
-                    cruiseControl_imageView.setImageResource(R.drawable.cruise_control_on)
+                    cruiseControl_imageView.setImageResourceWithTag(R.drawable.cruise_control_on)
                 else
-                    cruiseControl_imageView.setImageResource(R.drawable.cruise_control_off)
+                    cruiseControl_imageView.setImageResourceWithTag(R.drawable.cruise_control_off)
 
                 true
             }
@@ -668,7 +668,7 @@ class RCControllerActivity : AppCompatActivity() {
      */
     private fun resetUI(){
         if (isEngineStarted) {
-            engineStartStop_imageView.setImageResource(R.drawable.engine_started_stop_action)
+            engineStartStop_imageView.setImageResourceWithTag(R.drawable.engine_started_stop_action)
 
             steering_seekBar.isEnabled = true
             steering_seekBar.progress = resources.getInteger(R.integer.default_steering)
@@ -678,9 +678,9 @@ class RCControllerActivity : AppCompatActivity() {
                 getInteger(R.integer.default_throttle_n_brake);
 
             if (reverseIntention)
-                reverse_imageView.setImageResource(R.drawable.reverse_on)
+                reverse_imageView.setImageResourceWithTag(R.drawable.reverse_on)
             else
-                reverse_imageView.setImageResource(R.drawable.reverse_off)
+                reverse_imageView.setImageResourceWithTag(R.drawable.reverse_off)
 
             if (emergencyLights) {
                 emergencyLightsAnimation.start()
@@ -693,16 +693,16 @@ class RCControllerActivity : AppCompatActivity() {
             updateSpeedUIItem("${resources.getString(R.string.tachometer_value)}")
         }
         else {
-            engineStartStop_imageView.setImageResource(R.drawable.engine_stopped_start_action)
+            engineStartStop_imageView.setImageResourceWithTag(R.drawable.engine_stopped_start_action)
 
             steering_seekBar.isEnabled = false
             throttleNbrake_mySeekBar.isEnabled = false
 
-            reverse_imageView.setImageResource(R.drawable.reverse_off)
+            reverse_imageView.setImageResourceWithTag(R.drawable.reverse_off)
 
             //reset the cruise control flag
             cruiseControlActive = false
-            cruiseControl_imageView.setImageResource(R.drawable.cruise_control_off)
+            cruiseControl_imageView.setImageResourceWithTag(R.drawable.cruise_control_off)
 
             emergencyLightsAnimation.stop()
             emergencyLightsAnimation.selectDrawable(0)
@@ -737,19 +737,19 @@ class RCControllerActivity : AppCompatActivity() {
      */
     private fun updateMotionUIItems(){
         if(isParkingBrakeActive)
-            parkingBrake_imageView.setImageResource(R.drawable.parking_brake_on)
+            parkingBrake_imageView.setImageResourceWithTag(R.drawable.parking_brake_on)
         else
-            parkingBrake_imageView.setImageResource(R.drawable.parking_brake_off)
+            parkingBrake_imageView.setImageResourceWithTag(R.drawable.parking_brake_off)
 
         if(isHandbrakeActive)
-            handbrake_imageView.setImageResource(R.drawable.handbrake_on)
+            handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_on)
         else
-            handbrake_imageView.setImageResource(R.drawable.handbrake_off)
+            handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_off)
 
         if (cruiseControlActive)
-            cruiseControl_imageView.setImageResource(R.drawable.cruise_control_on)
+            cruiseControl_imageView.setImageResourceWithTag(R.drawable.cruise_control_on)
         else
-            cruiseControl_imageView.setImageResource(R.drawable.cruise_control_off)
+            cruiseControl_imageView.setImageResourceWithTag(R.drawable.cruise_control_off)
     }
 
     /* Rear differential slippery limiter interactive actions must be depending on each other.
@@ -760,21 +760,21 @@ class RCControllerActivity : AppCompatActivity() {
     private fun updateRearDifferentialSlipperyLimiterUIItem(){
         when (currentRearDifferentialSlipperyLimiter) {
             DIFFERENTIAL_SLIPPERY_LIMITER_OPEN -> differential_slippery_limiter_rear_imageView.
-                setImageResource(R.drawable.differential_rear_manual_0_open)
+                setImageResourceWithTag(R.drawable.differential_rear_manual_0_open)
             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 -> differential_slippery_limiter_rear_imageView.
-                setImageResource(R.drawable.differential_rear_manual_1_medi)
+                setImageResourceWithTag(R.drawable.differential_rear_manual_1_medi)
             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1 -> differential_slippery_limiter_rear_imageView.
-                setImageResource(R.drawable.differential_rear_manual_2_medi)
+                setImageResourceWithTag(R.drawable.differential_rear_manual_2_medi)
             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2 -> differential_slippery_limiter_rear_imageView.
-                setImageResource(R.drawable.differential_rear_manual_3_medi)
+                setImageResourceWithTag(R.drawable.differential_rear_manual_3_medi)
             DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED -> differential_slippery_limiter_rear_imageView.
-                setImageResource(R.drawable.differential_rear_manual_4_locked)
+                setImageResourceWithTag(R.drawable.differential_rear_manual_4_locked)
             DIFFERENTIAL_SLIPPERY_LIMITER_AUTO -> differential_slippery_limiter_rear_imageView.
-                setImageResource(R.drawable.differential_rear_auto)
+                setImageResourceWithTag(R.drawable.differential_rear_auto)
         //null -> differential_slippery_limiter_rear_imageView.
-        //   setImageResource(R.drawable.differential_rear_off)
+        //   setImageResourceWithTag(R.drawable.differential_rear_off)
             else -> differential_slippery_limiter_rear_imageView.
-                setImageResource(R.drawable.differential_rear_off)
+                setImageResourceWithTag(R.drawable.differential_rear_off)
         }
     }
 
@@ -786,21 +786,21 @@ class RCControllerActivity : AppCompatActivity() {
     private fun updateFrontDifferentialSlipperyLimiterUIItem(){
         when (currentFrontDifferentialSlipperyLimiter) {
             DIFFERENTIAL_SLIPPERY_LIMITER_OPEN -> differential_slippery_limiter_front_imageView.
-                setImageResource(R.drawable.differential_front_manual_0_open)
+                setImageResourceWithTag(R.drawable.differential_front_manual_0_open)
             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 -> differential_slippery_limiter_front_imageView.
-                setImageResource(R.drawable.differential_front_manual_1_medi)
+                setImageResourceWithTag(R.drawable.differential_front_manual_1_medi)
             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1 -> differential_slippery_limiter_front_imageView.
-                setImageResource(R.drawable.differential_front_manual_2_medi)
+                setImageResourceWithTag(R.drawable.differential_front_manual_2_medi)
             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2 -> differential_slippery_limiter_front_imageView.
-                setImageResource(R.drawable.differential_front_manual_3_medi)
+                setImageResourceWithTag(R.drawable.differential_front_manual_3_medi)
             DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED -> differential_slippery_limiter_front_imageView.
-                setImageResource(R.drawable.differential_front_manual_4_locked)
+                setImageResourceWithTag(R.drawable.differential_front_manual_4_locked)
             DIFFERENTIAL_SLIPPERY_LIMITER_AUTO -> differential_slippery_limiter_front_imageView.
-                setImageResource(R.drawable.differential_front_auto)
+                setImageResourceWithTag(R.drawable.differential_front_auto)
             //null -> differential_slippery_limiter_front_imageView.
-             //   setImageResource(R.drawable.differential_front_off)
+             //   setImageResourceWithTag(R.drawable.differential_front_off)
             else -> differential_slippery_limiter_front_imageView.
-                setImageResource(R.drawable.differential_front_off)
+                setImageResourceWithTag(R.drawable.differential_front_off)
         }
     }
 
@@ -812,25 +812,25 @@ class RCControllerActivity : AppCompatActivity() {
     private fun updateMotorSpeedLimiterUIItem(){
         when (motorSpeedLimiter) {
             MOTOR_SPEED_LIMITER_FULL_SPEED -> motor_speed_limiter_imageView.
-                    setImageResource(R.drawable.speed_limiter_manual_100)
+                setImageResourceWithTag(R.drawable.speed_limiter_manual_100)
             MOTOR_SPEED_LIMITER_FAST_SPEED_2 -> motor_speed_limiter_imageView.
-                setImageResource(R.drawable.speed_limiter_manual_090)
+                setImageResourceWithTag(R.drawable.speed_limiter_manual_090)
             MOTOR_SPEED_LIMITER_FAST_SPEED_1 -> motor_speed_limiter_imageView.
-                setImageResource(R.drawable.speed_limiter_manual_080)
+                setImageResourceWithTag(R.drawable.speed_limiter_manual_080)
             MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2 -> motor_speed_limiter_imageView.
-                setImageResource(R.drawable.speed_limiter_manual_070)
+                setImageResourceWithTag(R.drawable.speed_limiter_manual_070)
             MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1 -> motor_speed_limiter_imageView.
-                setImageResource(R.drawable.speed_limiter_manual_060)
+                setImageResourceWithTag(R.drawable.speed_limiter_manual_060)
             MOTOR_SPEED_LIMITER_SLOW_SPEED_2 -> motor_speed_limiter_imageView.
-                setImageResource(R.drawable.speed_limiter_manual_040)
+                setImageResourceWithTag(R.drawable.speed_limiter_manual_040)
             MOTOR_SPEED_LIMITER_SLOW_SPEED_1 -> motor_speed_limiter_imageView.
-                setImageResource(R.drawable.speed_limiter_manual_020)
+                setImageResourceWithTag(R.drawable.speed_limiter_manual_020)
             MOTOR_SPEED_LIMITER_NO_SPEED -> motor_speed_limiter_imageView.
-                setImageResource(R.drawable.speed_limiter_manual_000)
+                setImageResourceWithTag(R.drawable.speed_limiter_manual_000)
             //null -> motor_speed_limiter_imageView.
-            //    setImageResource(R.drawable.speed_limiter_off)
+            //    setImageResourceWithTag(R.drawable.speed_limiter_off)
             else -> motor_speed_limiter_imageView.
-                setImageResource(R.drawable.speed_limiter_off)
+                setImageResourceWithTag(R.drawable.speed_limiter_off)
         }
     }
 
@@ -849,7 +849,7 @@ class RCControllerActivity : AppCompatActivity() {
                 currentFrontDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_AUTO
                 currentRearDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_AUTO
                 handling_assistance_imageView.
-                    setImageResource(R.drawable.handling_assistance_full)
+                    setImageResourceWithTag(R.drawable.handling_assistance_full)
                 updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_IDLE_STATE,
                 abmState = SensorFeedbackServer.MODULE_IDLE_STATE,
                 esmState = SensorFeedbackServer.MODULE_IDLE_STATE,
@@ -861,7 +861,7 @@ class RCControllerActivity : AppCompatActivity() {
                 currentFrontDifferentialSlipperyLimiter = previousFrontDifferentialSlipperyLimiter
                 currentRearDifferentialSlipperyLimiter = previousRearDifferentialSlipperyLimiter
                 handling_assistance_imageView.
-                    setImageResource(R.drawable.handling_assistance_warning)
+                    setImageResourceWithTag(R.drawable.handling_assistance_warning)
                 updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_IDLE_STATE,
                         abmState = SensorFeedbackServer.MODULE_IDLE_STATE,
                         esmState = SensorFeedbackServer.MODULE_IDLE_STATE,
@@ -873,7 +873,7 @@ class RCControllerActivity : AppCompatActivity() {
                 currentFrontDifferentialSlipperyLimiter = previousFrontDifferentialSlipperyLimiter
                 currentRearDifferentialSlipperyLimiter = previousRearDifferentialSlipperyLimiter
                 handling_assistance_imageView.
-                    setImageResource(R.drawable.handling_assistance_manual)
+                    setImageResourceWithTag(R.drawable.handling_assistance_manual)
                 updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_OFF_STATE,
                         abmState = SensorFeedbackServer.MODULE_OFF_STATE,
                         esmState = SensorFeedbackServer.MODULE_OFF_STATE,
@@ -883,7 +883,7 @@ class RCControllerActivity : AppCompatActivity() {
             }
             else -> {
                 handling_assistance_imageView.
-                        setImageResource(R.drawable.handling_assistance_off)
+                    setImageResourceWithTag(R.drawable.handling_assistance_off)
                 updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_OFF_STATE,
                         abmState = SensorFeedbackServer.MODULE_OFF_STATE,
                         esmState = SensorFeedbackServer.MODULE_OFF_STATE,
@@ -919,11 +919,11 @@ class RCControllerActivity : AppCompatActivity() {
             runOnUiThread {
                 when (moduleState) {
                     SensorFeedbackServer.MODULE_ON_STATE ->
-                        moduleUI.setImageResource(moduleOnDrawable)
+                        moduleUI.setImageResourceWithTag(moduleOnDrawable)
                     SensorFeedbackServer.MODULE_IDLE_STATE ->
-                        moduleUI.setImageResource(moduleIdleDrawable)
+                        moduleUI.setImageResourceWithTag(moduleIdleDrawable)
                     SensorFeedbackServer.MODULE_OFF_STATE ->
-                        moduleUI.setImageResource(moduleOffDrawable)
+                        moduleUI.setImageResourceWithTag(moduleOffDrawable)
                     SensorFeedbackServer.MODULE_NOTHING_STATE ->
                         moduleUI.visibility = View.INVISIBLE
                 }
@@ -951,11 +951,11 @@ class RCControllerActivity : AppCompatActivity() {
      */
     private fun updateMainLightsUIItems(){
         when (mainLightsState) {
-            LONG_RANGE_LIGHTS -> lights_imageView.setImageResource(R.drawable.lights_long_range)
-            DRIVING_LIGHTS -> lights_imageView.setImageResource(R.drawable.lights_driving)
-            POSITION_LIGHTS -> lights_imageView.setImageResource(R.drawable.lights_position)
-            LIGHTS_OFF -> lights_imageView.setImageResource(R.drawable.lights_off)
-            else -> lights_imageView.setImageResource(R.drawable.lights_off)
+            LONG_RANGE_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_long_range)
+            DRIVING_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_driving)
+            POSITION_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_position)
+            LIGHTS_OFF -> lights_imageView.setImageResourceWithTag(R.drawable.lights_off)
+            else -> lights_imageView.setImageResourceWithTag(R.drawable.lights_off)
         }
     }
 
@@ -1010,111 +1010,111 @@ class RCControllerActivity : AppCompatActivity() {
                 frontLeftMotor == SensorFeedbackServer.WARNING_TYPE_NOTHING &&
                 frontRightMotor == SensorFeedbackServer.WARNING_TYPE_NOTHING &&
                 rearHBridge == SensorFeedbackServer.WARNING_TYPE_NOTHING)
-                carTemps_imageView.setImageResource(R.drawable.car_temps_off)
+                carTemps_imageView.setImageResourceWithTag(R.drawable.car_temps_off)
             else
-                carTemps_imageView.setImageResource(R.drawable.car_temps_on)
+                carTemps_imageView.setImageResourceWithTag(R.drawable.car_temps_on)
 
             when (rearLeftMotor) {
                 SensorFeedbackServer.WARNING_TYPE_NORMAL ->
-                    rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_normal)
+                    rearLeftMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_normal)
                 SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
-                    rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_medium)
+                    rearLeftMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_medium)
                 SensorFeedbackServer.WARNING_TYPE_HIGH ->
-                    rearLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_high)
+                    rearLeftMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_high)
                 SensorFeedbackServer.WARNING_TYPE_NOTHING ->
-                    rearLeftMotorTemps_imageView.setImageResource(android.R.color.transparent)
+                    rearLeftMotorTemps_imageView.setImageResourceWithTag(android.R.color.transparent)
             }
 
             when (rearRightMotor) {
                 SensorFeedbackServer.WARNING_TYPE_NORMAL ->
-                    rearRightMotorTemps_imageView.setImageResource(R.drawable.motor_temp_normal)
+                    rearRightMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_normal)
                 SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
-                    rearRightMotorTemps_imageView.setImageResource(R.drawable.motor_temp_medium)
+                    rearRightMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_medium)
                 SensorFeedbackServer.WARNING_TYPE_HIGH ->
-                    rearRightMotorTemps_imageView.setImageResource(R.drawable.motor_temp_high)
+                    rearRightMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_high)
                 SensorFeedbackServer.WARNING_TYPE_NOTHING ->
-                    rearRightMotorTemps_imageView.setImageResource(android.R.color.transparent)
+                    rearRightMotorTemps_imageView.setImageResourceWithTag(android.R.color.transparent)
             }
 
             when (frontLeftMotor) {
                 SensorFeedbackServer.WARNING_TYPE_NORMAL ->
-                    frontLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_normal)
+                    frontLeftMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_normal)
                 SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
-                    frontLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_medium)
+                    frontLeftMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_medium)
                 SensorFeedbackServer.WARNING_TYPE_HIGH ->
-                    frontLeftMotorTemps_imageView.setImageResource(R.drawable.motor_temp_high)
+                    frontLeftMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_high)
                 SensorFeedbackServer.WARNING_TYPE_NOTHING ->
-                    frontLeftMotorTemps_imageView.setImageResource(android.R.color.transparent)
+                    frontLeftMotorTemps_imageView.setImageResourceWithTag(android.R.color.transparent)
             }
 
             when (frontRightMotor) {
                 SensorFeedbackServer.WARNING_TYPE_NORMAL ->
-                    frontRightMotorTemps_imageView.setImageResource(R.drawable.motor_temp_normal)
+                    frontRightMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_normal)
                 SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
-                    frontRightMotorTemps_imageView.setImageResource(R.drawable.motor_temp_medium)
+                    frontRightMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_medium)
                 SensorFeedbackServer.WARNING_TYPE_HIGH ->
-                    frontRightMotorTemps_imageView.setImageResource(R.drawable.motor_temp_high)
+                    frontRightMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_high)
                 SensorFeedbackServer.WARNING_TYPE_NOTHING ->
-                    frontRightMotorTemps_imageView.setImageResource(android.R.color.transparent)
+                    frontRightMotorTemps_imageView.setImageResourceWithTag(android.R.color.transparent)
             }
 
             when (rearHBridge) {
                 SensorFeedbackServer.WARNING_TYPE_NORMAL ->
-                    rearHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_normal)
+                    rearHbridgeTemps_imageView.setImageResourceWithTag(R.drawable.h_bridge_temp_normal)
                 SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
-                    rearHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_medium)
+                    rearHbridgeTemps_imageView.setImageResourceWithTag(R.drawable.h_bridge_temp_medium)
                 SensorFeedbackServer.WARNING_TYPE_HIGH ->
-                    rearHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_high)
+                    rearHbridgeTemps_imageView.setImageResourceWithTag(R.drawable.h_bridge_temp_high)
                 SensorFeedbackServer.WARNING_TYPE_NOTHING ->
-                    rearHbridgeTemps_imageView.setImageResource(android.R.color.transparent)
+                    rearHbridgeTemps_imageView.setImageResourceWithTag(android.R.color.transparent)
             }
 
             when (frontHBridge) {
                 SensorFeedbackServer.WARNING_TYPE_NORMAL ->
-                    frontHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_normal)
+                    frontHbridgeTemps_imageView.setImageResourceWithTag(R.drawable.h_bridge_temp_normal)
                 SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
-                    frontHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_medium)
+                    frontHbridgeTemps_imageView.setImageResourceWithTag(R.drawable.h_bridge_temp_medium)
                 SensorFeedbackServer.WARNING_TYPE_HIGH ->
-                    frontHbridgeTemps_imageView.setImageResource(R.drawable.h_bridge_temp_high)
+                    frontHbridgeTemps_imageView.setImageResourceWithTag(R.drawable.h_bridge_temp_high)
                 SensorFeedbackServer.WARNING_TYPE_NOTHING ->
-                    frontHbridgeTemps_imageView.setImageResource(android.R.color.transparent)
+                    frontHbridgeTemps_imageView.setImageResourceWithTag(android.R.color.transparent)
             }
 
             when (raspberryPi) {
                 SensorFeedbackServer.WARNING_TYPE_NORMAL ->
-                    raspiTemp_imageView.setImageResource(R.drawable.raspi_temp_normal)
+                    raspiTemp_imageView.setImageResourceWithTag(R.drawable.raspi_temp_normal)
                 SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
-                    raspiTemp_imageView.setImageResource(R.drawable.raspi_temp_medium)
+                    raspiTemp_imageView.setImageResourceWithTag(R.drawable.raspi_temp_medium)
                 SensorFeedbackServer.WARNING_TYPE_HIGH ->
-                    raspiTemp_imageView.setImageResource(R.drawable.raspi_temp_high)
+                    raspiTemp_imageView.setImageResourceWithTag(R.drawable.raspi_temp_high)
                 SensorFeedbackServer.WARNING_TYPE_NOTHING ->
-                    raspiTemp_imageView.setImageResource(R.drawable.raspi_temp_off)
+                    raspiTemp_imageView.setImageResourceWithTag(R.drawable.raspi_temp_off)
             }
 
             when (batteries) {
                 SensorFeedbackServer.WARNING_TYPE_NORMAL ->
-                    batteryTemp_imageView.setImageResource(R.drawable.batteries_temp_normal)
+                    batteryTemp_imageView.setImageResourceWithTag(R.drawable.batteries_temp_normal)
                 SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
-                    batteryTemp_imageView.setImageResource(R.drawable.batteries_temp_medium)
+                    batteryTemp_imageView.setImageResourceWithTag(R.drawable.batteries_temp_medium)
                 SensorFeedbackServer.WARNING_TYPE_HIGH ->
-                    batteryTemp_imageView.setImageResource(R.drawable.batteries_temp_high)
+                    batteryTemp_imageView.setImageResourceWithTag(R.drawable.batteries_temp_high)
                 SensorFeedbackServer.WARNING_TYPE_NOTHING ->
-                    batteryTemp_imageView.setImageResource(R.drawable.batteries_temp_off)
+                    batteryTemp_imageView.setImageResourceWithTag(R.drawable.batteries_temp_off)
             }
 
             when (shiftRegisters) {
                 SensorFeedbackServer.WARNING_TYPE_NORMAL ->
                     shiftRegisterTemp_imageView.
-                        setImageResource(R.drawable.shift_register_temp_normal)
+                        setImageResourceWithTag(R.drawable.shift_register_temp_normal)
                 SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
                     shiftRegisterTemp_imageView.
-                        setImageResource(R.drawable.shift_register_temp_medium)
+                        setImageResourceWithTag(R.drawable.shift_register_temp_medium)
                 SensorFeedbackServer.WARNING_TYPE_HIGH ->
                     shiftRegisterTemp_imageView.
-                        setImageResource(R.drawable.shift_register_temp_high)
+                        setImageResourceWithTag(R.drawable.shift_register_temp_high)
                 SensorFeedbackServer.WARNING_TYPE_NOTHING ->
                     shiftRegisterTemp_imageView.
-                        setImageResource(R.drawable.shift_register_temp_off)
+                        setImageResourceWithTag(R.drawable.shift_register_temp_off)
             }
         }
     }
@@ -1131,7 +1131,7 @@ class RCControllerActivity : AppCompatActivity() {
         super.onPause()
         val status = activateParkingBrake(true)
         if(status == OK_STRING)
-            parkingBrake_imageView.setImageResource(R.drawable.parking_brake_on)
+            parkingBrake_imageView.setImageResourceWithTag(R.drawable.parking_brake_on)
     }
 
     override fun onBackPressed() {
@@ -1145,6 +1145,11 @@ class RCControllerActivity : AppCompatActivity() {
         Toast.makeText(this, getString(R.string.exit_info), Toast.LENGTH_SHORT).show()
 
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+    }
+
+    private fun ImageView.setImageResourceWithTag(resId: Int) {
+        setImageResource(resId)
+        tag = resId
     }
 
 }
