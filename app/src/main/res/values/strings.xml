@@ -4,6 +4,7 @@
 
     <string name="exit_info">Please click BACK again to exit</string>
     <string name="tachometer_value">0</string>
+    <string name="tachometer_null_value">-/-</string>
     <string name="tachometer_unit">km/h</string>
 
     <string name="long_click_info">Long-click to interact</string>

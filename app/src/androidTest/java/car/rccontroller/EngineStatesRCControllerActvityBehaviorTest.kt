@@ -126,6 +126,39 @@ class EngineStatesRCControllerActvityBehaviorTest: RCControllerActivityBehaviorT
                 withTagValue(equalTo(R.drawable.cdm_off)),
                 withTagValue(equalTo(R.drawable.cdm_idle)),
                 withTagValue(equalTo(R.drawable.cdm_on)))))
+        onView(withId(R.id.odm_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.odm_off)),
+                withTagValue(equalTo(R.drawable.odm_idle)),
+                withTagValue(equalTo(R.drawable.odm_on)))))
+        onView(withId(R.id.udm_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.udm_off)),
+                withTagValue(equalTo(R.drawable.udm_idle)),
+                withTagValue(equalTo(R.drawable.udm_on)))))
+        onView(withId(R.id.esm_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.esm_off)),
+                withTagValue(equalTo(R.drawable.esm_idle)),
+                withTagValue(equalTo(R.drawable.esm_on)))))
+        onView(withId(R.id.abm_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.abm_off)),
+                withTagValue(equalTo(R.drawable.abm_idle)),
+                withTagValue(equalTo(R.drawable.abm_on)))))
+        onView(withId(R.id.tcm_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.tcm_off)),
+                withTagValue(equalTo(R.drawable.tcm_idle)),
+                withTagValue(equalTo(R.drawable.tcm_on)))))
+        // TODO find another way to test this
+        onView(withId(R.id.vehicle_speed_textView))
+            .check(matches(withText(anyOf(
+                containsString("0"),containsString("1"),
+                containsString("2"),containsString("3"),
+                containsString("4"),containsString("5"),
+                containsString("6"),containsString("7"),
+                containsString("8"),containsString("9")))))
 
         // stop the engine at the end
         onView(withId(R.id.engineStartStop_imageView))
@@ -189,6 +222,19 @@ class EngineStatesRCControllerActvityBehaviorTest: RCControllerActivityBehaviorT
             .check(matches(withTagValue(equalTo(android.R.color.transparent))))
         onView(withId(R.id.cdm_imageView))
             .check(matches(withTagValue(equalTo(R.drawable.cdm_off))))
+        onView(withId(R.id.odm_imageView))
+            .check(matches(withTagValue(equalTo(R.drawable.odm_off))))
+        onView(withId(R.id.udm_imageView))
+            .check(matches(withTagValue(equalTo(R.drawable.udm_off))))
+        onView(withId(R.id.esm_imageView))
+            .check(matches(withTagValue(equalTo(R.drawable.esm_off))))
+        onView(withId(R.id.abm_imageView))
+            .check(matches(withTagValue(equalTo(R.drawable.abm_off))))
+        onView(withId(R.id.tcm_imageView))
+            .check(matches(withTagValue(equalTo(R.drawable.tcm_off))))
+        onView(withId(R.id.vehicle_speed_textView))
+            .check(matches(withText(containsString(
+                activityRule.activity.getString(R.string.tachometer_null_value)))))
     }
 
     @Test

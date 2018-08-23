@@ -719,7 +719,7 @@ class RCControllerActivity : AppCompatActivity() {
                 shiftRegisters = SensorFeedbackServer.WARNING_TYPE_NOTHING
             )
 
-            updateSpeedUIItem("-/-")
+            updateSpeedUIItem(getString(R.string.tachometer_null_value))
         }
 
         updateMotionUIItems()
@@ -1147,6 +1147,7 @@ class RCControllerActivity : AppCompatActivity() {
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 
+    // It is better for testing if every ImageView has a tag
     private fun ImageView.setImageResourceWithTag(resId: Int) {
         setImageResource(resId)
         tag = resId
