@@ -14,7 +14,7 @@ class ProgressMatcher internal constructor(private val expectedId: Int) : Bounde
         }
         val resources = item.context.resources
         expectedProgress = resources.getInteger(expectedId)
-        return item?.progress == expectedProgress
+        return item?.progress == expectedProgress ?: false
     }
 
     override fun describeTo(description: Description?) {

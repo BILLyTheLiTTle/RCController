@@ -151,14 +151,12 @@ class EngineStatesRCControllerActvityBehaviorTest: RCControllerActivityBehaviorT
                 withTagValue(equalTo(R.drawable.tcm_off)),
                 withTagValue(equalTo(R.drawable.tcm_idle)),
                 withTagValue(equalTo(R.drawable.tcm_on)))))
-        // TODO find another way to test this
         onView(withId(R.id.vehicle_speed_textView))
-            .check(matches(withText(anyOf(
-                containsString("0"),containsString("1"),
-                containsString("2"),containsString("3"),
-                containsString("4"),containsString("5"),
-                containsString("6"),containsString("7"),
-                containsString("8"),containsString("9")))))
+            .check(matches(withRegex("\\d+") {
+                    itemText: String?, expectedRegex: String ->
+                    itemText?.contains(expectedRegex.toRegex()) ?: false
+            }
+            ))
 
         // stop the engine at the end
         onView(withId(R.id.engineStartStop_imageView))
