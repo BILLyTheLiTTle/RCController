@@ -15,12 +15,11 @@ import car.rccontroller.network.isEngineStarted
 import android.net.wifi.WifiManager
 import android.support.test.InstrumentationRegistry
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
-import car.rccontroller.mymatchers.DrawableMatcher
 
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class EngineStatesRCControllerActvityBehaviorTest: RCControllerActivityBehaviorTestImpl() {
+class EngineStatesRCControllerActivityBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @Test
     fun showDialog_onEngineStart() {
@@ -298,7 +297,7 @@ class EngineStatesRCControllerActvityBehaviorTest: RCControllerActivityBehaviorT
     }
 
     @Test
-    fun showToast_onClick() {
+    fun showToastOnClick() {
         onView(withId(R.id.engineStartStop_imageView))
                 .perform(click())
         onView(withText(containsString(activityRule.activity.resources.getString(R.string.long_click_info))))

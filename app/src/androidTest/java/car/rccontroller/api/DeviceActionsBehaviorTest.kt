@@ -15,32 +15,37 @@ import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
 
 @RunWith(AndroidJUnit4::class)
 @MediumTest
-class ParkingBrakeStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
+class DeviceActionsBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @Test
-    fun applyHandbrake() {
-
-
-    }
-
-    @Test
-    fun releaseHandbrake() {
-
-
-    }
-
-    @Test
-    fun handbrakeFailed() {
-
-    }
-
-    @Test
-    fun showToastOnClick() {
+    fun pressBackOnce() {
         onView(withId(R.id.engineStartStop_imageView))
-                .perform(click())
-        onView(withText(containsString(activityRule.activity.resources.getString(R.string.long_click_info))))
-                .inRoot(withDecorView(not(activityRule.activity.window.decorView)))
-                .check(matches(isDisplayed()))
+            .perform(click())
+        onView(withText(containsString(activityRule.activity.resources.getString(R.string.exit_info))))
+            .inRoot(withDecorView(not(activityRule.activity.window.decorView)))
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun pressBackTwice() {
+
+
+    }
+
+    @Test
+    fun pressHomeAndReturnToApp() {
+
+    }
+
+    @Test
+    fun pressMenuAndReturnToApp() {
+
+
+    }
+
+    @Test
+    fun turnOffScreenAndReturnToApp() {
+
 
     }
 }
