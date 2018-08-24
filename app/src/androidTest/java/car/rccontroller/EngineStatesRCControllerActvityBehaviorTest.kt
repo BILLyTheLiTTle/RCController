@@ -157,6 +157,39 @@ class EngineStatesRCControllerActvityBehaviorTest: RCControllerActivityBehaviorT
                     itemText?.contains(expectedRegex.toRegex()) ?: false
             }
             ))
+        onView(withId(R.id.handling_assistance_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.handling_assistance_manual)),
+                withTagValue(equalTo(R.drawable.handling_assistance_warning)),
+                withTagValue(equalTo(R.drawable.handling_assistance_full)))))
+        onView(withId(R.id.differential_slippery_limiter_front_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.differential_front_manual_0_open)),
+                withTagValue(equalTo(R.drawable.differential_front_manual_1_medi)),
+                withTagValue(equalTo(R.drawable.differential_front_manual_2_medi)),
+                withTagValue(equalTo(R.drawable.differential_front_manual_3_medi)),
+                withTagValue(equalTo(R.drawable.differential_front_manual_4_locked)),
+                withTagValue(equalTo(R.drawable.differential_front_auto)))))
+        onView(withId(R.id.differential_slippery_limiter_rear_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.differential_rear_manual_0_open)),
+                withTagValue(equalTo(R.drawable.differential_rear_manual_1_medi)),
+                withTagValue(equalTo(R.drawable.differential_rear_manual_2_medi)),
+                withTagValue(equalTo(R.drawable.differential_rear_manual_3_medi)),
+                withTagValue(equalTo(R.drawable.differential_rear_manual_4_locked)),
+                withTagValue(equalTo(R.drawable.differential_rear_auto)))))
+        onView(withId(R.id.motor_speed_limiter_imageView))
+            .check(matches(anyOf(
+                withTagValue(equalTo(R.drawable.speed_limiter_manual_000)),
+                withTagValue(equalTo(R.drawable.speed_limiter_manual_020)),
+                withTagValue(equalTo(R.drawable.speed_limiter_manual_040)),
+                withTagValue(equalTo(R.drawable.speed_limiter_manual_060)),
+                withTagValue(equalTo(R.drawable.speed_limiter_manual_070)),
+                withTagValue(equalTo(R.drawable.speed_limiter_manual_080)),
+                withTagValue(equalTo(R.drawable.speed_limiter_manual_090)),
+                withTagValue(equalTo(R.drawable.speed_limiter_manual_100)),
+                withTagValue(equalTo(R.drawable.speed_limiter_auto)))))
+        // TODO for suspensions when implemented
 
         // stop the engine at the end
         onView(withId(R.id.engineStartStop_imageView))
@@ -233,6 +266,15 @@ class EngineStatesRCControllerActvityBehaviorTest: RCControllerActivityBehaviorT
         onView(withId(R.id.vehicle_speed_textView))
             .check(matches(withText(containsString(
                 activityRule.activity.getString(R.string.tachometer_null_value)))))
+        onView(withId(R.id.handling_assistance_imageView))
+            .check(matches(withTagValue(equalTo(R.drawable.handling_assistance_off))))
+        onView(withId(R.id.differential_slippery_limiter_front_imageView))
+            .check(matches(withTagValue(equalTo(R.drawable.differential_front_off))))
+        onView(withId(R.id.differential_slippery_limiter_rear_imageView))
+            .check(matches(withTagValue(equalTo(R.drawable.differential_rear_off))))
+        onView(withId(R.id.motor_speed_limiter_imageView))
+            .check(matches(withTagValue(equalTo(R.drawable.speed_limiter_off))))
+        // TODO for suspensions when implemented
     }
 
     @Test
