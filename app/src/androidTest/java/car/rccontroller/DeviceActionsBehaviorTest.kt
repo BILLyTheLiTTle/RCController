@@ -1,6 +1,5 @@
 package car.rccontroller
 
-import android.content.Context
 import android.support.test.espresso.Espresso.*
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.*
@@ -20,9 +19,6 @@ import org.junit.Before
 import org.junit.BeforeClass
 import android.support.test.uiautomator.UiSelector
 import org.junit.After
-import android.os.Build
-import android.content.Context.POWER_SERVICE
-import android.os.PowerManager
 import android.view.KeyEvent
 
 

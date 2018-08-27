@@ -1,6 +1,6 @@
 package car.rccontroller
 
-import android.support.test.espresso.Espresso.*
+import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.*
 import android.support.test.espresso.matcher.RootMatchers.*
@@ -11,6 +11,20 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.hamcrest.Matchers.*
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
+import car.rccontroller.network.isParkingBrakeActive
+import android.support.test.espresso.Espresso.onView
+import car.rccontroller.network.isEngineStarted
+import org.junit.After
+import org.junit.Before
+import android.widget.SeekBar
+import android.support.test.espresso.matcher.ViewMatchers
+import android.support.test.espresso.UiController
+import android.support.test.espresso.ViewAction
+import android.support.test.uiautomator.UiDevice
+import android.support.test.uiautomator.UiSelector
+import android.view.View
+import org.hamcrest.Matcher
+import org.junit.BeforeClass
 
 
 @RunWith(AndroidJUnit4::class)
@@ -18,14 +32,47 @@ import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
 class ParkingBrakeStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @Test
-    fun applyHandbrake() {
-
-
+    fun applyParkingBrake() {
+        if (isParkingBrakeActive) {
+            onView(withId(R.id.parkingBrake_imageView))
+                .perform(longClick())
+        }
+        onView(withId(R.id.parkingBrake_imageView))
+            .perform(longClick())
+            .check(matches(withTagValue(equalTo(R.drawable.parking_brake_on))))
     }
 
     @Test
-    fun releaseHandbrake() {
+    fun releaseParkingBrake() {
+        if (!isParkingBrakeActive) {
+            onView(withId(R.id.parkingBrake_imageView))
+                .perform(longClick())
+        }
+        onView(withId(R.id.parkingBrake_imageView))
+            .perform(longClick())
+            .check(matches(withTagValue(equalTo(R.drawable.parking_brake_off))))
+    }
 
+    @Test
+    fun releaseParkingBrakeOnThrottle() {
+        if (!isParkingBrakeActive) {
+            onView(withId(R.id.parkingBrake_imageView))
+                .perform(longClick())
+        }
+        mDevice.findObject(UiSelector().resourceId("car.rccontroller:id/throttleNbrake_mySeekBar"))
+            .swipeUp(30)
+        onView(withId(R.id.parkingBrake_imageView))
+            .check(matches(withTagValue(equalTo(R.drawable.parking_brake_off))))
+    }
+
+    @Test
+    fun releaseParkingBrakeOnHandbrake() {
+        if (!isParkingBrakeActive) {
+            onView(withId(R.id.parkingBrake_imageView))
+                .perform(longClick())
+        }
+        onView(withId(R.id.handbrake_imageView))
+            .perform(longClick())
 
     }
 
@@ -36,11 +83,43 @@ class ParkingBrakeStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @Test
     fun showToastOnClick() {
-        onView(withId(R.id.engineStartStop_imageView))
-                .perform(click())
+        onView(withId(R.id.parkingBrake_imageView))
+            .perform(click())
         onView(withText(containsString(activityRule.activity.resources.getString(R.string.long_click_info))))
-                .inRoot(withDecorView(not(activityRule.activity.window.decorView)))
-                .check(matches(isDisplayed()))
+            .inRoot(withDecorView(not(activityRule.activity.window.decorView)))
+            .check(matches(isDisplayed()))
 
+    }
+
+    @Before
+    fun startEngine() {
+        if (isEngineStarted) {
+            onView(withId(R.id.engineStartStop_imageView))
+                .perform(longClick())
+        }
+        onView(withId(R.id.engineStartStop_imageView))
+            .perform(longClick())
+        onView(withId(R.id.server_connection_dialog_layout))
+            .check(matches(isDisplayed()))
+        onView(withText(R.string.server_dialog_ok_button))
+            .perform(click())
+    }
+
+    @After
+    fun stopEngine() {
+        if (isEngineStarted) {
+            onView(withId(R.id.engineStartStop_imageView))
+                .perform(longClick())
+        }
+    }
+
+    companion object {
+        private lateinit var mDevice: UiDevice
+
+        @BeforeClass
+        @JvmStatic
+        fun setUp() {
+            mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        }
     }
 }

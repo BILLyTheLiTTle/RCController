@@ -15,7 +15,6 @@ import car.rccontroller.network.isEngineStarted
 import android.net.wifi.WifiManager
 import android.support.test.InstrumentationRegistry
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
-import org.junit.After
 
 
 @RunWith(AndroidJUnit4::class)
