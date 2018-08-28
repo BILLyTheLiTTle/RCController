@@ -16,14 +16,8 @@ import android.support.test.espresso.Espresso.onView
 import car.rccontroller.network.isEngineStarted
 import org.junit.After
 import org.junit.Before
-import android.widget.SeekBar
-import android.support.test.espresso.matcher.ViewMatchers
-import android.support.test.espresso.UiController
-import android.support.test.espresso.ViewAction
 import android.support.test.uiautomator.UiDevice
 import android.support.test.uiautomator.UiSelector
-import android.view.View
-import org.hamcrest.Matcher
 import org.junit.BeforeClass
 
 
