@@ -10,7 +10,6 @@ import android.support.test.filters.MediumTest
 import android.support.test.runner.AndroidJUnit4
 import android.support.test.uiautomator.UiDevice
 import android.support.test.uiautomator.UiSelector
-import android.util.Log
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
 import car.rccontroller.network.*
 import org.hamcrest.Matchers.*
