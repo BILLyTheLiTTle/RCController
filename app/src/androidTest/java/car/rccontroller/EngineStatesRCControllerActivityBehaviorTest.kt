@@ -15,6 +15,7 @@ import car.rccontroller.network.isEngineStarted
 import android.net.wifi.WifiManager
 import android.support.test.InstrumentationRegistry
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
+import org.junit.After
 
 
 @RunWith(AndroidJUnit4::class)
@@ -187,11 +188,11 @@ class EngineStatesRCControllerActivityBehaviorTest: RCControllerActivityBehavior
                 withTagValue(equalTo(R.drawable.speed_limiter_manual_090)),
                 withTagValue(equalTo(R.drawable.speed_limiter_manual_100)),
                 withTagValue(equalTo(R.drawable.speed_limiter_auto)))))
-        // TODO for suspensions when implemented
-
-        // stop the engine at the end
-        onView(withId(R.id.engineStartStop_imageView))
-            .perform(longClick())
+        // TODO test the suspensions when implemented
+        onView(withId(R.id.suspension_front_imageView))
+            .check(matches(withDrawable(R.drawable.suspension_front_off)))
+        onView(withId(R.id.suspension_rear_imageView))
+            .check(matches(withDrawable(R.drawable.suspension_rear_off)))
     }
 
     @Test
@@ -272,7 +273,11 @@ class EngineStatesRCControllerActivityBehaviorTest: RCControllerActivityBehavior
             .check(matches(withTagValue(equalTo(R.drawable.differential_rear_off))))
         onView(withId(R.id.motor_speed_limiter_imageView))
             .check(matches(withTagValue(equalTo(R.drawable.speed_limiter_off))))
-        // TODO for suspensions when implemented
+        // TODO test the suspensions when implemented
+        onView(withId(R.id.suspension_front_imageView))
+            .check(matches(withDrawable(R.drawable.suspension_front_off)))
+        onView(withId(R.id.suspension_rear_imageView))
+            .check(matches(withDrawable(R.drawable.suspension_rear_off)))
     }
 
     @Test
@@ -303,5 +308,13 @@ class EngineStatesRCControllerActivityBehaviorTest: RCControllerActivityBehavior
                 .inRoot(withDecorView(not(activityRule.activity.window.decorView)))
                 .check(matches(isDisplayed()))
 
+    }
+
+    @After
+    fun stopEngineAlways() {
+        if (isEngineStarted) {
+            onView(withId(R.id.engineStartStop_imageView))
+                .perform(longClick())
+        }
     }
 }

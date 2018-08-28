@@ -71,11 +71,6 @@ class ParkingBrakeStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
     }
 
     @Test
-    fun handbrakeFailed() {
-
-    }
-
-    @Test
     fun showToastOnClick() {
         onView(withId(R.id.parkingBrake_imageView))
             .perform(click())
