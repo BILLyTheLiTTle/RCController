@@ -478,7 +478,7 @@ class RCControllerActivity : AppCompatActivity() {
                                         DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
                             DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED -> Toast.makeText(
                                 context,
-                                getString(R.string.differential_speed_limiter_locked_warning),
+                                getString(R.string.differential_slippery_limiter_locked_warning),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -555,7 +555,7 @@ class RCControllerActivity : AppCompatActivity() {
                                         DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
                             DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED -> Toast.makeText(
                                 context,
-                                getString(R.string.differential_speed_limiter_locked_warning),
+                                getString(R.string.differential_slippery_limiter_locked_warning),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

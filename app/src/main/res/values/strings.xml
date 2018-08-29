@@ -25,7 +25,7 @@
 
     <string name="differential_slippery_limiter_open_warning">Single click to move to a more locked
         diff</string>
-    <string name="differential_speed_limiter_locked_warning">Long-click to move to a more open
+    <string name="differential_slippery_limiter_locked_warning">Long-click to move to a more open
         diff</string>
 
     <string name="auto_to_manual_warning">Not possible option due to \"Handling Assistance\"
