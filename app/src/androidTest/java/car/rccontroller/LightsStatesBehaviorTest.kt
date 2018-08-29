@@ -1,15 +1,15 @@
 package car.rccontroller
 
-import android.support.test.espresso.Espresso
-import android.support.test.espresso.action.ViewActions
-import android.support.test.espresso.assertion.ViewAssertions
-import android.support.test.espresso.matcher.RootMatchers
-import android.support.test.espresso.matcher.ViewMatchers
+import android.support.test.espresso.Espresso.*
+import android.support.test.espresso.action.ViewActions.*
+import android.support.test.espresso.assertion.ViewAssertions.*
+import android.support.test.espresso.matcher.RootMatchers.*
+import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.filters.MediumTest
 import android.support.test.runner.AndroidJUnit4
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
 import car.rccontroller.network.isEngineStarted
-import org.hamcrest.Matchers
+import org.hamcrest.Matchers.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -21,68 +21,95 @@ class LightsStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @Test
     fun increaseLightBeam() {
+        val drawables = arrayOf(
+            R.drawable.lights_off, R.drawable.lights_position,
+            R.drawable.lights_driving, R.drawable.lights_long_range)
 
+        for (drawable in drawables) {
+            onView(withId(R.id.lights_imageView))
+                .check(matches(withTagValue(equalTo(drawable))))
+                .perform(longClick())
+            Thread.sleep(200)
+        }
     }
 
     @Test
     fun decreaseLightBeam() {
+        increaseLightBeam()
 
+        val drawables = arrayOf(
+            R.drawable.lights_long_range, R.drawable.lights_driving,
+            R.drawable.lights_position, R.drawable.lights_off)
+
+        for (drawable in drawables) {
+            onView(withId(R.id.lights_imageView))
+                .check(matches(withTagValue(equalTo(drawable))))
+                .perform(click())
+            Thread.sleep(200)
+        }
     }
 
     @Test
     fun showToastWhenSingleClickIsUnavailable() {
-        Espresso.onView(ViewMatchers.withId(R.id.lights_imageView))
-            .perform(ViewActions.click())
-        Espresso.onView(
-            ViewMatchers.withText(
-                Matchers.containsString(
+        onView(withId(R.id.lights_imageView))
+            .perform(click())
+        onView(
+            withText(
+                containsString(
                     activityRule.activity.resources.getString(
                         R.string.lights_off_warning
                     )
                 )
             )
         )
-            .inRoot(RootMatchers.withDecorView(Matchers.not(activityRule.activity.window.decorView)))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+            .inRoot(withDecorView(not(activityRule.activity.window.decorView)))
+            .check(matches(isDisplayed()))
     }
 
     @Test
     fun showToastWhenLongClickIsUnavailable() {
-        for(i in 0..1)
-            Espresso.onView(ViewMatchers.withId(R.id.lights_imageView))
-                .perform(ViewActions.longClick())
-        Espresso.onView(
-            ViewMatchers.withText(
-                Matchers.containsString(
+        for(i in 0..3)
+            onView(withId(R.id.lights_imageView))
+                .perform(longClick())
+        onView(
+            withText(
+                containsString(
                     activityRule.activity.resources.getString(
                         R.string.long_range_lights_warning
                     )
                 )
             )
         )
-            .inRoot(RootMatchers.withDecorView(Matchers.not(activityRule.activity.window.decorView)))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+            .inRoot(withDecorView(not(activityRule.activity.window.decorView)))
+            .check(matches(isDisplayed()))
     }
 
     @Before
     fun startEngine() {
         if (isEngineStarted) {
-            Espresso.onView(ViewMatchers.withId(R.id.engineStartStop_imageView))
-                .perform(ViewActions.longClick())
+            onView(withId(R.id.engineStartStop_imageView))
+                .perform(longClick())
         }
-        Espresso.onView(ViewMatchers.withId(R.id.engineStartStop_imageView))
-            .perform(ViewActions.longClick())
-        Espresso.onView(ViewMatchers.withId(R.id.server_connection_dialog_layout))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-        Espresso.onView(ViewMatchers.withText(R.string.server_dialog_ok_button))
-            .perform(ViewActions.click())
+        onView(withId(R.id.engineStartStop_imageView))
+            .perform(longClick())
+        onView(withId(R.id.server_connection_dialog_layout))
+            .check(matches(isDisplayed()))
+        onView(withText(R.string.server_dialog_ok_button))
+            .perform(click())
     }
 
     @After
     fun stopEngine() {
         if (isEngineStarted) {
-            Espresso.onView(ViewMatchers.withId(R.id.engineStartStop_imageView))
-                .perform(ViewActions.longClick())
+            onView(withId(R.id.engineStartStop_imageView))
+                .perform(longClick())
+        }
+
+        // Make sure the lights are off
+        for(i in 0..3) {
+            onView(withId(R.id.lights_imageView))
+                .perform(click())
+            Thread.sleep(200)
         }
     }
 }
