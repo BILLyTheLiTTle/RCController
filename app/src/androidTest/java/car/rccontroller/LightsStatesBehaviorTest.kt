@@ -19,12 +19,14 @@ import org.junit.runner.RunWith
 @MediumTest
 class LightsStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
+    val drawables = arrayOf(
+        R.drawable.lights_off, R.drawable.lights_position,
+        R.drawable.lights_driving, R.drawable.lights_long_range)
+
+    val maxClicks = 4
+
     @Test
     fun increaseLightBeam() {
-        val drawables = arrayOf(
-            R.drawable.lights_off, R.drawable.lights_position,
-            R.drawable.lights_driving, R.drawable.lights_long_range)
-
         for (drawable in drawables) {
             onView(withId(R.id.lights_imageView))
                 .check(matches(withTagValue(equalTo(drawable))))
@@ -37,11 +39,7 @@ class LightsStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
     fun decreaseLightBeam() {
         increaseLightBeam()
 
-        val drawables = arrayOf(
-            R.drawable.lights_long_range, R.drawable.lights_driving,
-            R.drawable.lights_position, R.drawable.lights_off)
-
-        for (drawable in drawables) {
+        for (drawable in drawables.reversedArray()) {
             onView(withId(R.id.lights_imageView))
                 .check(matches(withTagValue(equalTo(drawable))))
                 .perform(click())
@@ -68,7 +66,7 @@ class LightsStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @Test
     fun showToastWhenLongClickIsUnavailable() {
-        for(i in 0..3)
+        for(i in 0 until maxClicks)
             onView(withId(R.id.lights_imageView))
                 .perform(longClick())
         onView(
@@ -106,7 +104,7 @@ class LightsStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
         }
 
         // Make sure the lights are off
-        for(i in 0..3) {
+        for(i in 0 until maxClicks) {
             onView(withId(R.id.lights_imageView))
                 .perform(click())
             Thread.sleep(200)
