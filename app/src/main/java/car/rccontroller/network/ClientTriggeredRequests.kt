@@ -1,6 +1,5 @@
 package car.rccontroller.network
 
-import android.app.Application
 import android.content.Context
 import car.rccontroller.R
 import kotlinx.coroutines.experimental.CommonPool
