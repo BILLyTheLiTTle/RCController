@@ -35,22 +35,46 @@ class DifferentialStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @Test
     fun increaseFrontSlipperyLimiter() {
+        decreaseFrontSlipperyLimiter()
 
+        for (drawable in frontDiffDrawable) {
+            onView(withId(R.id.differential_slippery_limiter_front_imageView))
+                .check(matches(withTagValue(equalTo(drawable))))
+                .perform(click())
+            Thread.sleep(200)
+        }
     }
 
     @Test
     fun decreaseFrontSlipperyLimiter() {
-
+        for (drawable in frontDiffDrawable.reversedArray()) {
+            onView(withId(R.id.differential_slippery_limiter_front_imageView))
+                .check(matches(withTagValue(equalTo(drawable))))
+                .perform(longClick())
+            Thread.sleep(200)
+        }
     }
 
     @Test
     fun increaseRearSlipperyLimiter() {
+        decreaseRearSlipperyLimiter()
 
+        for (drawable in rearDiffDrawable) {
+            onView(withId(R.id.differential_slippery_limiter_rear_imageView))
+                .check(matches(withTagValue(equalTo(drawable))))
+                .perform(click())
+            Thread.sleep(200)
+        }
     }
 
     @Test
     fun decreaseRearSlipperyLimiter() {
-
+        for (drawable in rearDiffDrawable.reversedArray()) {
+            onView(withId(R.id.differential_slippery_limiter_rear_imageView))
+                .check(matches(withTagValue(equalTo(drawable))))
+                .perform(longClick())
+            Thread.sleep(200)
+        }
     }
 
     @Test
