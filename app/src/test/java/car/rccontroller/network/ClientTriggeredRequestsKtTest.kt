@@ -33,14 +33,15 @@ class ClientTriggeredRequestsKtTest {
         assertThat(isEngineStarted, `is`(false))
     }
 
-    @Test
+    /*@Test
     fun `validate that local server has started`() {
-
+        car.rccontroller.network.startEngine(null, "192.168.200.245", 8080)
+        assertThat(if (::sensorFeedbackServer.isInitialized) sensorFeedbackServer.isAlive else false, `is`(true))
     }
     @Test
     fun `validate that local server has stopped`() {
 
-    }
+    }*/
 
     @Test
     fun `validate that parking brake is activated`() {
