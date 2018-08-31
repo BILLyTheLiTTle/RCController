@@ -1,6 +1,5 @@
 package car.rccontroller.network.server.feedback
 
-import android.util.Log
 import car.rccontroller.RCControllerActivity
 import car.rccontroller.network.EMPTY_STRING
 import car.rccontroller.network.OK_STRING
@@ -13,95 +12,95 @@ class SensorFeedbackServer(
     val port: Int = 8090
 ) : NanoHTTPD(ip, port) {
 
-    private val TEMP_URI = "/temp"
-    private val TEMP_PARAM_KEY_ITEM = "item"
-    private val TEMP_PARAM_KEY_WARNING = "warning"
-    private val TEMP_PARAM_KEY_VALUE = "value"
-    private val MOTOR_REAR_LEFT_TEMP = "motor_rear_left_temp"
-    private val MOTOR_REAR_RIGHT_TEMP = "motor_rear_right_temp"
-    private val MOTOR_FRONT_LEFT_TEMP = "motor_front_left_temp"
-    private val MOTOR_FRONT_RIGHT_TEMP = "motor_front_right_temp"
-    private val H_BRIDGE_REAR_TEMP = "h_bridge_rear_temp"
-    private val H_BRIDGE_FRONT_TEMP = "h_bridge_front_temp"
-    private val RASPBERRY_PI_TEMP = "raspberry_pi_temp"
-    private val BATTERIES_TEMP = "batteries_temp"
-    private val SHIFT_REGISTERS_TEMP = "shift_registers_temp"
+    private val tempUri = "/temp"
+    private val tempParamKeyItem = "item"
+    private val tempParamKeyWarning = "warning"
+    private val tempParamKeyValue = "value"
+    private val motorRearLeftTemp = "motor_rear_left_temp"
+    private val motorRearRightTemp = "motor_rear_right_temp"
+    private val motorFrontLeftTemp = "motor_front_left_temp"
+    private val motorFrontRightTemp = "motor_front_right_temp"
+    private val hBridgeRearTemp = "h_bridge_rear_temp"
+    private val hBridgeFrontTemp = "h_bridge_front_temp"
+    private val raspberryPiTemp = "raspberry_pi_temp"
+    private val batteriesTemp = "batteries_temp"
+    private val shiftRegistersTemp = "shift_registers_temp"
 
-    private val SPEED_URI = "/speed"
-    private val SPEED_PARAM_KEY_VALUE = "value"
+    private val speedUri = "/speed"
+    private val speedParamKeyValue = "value"
     private var receivedSpeed: String? = "0"
     private var publishedSpeed = "0"
 
-    private val ECU_URI = "/ecu"
-    private val ECU_PARAM_KEY_ITEM = "item"
-    private val ECU_PARAM_KEY_VALUE = "value"
-    private val TRACTION_CONTROL_MODULE = "TCM"
-    private val ANTILOCK_BRAKING_MODULE = "ABM"
-    private val ELECTRONIC_STABILITY_MODULE = "ESM"
-    private val UNDERSTEER_DETECTION_MODULE = "UDM"
-    private val OVERSTEER_DETECTION_MODULE = "ODM"
-    private val COLLISION_DETECTION_MODULE = "CDM"
+    private val ecuUri = "/ecu"
+    private val ecuParamKeyItem = "item"
+    private val ecuParamKeyValue = "value"
+    private val tractionControlModule = "TCM"
+    private val antilockBrakingModule = "ABM"
+    private val electronicStabilityModule = "ESM"
+    private val understeerDetectionModule = "UDM"
+    private val oversteerDetectionModule = "ODM"
+    private val collisionDetectionModule = "CDM"
 
     override fun serve(session: IHTTPSession): Response {
-        val params = session.parms
+        val params = session.parameters
         val uri = session.uri
 
         when (uri) {
-            TEMP_URI -> {
-                when (params[TEMP_PARAM_KEY_ITEM]) {
-                    MOTOR_REAR_LEFT_TEMP -> activity.updateTempUIItems(
-                        rearLeftMotor = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED
+            tempUri -> {
+                when (params[tempParamKeyItem]?.get(0)) {
+                    motorRearLeftTemp -> activity.updateTempUIItems(
+                        rearLeftMotor = params[tempParamKeyWarning]?.get(0) ?: WARNING_TYPE_UNCHANGED
                     )
-                    MOTOR_REAR_RIGHT_TEMP -> activity.updateTempUIItems(
-                        rearRightMotor = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED
+                    motorRearRightTemp -> activity.updateTempUIItems(
+                        rearRightMotor = params[tempParamKeyWarning]?.get(0) ?: WARNING_TYPE_UNCHANGED
                     )
-                    MOTOR_FRONT_LEFT_TEMP -> activity.updateTempUIItems(
-                        frontLeftMotor = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED
+                    motorFrontLeftTemp -> activity.updateTempUIItems(
+                        frontLeftMotor = params[tempParamKeyWarning]?.get(0) ?: WARNING_TYPE_UNCHANGED
                     )
-                    MOTOR_FRONT_RIGHT_TEMP -> activity.updateTempUIItems(
-                        frontRightMotor = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED
+                    motorFrontRightTemp -> activity.updateTempUIItems(
+                        frontRightMotor = params[tempParamKeyWarning]?.get(0) ?: WARNING_TYPE_UNCHANGED
                     )
-                    H_BRIDGE_REAR_TEMP -> activity.updateTempUIItems(
-                        rearHBridge = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED
+                    hBridgeRearTemp -> activity.updateTempUIItems(
+                        rearHBridge = params[tempParamKeyWarning]?.get(0) ?: WARNING_TYPE_UNCHANGED
                     )
-                    H_BRIDGE_FRONT_TEMP -> activity.updateTempUIItems(
-                        frontHBridge = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED
+                    hBridgeFrontTemp -> activity.updateTempUIItems(
+                        frontHBridge = params[tempParamKeyWarning]?.get(0) ?: WARNING_TYPE_UNCHANGED
                     )
-                    RASPBERRY_PI_TEMP -> activity.updateTempUIItems(
-                        raspberryPi = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED
+                    raspberryPiTemp -> activity.updateTempUIItems(
+                        raspberryPi = params[tempParamKeyWarning]?.get(0) ?: WARNING_TYPE_UNCHANGED
                     )
-                    BATTERIES_TEMP -> activity.updateTempUIItems(
-                        batteries = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED
+                    batteriesTemp -> activity.updateTempUIItems(
+                        batteries = params[tempParamKeyWarning]?.get(0) ?: WARNING_TYPE_UNCHANGED
                     )
-                    SHIFT_REGISTERS_TEMP -> activity.updateTempUIItems(
-                        shiftRegisters = params[TEMP_PARAM_KEY_WARNING] ?: WARNING_TYPE_UNCHANGED
+                    shiftRegistersTemp -> activity.updateTempUIItems(
+                        shiftRegisters = params[tempParamKeyWarning]?.get(0) ?: WARNING_TYPE_UNCHANGED
                     )
                 }
             }
-            SPEED_URI -> {
-                receivedSpeed = params[SPEED_PARAM_KEY_VALUE]
+            speedUri -> {
+                receivedSpeed = params[speedParamKeyValue]?.get(0)
                 publishedSpeed = receivedSpeed ?: publishedSpeed
                 activity.updateSpeedUIItem(publishedSpeed)
             }
-            ECU_URI -> {
-                when (params[ECU_PARAM_KEY_ITEM]) {
-                    TRACTION_CONTROL_MODULE -> activity.updateAdvancedSensorUIItems(
-                        tcmState = params[ECU_PARAM_KEY_VALUE] ?: MODULE_UNCHANGED_STATE
+            ecuUri -> {
+                when (params[ecuParamKeyItem]?.get(0)) {
+                    tractionControlModule -> activity.updateAdvancedSensorUIItems(
+                        tcmState = params[ecuParamKeyValue]?.get(0) ?: MODULE_UNCHANGED_STATE
                     )
-                    ANTILOCK_BRAKING_MODULE -> activity.updateAdvancedSensorUIItems(
-                        abmState = params[ECU_PARAM_KEY_VALUE] ?: MODULE_UNCHANGED_STATE
+                    antilockBrakingModule -> activity.updateAdvancedSensorUIItems(
+                        abmState = params[ecuParamKeyValue]?.get(0) ?: MODULE_UNCHANGED_STATE
                     )
-                    ELECTRONIC_STABILITY_MODULE -> activity.updateAdvancedSensorUIItems(
-                        esmState = params[ECU_PARAM_KEY_VALUE] ?: MODULE_UNCHANGED_STATE
+                    electronicStabilityModule -> activity.updateAdvancedSensorUIItems(
+                        esmState = params[ecuParamKeyValue]?.get(0) ?: MODULE_UNCHANGED_STATE
                     )
-                    UNDERSTEER_DETECTION_MODULE -> activity.updateAdvancedSensorUIItems(
-                        udmState = params[ECU_PARAM_KEY_VALUE] ?: MODULE_UNCHANGED_STATE
+                    understeerDetectionModule -> activity.updateAdvancedSensorUIItems(
+                        udmState = params[ecuParamKeyValue]?.get(0) ?: MODULE_UNCHANGED_STATE
                     )
-                    OVERSTEER_DETECTION_MODULE -> activity.updateAdvancedSensorUIItems(
-                        odmState = params[ECU_PARAM_KEY_VALUE] ?: MODULE_UNCHANGED_STATE
+                    oversteerDetectionModule -> activity.updateAdvancedSensorUIItems(
+                        odmState = params[ecuParamKeyValue]?.get(0) ?: MODULE_UNCHANGED_STATE
                     )
-                    COLLISION_DETECTION_MODULE -> activity.updateAdvancedSensorUIItems(
-                        cdmState = params[ECU_PARAM_KEY_VALUE] ?: MODULE_UNCHANGED_STATE
+                    collisionDetectionModule -> activity.updateAdvancedSensorUIItems(
+                        cdmState = params[ecuParamKeyValue]?.get(0) ?: MODULE_UNCHANGED_STATE
                     )
                 }
             }

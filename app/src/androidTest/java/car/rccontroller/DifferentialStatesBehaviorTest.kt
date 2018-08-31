@@ -19,19 +19,19 @@ import org.junit.runner.RunWith
 @MediumTest
 class DifferentialStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
-    val frontDiffDrawable = arrayOf(
+    private val frontDiffDrawable = arrayOf(
         R.drawable.differential_front_manual_0_open, R.drawable.differential_front_manual_1_medi,
         R.drawable.differential_front_manual_2_medi, R.drawable.differential_front_manual_3_medi,
         R.drawable.differential_front_manual_4_locked
     )
 
-    val rearDiffDrawable = arrayOf(
+    private val rearDiffDrawable = arrayOf(
         R.drawable.differential_rear_manual_0_open, R.drawable.differential_rear_manual_1_medi,
         R.drawable.differential_rear_manual_2_medi, R.drawable.differential_rear_manual_3_medi,
         R.drawable.differential_rear_manual_4_locked
     )
 
-    val maxClicks = 5
+    private val maxClicks = 5
 
     @Test
     fun increaseFrontSlipperyLimiter() {

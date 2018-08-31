@@ -675,7 +675,7 @@ class RCControllerActivity : AppCompatActivity() {
 
             throttleNbrake_mySeekBar.isEnabled = true
             throttleNbrake_mySeekBar.progress = resources.
-                getInteger(R.integer.default_throttle_n_brake);
+                getInteger(R.integer.default_throttle_n_brake)
 
             if (reverseIntention)
                 reverse_imageView.setImageResourceWithTag(R.drawable.reverse_on)
@@ -690,7 +690,7 @@ class RCControllerActivity : AppCompatActivity() {
                 emergencyLightsAnimation.selectDrawable(0)
             }
 
-            updateSpeedUIItem("${resources.getString(R.string.tachometer_value)}")
+            updateSpeedUIItem(resources.getString(R.string.tachometer_value))
         }
         else {
             engineStartStop_imageView.setImageResourceWithTag(R.drawable.engine_stopped_start_action)
@@ -1123,7 +1123,8 @@ class RCControllerActivity : AppCompatActivity() {
     */
     fun updateSpeedUIItem(speed: String){
         runOnUiThread {
-            vehicle_speed_textView.text = "$speed ${resources.getString(R.string.tachometer_unit)}"
+            vehicle_speed_textView.text = resources.getString(R.string.tachometer_info,
+                speed, resources.getString(R.string.tachometer_unit))
         }
     }
 

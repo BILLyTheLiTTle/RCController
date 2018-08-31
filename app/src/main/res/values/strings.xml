@@ -6,6 +6,7 @@
     <string name="tachometer_value">0</string>
     <string name="tachometer_null_value">-/-</string>
     <string name="tachometer_unit">km/h</string>
+    <string name="tachometer_info">%1s %2s</string>
 
     <string name="long_click_info">Long-click to interact</string>
     <string name="cruise_control_info">Cruise Control activated.\nUse throttle to deactivate

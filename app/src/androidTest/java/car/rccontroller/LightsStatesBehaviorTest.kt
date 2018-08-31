@@ -19,11 +19,11 @@ import org.junit.runner.RunWith
 @MediumTest
 class LightsStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
-    val drawables = arrayOf(
+    private val drawables = arrayOf(
         R.drawable.lights_off, R.drawable.lights_position,
         R.drawable.lights_driving, R.drawable.lights_long_range)
 
-    val maxClicks = 4
+    private val maxClicks = 4
 
     @Test
     fun increaseLightBeam() {

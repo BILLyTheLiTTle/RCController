@@ -19,13 +19,13 @@ import org.junit.runner.RunWith
 @MediumTest
 class SpeedLimiterStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
-    val drawables = arrayOf(
+    private val drawables = arrayOf(
         R.drawable.speed_limiter_manual_000, R.drawable.speed_limiter_manual_020,
         R.drawable.speed_limiter_manual_040, R.drawable.speed_limiter_manual_060,
         R.drawable.speed_limiter_manual_070, R.drawable.speed_limiter_manual_080,
         R.drawable.speed_limiter_manual_090, R.drawable.speed_limiter_manual_100)
 
-    val maxClicks = 8
+    private val maxClicks = 8
 
     @Test
     fun increaseSpeedLimit() {

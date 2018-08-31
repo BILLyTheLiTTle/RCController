@@ -54,7 +54,7 @@ class DrawableMatcher internal constructor(private val expectedId: Int) : TypeSa
     }
 
     companion object {
-        internal val EMPTY = -1
-        internal val ANY = -2
+        internal const val EMPTY = -1
+        internal const val ANY = -2
     }
 }
