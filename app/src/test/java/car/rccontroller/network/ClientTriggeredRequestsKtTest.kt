@@ -2,8 +2,11 @@ package car.rccontroller.network
 
 import car.rccontroller.RCControllerActivity
 import junit.framework.Assert.*
+import kotlinx.coroutines.experimental.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.CoreMatchers.*
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
@@ -15,7 +18,21 @@ import org.mockito.Mock
 class ClientTriggeredRequestsKtTest {
 
     @Mock
-    var mockedActivity: RCControllerActivity? = null
+    private var mockedActivity: RCControllerActivity? = null
+
+    private val serverIp = "192.168.200.245"
+    private val port = 8080
+
+    @Before
+    fun setUp() {
+        car.rccontroller.network.startEngine(null, serverIp, port)
+        throttleBrakeActionId++
+    }
+
+    @After
+    fun tearDown() {
+        car.rccontroller.network.stopEngine()
+    }
 
     @Test
     fun sanityCheck() {
@@ -24,7 +41,6 @@ class ClientTriggeredRequestsKtTest {
 
     @Test
     fun `validate that engine has started`() {
-        car.rccontroller.network.startEngine(null, "192.168.200.245", 8080)
         assertThat(isEngineStarted, `is`(true))
     }
     @Test
@@ -45,44 +61,70 @@ class ClientTriggeredRequestsKtTest {
 
     @Test
     fun `validate that parking brake is activated`() {
-
+        car.rccontroller.network.activateParkingBrake(true)
+        assertThat(isParkingBrakeActive, `is`(true))
     }
     @Test
     fun `validate that parking brake is deactivated`() {
-
+        car.rccontroller.network.activateParkingBrake(false)
+        assertThat(isParkingBrakeActive, `is`(false))
     }
 
     @Test
     fun `validate that handbrake is activated`() {
-
+        runBlocking {
+            car.rccontroller.network.activateHandbrake(true).join()
+        }
+        assertThat(isHandbrakeActive, `is`(true))
     }
     @Test
     fun `validate that handbrake is deactivated`() {
-
+        runBlocking {
+            car.rccontroller.network.activateHandbrake(false).join()
+        }
+        assertThat(isHandbrakeActive, `is`(false))
     }
 
     @Test
     fun `validate that reverse is activated`() {
-
+        car.rccontroller.network.reverseIntention = true
+        assertThat(reverseIntention, `is`(true))
     }
     @Test
     fun `validate that reverse is deactivated`() {
-
+        car.rccontroller.network.reverseIntention = false
+        assertThat(reverseIntention, `is`(false))
     }
 
     @Test
     fun `validate that car is in neutral`() {
-
+        runBlocking {
+            car.rccontroller.network.setNeutral().join()
+        }
+        assertThat(motionState, `is`(ACTION_NEUTRAL))
     }
 
     @Test
     fun `validate that car is braking still`() {
-
+        runBlocking {
+            car.rccontroller.network.setBrakingStill().join()
+        }
+        assertThat(motionState, `is`(ACTION_BRAKING_STILL))
     }
 
     @Test
-    fun `validate that car is throttling or braking`() {
-
+    fun `validate that car is throttling forward or braking`() {
+        runBlocking {
+            car.rccontroller.network.setThrottleBrake(ACTION_MOVE_FORWARD, 60).join()
+        }
+        assertThat(motionState, `is`(ACTION_MOVE_FORWARD))
+    }
+    @Test
+    fun `validate that car is throttling backward or braking`() {
+        runBlocking {
+            car.rccontroller.network.setThrottleBrake(ACTION_MOVE_BACKWARD, 40).join()
+        }
+        assertThat(motionState, `is`(ACTION_MOVE_BACKWARD))
     }
 
     @Test

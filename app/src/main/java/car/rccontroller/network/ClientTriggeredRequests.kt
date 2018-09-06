@@ -16,6 +16,7 @@ import android.text.format.Formatter
 import car.rccontroller.RCControllerActivity
 import car.rccontroller.RUN_ON_EMULATOR
 import car.rccontroller.network.server.feedback.SensorFeedbackServer
+import kotlinx.coroutines.experimental.Job
 
 
 const val OK_STRING = "OK"
@@ -144,6 +145,10 @@ var reverseIntention: Boolean
     set(value) {doBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
             "set_reverse_lights_state?" +
             "state=$value")}
+
+val motionState: String
+    get() = doBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+            "get_motion_state")
 
 fun setNeutral() = doNonBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
         "set_throttle_brake_system?id=${throttleBrakeActionId++}&action=$ACTION_NEUTRAL")
