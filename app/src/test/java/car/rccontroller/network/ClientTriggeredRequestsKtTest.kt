@@ -26,7 +26,7 @@ class ClientTriggeredRequestsKtTest {
     @Before
     fun setUp() {
         car.rccontroller.network.startEngine(null, serverIp, port)
-        throttleBrakeActionId++
+        throttleBrakeActionId = System.currentTimeMillis()
     }
 
     @After

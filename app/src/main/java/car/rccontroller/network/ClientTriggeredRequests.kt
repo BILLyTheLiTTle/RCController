@@ -39,7 +39,7 @@ get() = doBlockingRequest("http://${car.rccontroller.network.raspiServerIp}:" +
 fun startEngine(context: RCControllerActivity?, serverIp: String?, serverPort: Int?): String{
     //reset and get ready for new requests
     if(context != null) {
-        throttleBrakeActionId = context.resources.getInteger(R.integer.default_throttleBrakeActionId)
+        throttleBrakeActionId = context.resources.getInteger(R.integer.default_throttleBrakeActionId).toLong()
         steeringDirectionId = context.resources.getInteger(R.integer.default_steeringDirectionId)
     }
 
@@ -100,7 +100,7 @@ const val ACTION_BRAKING_STILL = "braking_still"
 const val ACTION_PARKING_BRAKE = "parking_brake"
 const val ACTION_HANDBRAKE = "handbrake"
 // Initial value should be 0 cuz in server is -1
-var throttleBrakeActionId = 0
+var throttleBrakeActionId = 0L
 
 //---- Parking Brake ----
 val isParkingBrakeActive: Boolean
