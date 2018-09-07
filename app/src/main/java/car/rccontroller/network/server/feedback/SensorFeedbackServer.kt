@@ -5,6 +5,10 @@ import car.rccontroller.network.EMPTY_STRING
 import car.rccontroller.network.OK_STRING
 import fi.iki.elonen.NanoHTTPD
 
+
+fun formatResponse(item: String, warningType: String) =
+        String.format("%s : %s", item, warningType)
+
 // constructor default parameters are for emulator
 class SensorFeedbackServer(
     private val activity: RCControllerActivity,
@@ -12,11 +16,6 @@ class SensorFeedbackServer(
     val port: Int = 8090
 ) : NanoHTTPD(ip, port) {
 
-    private val tempUri = "/temp"
-    private val tempParamKeyItem = "item"
-    private val tempParamKeyWarning = "warning"
-    private val tempParamKeyValue = "value"
-    private val motorRearLeftTemp = "motor_rear_left_temp"
     private val motorRearRightTemp = "motor_rear_right_temp"
     private val motorFrontLeftTemp = "motor_front_left_temp"
     private val motorFrontRightTemp = "motor_front_right_temp"
@@ -46,34 +45,36 @@ class SensorFeedbackServer(
         val uri = session.uri
 
         when (uri) {
-            tempUri -> {
-                when (params[tempParamKeyItem]?.get(0)) {
-                    motorRearLeftTemp -> activity.updateTempUIItems(
-                        rearLeftMotor = params[tempParamKeyWarning]?.get(0) ?: WARNING_TYPE_UNCHANGED
+            TEMP_URI -> {
+                when (params[TEMP_PARAM_KEY_ITEM]?.get(0)) {
+                    MOTOR_REAR_LEFT_TEMP -> { activity.updateTempUIItems(
+                        rearLeftMotor = params[TEMP_PARAM_KEY_WARNING]?.get(0) ?: WARNING_TYPE_UNCHANGED
                     )
+                    return newFixedLengthResponse(formatResponse(MOTOR_REAR_LEFT_TEMP, params[TEMP_PARAM_KEY_WARNING]?.get(0) ?: WARNING_TYPE_UNCHANGED))
+                    }
                     motorRearRightTemp -> activity.updateTempUIItems(
-                        rearRightMotor = params[tempParamKeyWarning]?.get(0) ?: WARNING_TYPE_UNCHANGED
+                        rearRightMotor = params[TEMP_PARAM_KEY_WARNING]?.get(0) ?: WARNING_TYPE_UNCHANGED
                     )
                     motorFrontLeftTemp -> activity.updateTempUIItems(
-                        frontLeftMotor = params[tempParamKeyWarning]?.get(0) ?: WARNING_TYPE_UNCHANGED
+                        frontLeftMotor = params[TEMP_PARAM_KEY_WARNING]?.get(0) ?: WARNING_TYPE_UNCHANGED
                     )
                     motorFrontRightTemp -> activity.updateTempUIItems(
-                        frontRightMotor = params[tempParamKeyWarning]?.get(0) ?: WARNING_TYPE_UNCHANGED
+                        frontRightMotor = params[TEMP_PARAM_KEY_WARNING]?.get(0) ?: WARNING_TYPE_UNCHANGED
                     )
                     hBridgeRearTemp -> activity.updateTempUIItems(
-                        rearHBridge = params[tempParamKeyWarning]?.get(0) ?: WARNING_TYPE_UNCHANGED
+                        rearHBridge = params[TEMP_PARAM_KEY_WARNING]?.get(0) ?: WARNING_TYPE_UNCHANGED
                     )
                     hBridgeFrontTemp -> activity.updateTempUIItems(
-                        frontHBridge = params[tempParamKeyWarning]?.get(0) ?: WARNING_TYPE_UNCHANGED
+                        frontHBridge = params[TEMP_PARAM_KEY_WARNING]?.get(0) ?: WARNING_TYPE_UNCHANGED
                     )
                     raspberryPiTemp -> activity.updateTempUIItems(
-                        raspberryPi = params[tempParamKeyWarning]?.get(0) ?: WARNING_TYPE_UNCHANGED
+                        raspberryPi = params[TEMP_PARAM_KEY_WARNING]?.get(0) ?: WARNING_TYPE_UNCHANGED
                     )
                     batteriesTemp -> activity.updateTempUIItems(
-                        batteries = params[tempParamKeyWarning]?.get(0) ?: WARNING_TYPE_UNCHANGED
+                        batteries = params[TEMP_PARAM_KEY_WARNING]?.get(0) ?: WARNING_TYPE_UNCHANGED
                     )
                     shiftRegistersTemp -> activity.updateTempUIItems(
-                        shiftRegisters = params[tempParamKeyWarning]?.get(0) ?: WARNING_TYPE_UNCHANGED
+                        shiftRegisters = params[TEMP_PARAM_KEY_WARNING]?.get(0) ?: WARNING_TYPE_UNCHANGED
                     )
                 }
             }
@@ -109,6 +110,7 @@ class SensorFeedbackServer(
         return newFixedLengthResponse(OK_STRING)
     }
 
+
     companion object {
         const val WARNING_TYPE_NOTHING = EMPTY_STRING
         const val WARNING_TYPE_UNCHANGED = "unchanged"
@@ -121,5 +123,12 @@ class SensorFeedbackServer(
         const val MODULE_ON_STATE = "module_on_state"
         const val MODULE_IDLE_STATE = "module_idle_state"
         const val MODULE_UNCHANGED_STATE = "module_unchanged_state"
+
+        const val MOTOR_REAR_LEFT_TEMP = "motor_rear_left_temp"
+        const val TEMP_URI = "/temp"
+        const val TEMP_PARAM_KEY_ITEM = "item"
+        const val TEMP_PARAM_KEY_WARNING = "warning"
+        const val TEMP_PARAM_KEY_VALUE = "value"
+
     }
 }
