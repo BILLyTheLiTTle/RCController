@@ -40,7 +40,7 @@ fun startEngine(context: RCControllerActivity?, serverIp: String?, serverPort: I
     //reset and get ready for new requests
     if(context != null) {
         throttleBrakeActionId = context.resources.getInteger(R.integer.default_throttleBrakeActionId).toLong()
-        steeringDirectionId = context.resources.getInteger(R.integer.default_steeringDirectionId)
+        steeringDirectionId = context.resources.getInteger(R.integer.default_steeringDirectionId).toLong()
     }
 
     /* The server will know when car is moving backward and not when the car is going to move
@@ -173,7 +173,7 @@ const val ACTION_TURN_RIGHT = "right"
 const val ACTION_TURN_LEFT = "left"
 const val ACTION_STRAIGHT = "straight"
 // Initial value should be 0 cuz in server is -1
-var steeringDirectionId = 0
+var steeringDirectionId = 0L
 val steeringDirection
     get() = doBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
             "get_steering_direction")
