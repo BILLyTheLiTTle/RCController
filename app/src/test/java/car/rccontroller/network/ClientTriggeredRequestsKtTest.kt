@@ -13,7 +13,6 @@ import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.Mock
 
 
-
 @RunWith(MockitoJUnitRunner::class)
 class ClientTriggeredRequestsKtTest {
 

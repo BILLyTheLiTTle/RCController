@@ -310,7 +310,7 @@ var currentRearDifferentialSlipperyLimiter: Int?
 /////////
 private fun doNonBlockingRequest(url:String) = launch { doRequest(url) }
 
-private fun doBlockingRequest(url:String) = runBlocking(CommonPool) { doRequest(url) }
+internal fun doBlockingRequest(url:String) = runBlocking(CommonPool) { doRequest(url) }
 
 private fun doRequest(url: String): String {
     val con: HttpURLConnection?
