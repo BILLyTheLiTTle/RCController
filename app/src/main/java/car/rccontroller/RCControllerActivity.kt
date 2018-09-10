@@ -848,8 +848,10 @@ class RCControllerActivity : AppCompatActivity() {
             ASSISTANCE_FULL -> {
                 currentFrontDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_AUTO
                 currentRearDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_AUTO
+
                 handling_assistance_imageView.
                     setImageResourceWithTag(R.drawable.handling_assistance_full)
+
                 updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_IDLE_STATE,
                 abmState = SensorFeedbackServer.MODULE_IDLE_STATE,
                 esmState = SensorFeedbackServer.MODULE_IDLE_STATE,
@@ -860,8 +862,10 @@ class RCControllerActivity : AppCompatActivity() {
             ASSISTANCE_WARNING -> {
                 currentFrontDifferentialSlipperyLimiter = previousFrontDifferentialSlipperyLimiter
                 currentRearDifferentialSlipperyLimiter = previousRearDifferentialSlipperyLimiter
+
                 handling_assistance_imageView.
                     setImageResourceWithTag(R.drawable.handling_assistance_warning)
+
                 updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_IDLE_STATE,
                         abmState = SensorFeedbackServer.MODULE_IDLE_STATE,
                         esmState = SensorFeedbackServer.MODULE_IDLE_STATE,
@@ -872,8 +876,10 @@ class RCControllerActivity : AppCompatActivity() {
             ASSISTANCE_NONE -> {
                 currentFrontDifferentialSlipperyLimiter = previousFrontDifferentialSlipperyLimiter
                 currentRearDifferentialSlipperyLimiter = previousRearDifferentialSlipperyLimiter
+
                 handling_assistance_imageView.
                     setImageResourceWithTag(R.drawable.handling_assistance_manual)
+
                 updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_OFF_STATE,
                         abmState = SensorFeedbackServer.MODULE_OFF_STATE,
                         esmState = SensorFeedbackServer.MODULE_OFF_STATE,
@@ -884,6 +890,7 @@ class RCControllerActivity : AppCompatActivity() {
             else -> {
                 handling_assistance_imageView.
                     setImageResourceWithTag(R.drawable.handling_assistance_off)
+
                 updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_OFF_STATE,
                         abmState = SensorFeedbackServer.MODULE_OFF_STATE,
                         esmState = SensorFeedbackServer.MODULE_OFF_STATE,
