@@ -5,10 +5,6 @@ import car.rccontroller.network.EMPTY_STRING
 import car.rccontroller.network.OK_STRING
 import fi.iki.elonen.NanoHTTPD
 
-
-fun formatResponse(item: String, warningType: String) =
-        String.format("%s : %s", item, warningType)
-
 // constructor default parameters are for emulator
 class SensorFeedbackServer(
     private val activity: RCControllerActivity,
@@ -130,5 +126,7 @@ class SensorFeedbackServer(
         const val TEMP_PARAM_KEY_WARNING = "warning"
         const val TEMP_PARAM_KEY_VALUE = "value"
 
+        fun formatResponse(item: String, warningType: String) =
+            String.format("%s : %s", item, warningType)
     }
 }

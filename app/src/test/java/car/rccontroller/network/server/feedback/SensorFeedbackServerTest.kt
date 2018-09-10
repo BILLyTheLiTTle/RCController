@@ -10,8 +10,8 @@ import car.rccontroller.network.doBlockingRequest
 @RunWith(MockitoJUnitRunner::class)
 class SensorFeedbackServerTest {
 
-    private val ip = "192.168.1.2"
-    private val port = "8080"
+    private val ip = "localhost" // ip for real device, localhost for emulator
+    private val port = "8090" // 8080 for real device, 8090 for emulator
 
     // serve
     @Test
@@ -28,7 +28,8 @@ class SensorFeedbackServerTest {
                     "&${SensorFeedbackServer.TEMP_PARAM_KEY_VALUE}=10"
         )
         assertThat(ret,
-                `is`(formatResponse(
+                `is`(
+                    SensorFeedbackServer.formatResponse(
                         SensorFeedbackServer.MOTOR_REAR_LEFT_TEMP,
                         SensorFeedbackServer.WARNING_TYPE_NORMAL
                 )))
