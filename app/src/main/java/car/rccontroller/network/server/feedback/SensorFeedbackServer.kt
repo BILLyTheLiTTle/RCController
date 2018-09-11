@@ -12,8 +12,6 @@ class SensorFeedbackServer(
     val port: Int = 8090
 ) : NanoHTTPD(ip, port) {
 
-    private val speedUri = "/speed"
-    private val speedParamKeyValue = "value"
     private var receivedSpeed: String? = "0"
     private var publishedSpeed = "0"
 
@@ -130,8 +128,8 @@ class SensorFeedbackServer(
                             formatResponse("ERROR TEMP", WARNING_TYPE_NOTHING)
                     }
                 }
-                speedUri -> {
-                    receivedSpeed = params[speedParamKeyValue]?.get(0)
+                SPEED_URI -> {
+                    receivedSpeed = params[SPEED_PARAM_KEY_VALUE]?.get(0)
                     publishedSpeed = receivedSpeed ?: publishedSpeed
                     activity.updateSpeedUIItem(publishedSpeed)
                     formatResponse("SPEED", publishedSpeed)
@@ -235,6 +233,9 @@ class SensorFeedbackServer(
         const val TEMP_PARAM_KEY_ITEM = "item"
         const val TEMP_PARAM_KEY_WARNING = "warning"
         const val TEMP_PARAM_KEY_VALUE = "value"
+
+        const val SPEED_URI = "/speed"
+        const val SPEED_PARAM_KEY_VALUE = "value"
 
         fun formatResponse(item: String, warningType: String, delimiter: String = ":") =
             String.format("%s $delimiter %s", item, warningType)

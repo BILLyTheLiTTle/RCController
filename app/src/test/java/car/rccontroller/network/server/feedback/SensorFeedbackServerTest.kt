@@ -370,7 +370,17 @@ class SensorFeedbackServerTest {
     // for speed
     @Test
     fun `validate speed`() {
-
+        val ret = doBlockingRequest(
+            "http://" +
+                    "$ip:$port" +
+                    SensorFeedbackServer.SPEED_URI +
+                    "?${SensorFeedbackServer.SPEED_PARAM_KEY_VALUE}=150"
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    "SPEED","150"
+                )))
     }
     // for ecu modules
     @Test
