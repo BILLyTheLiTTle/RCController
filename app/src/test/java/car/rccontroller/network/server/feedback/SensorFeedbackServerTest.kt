@@ -32,7 +32,6 @@ class SensorFeedbackServerTest {
             "&${SensorFeedbackServer.TEMP_PARAM_KEY_WARNING}=$warning" +
             "&${SensorFeedbackServer.TEMP_PARAM_KEY_VALUE}=10"
         )
-
     @Test
     fun `validate error temperatures`() {
         val ret = doTempRequest()
@@ -383,80 +382,165 @@ class SensorFeedbackServerTest {
                 )))
     }
     // for ecu modules
+    private fun doEcuRequest(hardware: String = "", value: String = "") =
+        doBlockingRequest(
+            "http://" +
+                    "$ip:$port" +
+                    SensorFeedbackServer.ECU_URI +
+                    "?${SensorFeedbackServer.ECU_PARAM_KEY_ITEM}=$hardware" +
+                    "&${SensorFeedbackServer.TEMP_PARAM_KEY_VALUE}=$value"
+        )
     @Test
     fun `validate error in ecu modules`() {
-
+        val ret = doEcuRequest()
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse("ERROR ECU",
+                    SensorFeedbackServer.MODULE_NOTHING_STATE
+                )))
     }
     @Test
     fun `validate traction control module is on`() {
-
+        val ret = doEcuRequest(SensorFeedbackServer.TRACTION_CONTROL_MODULE,
+            SensorFeedbackServer.MODULE_ON_STATE
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.TRACTION_CONTROL_MODULE,
+                    SensorFeedbackServer.MODULE_ON_STATE
+                )))
     }
     @Test
     fun `validate traction control module is idle`() {
-
-    }
-    @Test
-    fun `validate traction control module is unchanged`() {
-
+        val ret = doEcuRequest(SensorFeedbackServer.TRACTION_CONTROL_MODULE,
+            SensorFeedbackServer.MODULE_IDLE_STATE
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.TRACTION_CONTROL_MODULE,
+                    SensorFeedbackServer.MODULE_IDLE_STATE
+                )))
     }
     @Test
     fun `validate antilock braking module is on`() {
-
+        val ret = doEcuRequest(SensorFeedbackServer.ANTILOCK_BRAKING_MODULE,
+            SensorFeedbackServer.MODULE_ON_STATE
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.ANTILOCK_BRAKING_MODULE,
+                    SensorFeedbackServer.MODULE_ON_STATE
+                )))
     }
     @Test
     fun `validate antilock braking module is idle`() {
-
-    }
-    @Test
-    fun `validate antilock braking module is unchanged`() {
-
+        val ret = doEcuRequest(SensorFeedbackServer.ANTILOCK_BRAKING_MODULE,
+            SensorFeedbackServer.MODULE_IDLE_STATE
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.ANTILOCK_BRAKING_MODULE,
+                    SensorFeedbackServer.MODULE_IDLE_STATE
+                )))
     }
     @Test
     fun `validate electronic stability module is on`() {
-
+        val ret = doEcuRequest(SensorFeedbackServer.ELECTRONIC_STABILITY_MODULE,
+            SensorFeedbackServer.MODULE_ON_STATE
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.ELECTRONIC_STABILITY_MODULE,
+                    SensorFeedbackServer.MODULE_ON_STATE
+                )))
     }
     @Test
     fun `validate electronic stability module is idle`() {
-
-    }
-    @Test
-    fun `validate electronic stability module is unchanged`() {
-
+        val ret = doEcuRequest(SensorFeedbackServer.ELECTRONIC_STABILITY_MODULE,
+            SensorFeedbackServer.MODULE_IDLE_STATE
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.ELECTRONIC_STABILITY_MODULE,
+                    SensorFeedbackServer.MODULE_IDLE_STATE
+                )))
     }
     @Test
     fun `validate understeer detection module is on`() {
-
+        val ret = doEcuRequest(SensorFeedbackServer.UNDERSTEER_DETECTION_MODULE,
+            SensorFeedbackServer.MODULE_ON_STATE
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.UNDERSTEER_DETECTION_MODULE,
+                    SensorFeedbackServer.MODULE_ON_STATE
+                )))
     }
     @Test
     fun `validate understeer detection module is idle`() {
-
-    }
-    @Test
-    fun `validate understeer detection module is unchanged`() {
-
+        val ret = doEcuRequest(SensorFeedbackServer.UNDERSTEER_DETECTION_MODULE,
+            SensorFeedbackServer.MODULE_IDLE_STATE
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.UNDERSTEER_DETECTION_MODULE,
+                    SensorFeedbackServer.MODULE_IDLE_STATE
+                )))
     }
     @Test
     fun `validate oversteer detection module is on`() {
-
+        val ret = doEcuRequest(SensorFeedbackServer.OVERSTEER_DETECTION_MODULE,
+            SensorFeedbackServer.MODULE_ON_STATE
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.OVERSTEER_DETECTION_MODULE,
+                    SensorFeedbackServer.MODULE_ON_STATE
+                )))
     }
     @Test
     fun `validate oversteer detection module is idle`() {
-
-    }
-    @Test
-    fun `validate oversteer detection module is unchanged`() {
-
+        val ret = doEcuRequest(SensorFeedbackServer.OVERSTEER_DETECTION_MODULE,
+            SensorFeedbackServer.MODULE_IDLE_STATE
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.OVERSTEER_DETECTION_MODULE,
+                    SensorFeedbackServer.MODULE_IDLE_STATE
+                )))
     }
     @Test
     fun `validate collision detection module is on`() {
-
+        val ret = doEcuRequest(SensorFeedbackServer.COLLISION_DETECTION_MODULE,
+            SensorFeedbackServer.MODULE_ON_STATE
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.COLLISION_DETECTION_MODULE,
+                    SensorFeedbackServer.MODULE_ON_STATE
+                )))
     }
     @Test
     fun `validate collision detection module is idle`() {
-
-    }
-    @Test
-    fun `validate collision detection module is unchanged`() {
-
+        val ret = doEcuRequest(SensorFeedbackServer.COLLISION_DETECTION_MODULE,
+            SensorFeedbackServer.MODULE_IDLE_STATE
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.COLLISION_DETECTION_MODULE,
+                    SensorFeedbackServer.MODULE_IDLE_STATE
+                )))
     }
 }

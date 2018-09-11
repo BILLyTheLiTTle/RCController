@@ -15,16 +15,6 @@ class SensorFeedbackServer(
     private var receivedSpeed: String? = "0"
     private var publishedSpeed = "0"
 
-    private val ecuUri = "/ecu"
-    private val ecuParamKeyItem = "item"
-    private val ecuParamKeyValue = "value"
-    private val tractionControlModule = "TCM"
-    private val antilockBrakingModule = "ABM"
-    private val electronicStabilityModule = "ESM"
-    private val understeerDetectionModule = "UDM"
-    private val oversteerDetectionModule = "ODM"
-    private val collisionDetectionModule = "CDM"
-
     override fun serve(session: IHTTPSession): Response {
         val params = session.parameters
         val uri = session.uri
@@ -134,65 +124,71 @@ class SensorFeedbackServer(
                     activity.updateSpeedUIItem(publishedSpeed)
                     formatResponse("SPEED", publishedSpeed)
                 }
-                ecuUri -> {
-                    when (params[ecuParamKeyItem]?.get(0)) {
-                        tractionControlModule -> {
+                ECU_URI -> {
+                    when (params[ECU_PARAM_KEY_ITEM]?.get(0)) {
+                        TRACTION_CONTROL_MODULE -> {
                             activity.updateAdvancedSensorUIItems(
-                                tcmState = params[ecuParamKeyValue]
+                                tcmState = params[ECU_PARAM_KEY_VALUE]
                                     ?.get(0) ?: MODULE_UNCHANGED_STATE
                             )
-                            formatResponse(tractionControlModule,
-                                params[ecuParamKeyValue]
+                            formatResponse(
+                                TRACTION_CONTROL_MODULE,
+                                params[ECU_PARAM_KEY_VALUE]
                                     ?.get(0) ?: MODULE_UNCHANGED_STATE
                             )
                         }
-                        antilockBrakingModule -> {
+                        ANTILOCK_BRAKING_MODULE -> {
                             activity.updateAdvancedSensorUIItems(
-                                abmState = params[ecuParamKeyValue]
+                                abmState = params[ECU_PARAM_KEY_VALUE]
                                     ?.get(0) ?: MODULE_UNCHANGED_STATE
                             )
-                            formatResponse(antilockBrakingModule,
-                                params[ecuParamKeyValue]
+                            formatResponse(
+                                ANTILOCK_BRAKING_MODULE,
+                                params[ECU_PARAM_KEY_VALUE]
                                     ?.get(0) ?: MODULE_UNCHANGED_STATE
                             )
                         }
-                        electronicStabilityModule -> {
+                        ELECTRONIC_STABILITY_MODULE -> {
                             activity.updateAdvancedSensorUIItems(
-                                esmState = params[ecuParamKeyValue]
+                                esmState = params[ECU_PARAM_KEY_VALUE]
                                     ?.get(0) ?: MODULE_UNCHANGED_STATE
                             )
-                            formatResponse(electronicStabilityModule,
-                                params[ecuParamKeyValue]
+                            formatResponse(
+                                ELECTRONIC_STABILITY_MODULE,
+                                params[ECU_PARAM_KEY_VALUE]
                                     ?.get(0) ?: MODULE_UNCHANGED_STATE
                             )
                         }
-                        understeerDetectionModule -> {
+                        UNDERSTEER_DETECTION_MODULE -> {
                             activity.updateAdvancedSensorUIItems(
-                                udmState = params[ecuParamKeyValue]
+                                udmState = params[ECU_PARAM_KEY_VALUE]
                                     ?.get(0) ?: MODULE_UNCHANGED_STATE
                             )
-                            formatResponse(understeerDetectionModule,
-                                params[ecuParamKeyValue]
+                            formatResponse(
+                                UNDERSTEER_DETECTION_MODULE,
+                                params[ECU_PARAM_KEY_VALUE]
                                     ?.get(0) ?: MODULE_UNCHANGED_STATE
                             )
                         }
-                        oversteerDetectionModule -> {
+                        OVERSTEER_DETECTION_MODULE -> {
                             activity.updateAdvancedSensorUIItems(
-                                odmState = params[ecuParamKeyValue]
+                                odmState = params[ECU_PARAM_KEY_VALUE]
                                     ?.get(0) ?: MODULE_UNCHANGED_STATE
                             )
-                            formatResponse(oversteerDetectionModule,
-                                params[ecuParamKeyValue]
+                            formatResponse(
+                                OVERSTEER_DETECTION_MODULE,
+                                params[ECU_PARAM_KEY_VALUE]
                                     ?.get(0) ?: MODULE_UNCHANGED_STATE
                             )
                         }
-                        collisionDetectionModule -> {
+                        COLLISION_DETECTION_MODULE -> {
                             activity.updateAdvancedSensorUIItems(
-                                cdmState = params[ecuParamKeyValue]
+                                cdmState = params[ECU_PARAM_KEY_VALUE]
                                     ?.get(0) ?: MODULE_UNCHANGED_STATE
                             )
-                            formatResponse(collisionDetectionModule,
-                                params[ecuParamKeyValue]
+                            formatResponse(
+                                COLLISION_DETECTION_MODULE,
+                                params[ECU_PARAM_KEY_VALUE]
                                     ?.get(0) ?: MODULE_UNCHANGED_STATE
                             )
                         }
@@ -236,6 +232,16 @@ class SensorFeedbackServer(
 
         const val SPEED_URI = "/speed"
         const val SPEED_PARAM_KEY_VALUE = "value"
+
+        const val ECU_URI = "/ecu"
+        const val ECU_PARAM_KEY_ITEM = "item"
+        const val ECU_PARAM_KEY_VALUE = "value"
+        const val TRACTION_CONTROL_MODULE = "TCM"
+        const val ANTILOCK_BRAKING_MODULE = "ABM"
+        const val ELECTRONIC_STABILITY_MODULE = "ESM"
+        const val UNDERSTEER_DETECTION_MODULE = "UDM"
+        const val OVERSTEER_DETECTION_MODULE = "ODM"
+        const val COLLISION_DETECTION_MODULE = "CDM"
 
         fun formatResponse(item: String, warningType: String, delimiter: String = ":") =
             String.format("%s $delimiter %s", item, warningType)
