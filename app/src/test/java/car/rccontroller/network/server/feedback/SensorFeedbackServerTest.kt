@@ -26,13 +26,10 @@ class SensorFeedbackServerTest {
     private fun doTempRequest(hardware: String = "", warning: String = "") =
         doBlockingRequest(
             "http://" +
-            "$ip:" +
-            "$port" +
-            "${SensorFeedbackServer.TEMP_URI}" +
-            "?${SensorFeedbackServer.TEMP_PARAM_KEY_ITEM}=" +
-            "$hardware" +
-            "&${SensorFeedbackServer.TEMP_PARAM_KEY_WARNING}=" +
-            "$warning" +
+            "$ip:$port" +
+            SensorFeedbackServer.TEMP_URI +
+            "?${SensorFeedbackServer.TEMP_PARAM_KEY_ITEM}=$hardware" +
+            "&${SensorFeedbackServer.TEMP_PARAM_KEY_WARNING}=$warning" +
             "&${SensorFeedbackServer.TEMP_PARAM_KEY_VALUE}=10"
         )
 
@@ -92,92 +89,283 @@ class SensorFeedbackServerTest {
     }
     @Test
     fun `validate medium rear right motor temperature`() {
-
+        val ret = doTempRequest(SensorFeedbackServer.MOTOR_REAR_RIGHT_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_MEDIUM
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.MOTOR_REAR_RIGHT_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_MEDIUM
+                )))
     }
     @Test
     fun `validate high rear right motor temperature`() {
-
+        val ret = doTempRequest(SensorFeedbackServer.MOTOR_REAR_RIGHT_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_HIGH
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.MOTOR_REAR_RIGHT_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_HIGH
+                )))
     }
     @Test
     fun `validate normal front left motor temperature`() {
+        val ret = doTempRequest(SensorFeedbackServer.MOTOR_FRONT_LEFT_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_NORMAL
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.MOTOR_FRONT_LEFT_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_NORMAL
+                )))
     }
     @Test
     fun `validate medium front left motor temperature`() {
-
+        val ret = doTempRequest(SensorFeedbackServer.MOTOR_FRONT_LEFT_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_MEDIUM
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.MOTOR_FRONT_LEFT_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_MEDIUM
+                )))
     }
     @Test
     fun `validate high front left motor temperature`() {
-
+        val ret = doTempRequest(SensorFeedbackServer.MOTOR_FRONT_LEFT_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_HIGH
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.MOTOR_FRONT_LEFT_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_HIGH
+                )))
     }
     @Test
     fun `validate normal front right motor temperature`() {
+        val ret = doTempRequest(SensorFeedbackServer.MOTOR_FRONT_RIGHT_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_NORMAL
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.MOTOR_FRONT_RIGHT_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_NORMAL
+                )))
     }
     @Test
     fun `validate medium front right motor temperature`() {
-
+        val ret = doTempRequest(SensorFeedbackServer.MOTOR_FRONT_RIGHT_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_MEDIUM
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.MOTOR_FRONT_RIGHT_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_MEDIUM
+                )))
     }
     @Test
     fun `validate high front right motor temperature`() {
-
+        val ret = doTempRequest(SensorFeedbackServer.MOTOR_FRONT_RIGHT_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_HIGH
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.MOTOR_FRONT_RIGHT_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_HIGH
+                )))
     }
     // temperature - h bridges
     @Test
     fun `validate normal rear h bridge temperature`() {
+        val ret = doTempRequest(SensorFeedbackServer.H_BRIDGE_REAR_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_NORMAL
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.H_BRIDGE_REAR_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_NORMAL
+                )))
     }
     @Test
     fun `validate medium rear h bridge temperature`() {
-
+        val ret = doTempRequest(SensorFeedbackServer.H_BRIDGE_REAR_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_MEDIUM
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.H_BRIDGE_REAR_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_MEDIUM
+                )))
     }
     @Test
     fun `validate high rear h bridge temperature`() {
-
+        val ret = doTempRequest(SensorFeedbackServer.H_BRIDGE_REAR_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_HIGH
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.H_BRIDGE_REAR_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_HIGH
+                )))
     }
     @Test
     fun `validate normal front h bridge temperature`() {
+        val ret = doTempRequest(SensorFeedbackServer.H_BRIDGE_FRONT_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_NORMAL
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.H_BRIDGE_FRONT_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_NORMAL
+                )))
     }
     @Test
     fun `validate medium front h bridge temperature`() {
-
+        val ret = doTempRequest(SensorFeedbackServer.H_BRIDGE_FRONT_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_MEDIUM
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.H_BRIDGE_FRONT_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_MEDIUM
+                )))
     }
     @Test
     fun `validate high front h bridge temperature`() {
-
+        val ret = doTempRequest(SensorFeedbackServer.H_BRIDGE_FRONT_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_HIGH
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.H_BRIDGE_FRONT_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_HIGH
+                )))
     }
     // temperature - raspberry
     @Test
     fun `validate normal raspberry temperature`() {
+        val ret = doTempRequest(SensorFeedbackServer.RASPBERRY_PI_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_NORMAL
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.RASPBERRY_PI_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_NORMAL
+                )))
     }
     @Test
     fun `validate medium raspberry temperature`() {
-
+        val ret = doTempRequest(SensorFeedbackServer.RASPBERRY_PI_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_MEDIUM
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.RASPBERRY_PI_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_MEDIUM
+                )))
     }
     @Test
     fun `validate high raspberry temperature`() {
-
+        val ret = doTempRequest(SensorFeedbackServer.RASPBERRY_PI_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_HIGH
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.RASPBERRY_PI_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_HIGH
+                )))
     }
     // temperature - batteries
     @Test
     fun `validate normal batteries temperature`() {
+        val ret = doTempRequest(SensorFeedbackServer.BATTERIES_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_NORMAL
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.BATTERIES_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_NORMAL
+                )))
     }
     @Test
     fun `validate medium batteries temperature`() {
-
+        val ret = doTempRequest(SensorFeedbackServer.BATTERIES_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_MEDIUM
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.BATTERIES_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_MEDIUM
+                )))
     }
     @Test
     fun `validate high batteries temperature`() {
-
+        val ret = doTempRequest(SensorFeedbackServer.BATTERIES_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_HIGH
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.BATTERIES_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_HIGH
+                )))
     }
     // temperature - shift registers
     @Test
     fun `validate normal shift registers temperature`() {
+        val ret = doTempRequest(SensorFeedbackServer.SHIFT_REGISTER_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_NORMAL
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.SHIFT_REGISTER_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_NORMAL
+                )))
     }
     @Test
     fun `validate medium shift registers temperature`() {
-
+        val ret = doTempRequest(SensorFeedbackServer.SHIFT_REGISTER_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_MEDIUM
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.SHIFT_REGISTER_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_MEDIUM
+                )))
     }
     @Test
     fun `validate high shift registers temperature`() {
-
+        val ret = doTempRequest(SensorFeedbackServer.SHIFT_REGISTER_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_HIGH
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.SHIFT_REGISTER_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_HIGH
+                )))
     }
     // for speed
     @Test
