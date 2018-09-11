@@ -1,5 +1,6 @@
 package car.rccontroller.network.server.feedback
 
+import car.rccontroller.network.EMPTY_STRING
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.CoreMatchers.*
 import org.junit.Test
@@ -16,19 +17,35 @@ class SensorFeedbackServerTest {
     ////////
     //serve function tests
     ////////
+    @Test
+    fun `validate no option in serve`() {
+        val ret = doBlockingRequest("http://$ip:$port")
+        assertThat(ret, `is`(SensorFeedbackServer.formatResponse("ERROR SERVE", EMPTY_STRING)))
+    }
     // temperature - motors
+    private fun doTempRequest(hardware: String = "", warning: String = "") =
+        doBlockingRequest(
+            "http://" +
+            "$ip:" +
+            "$port" +
+            "${SensorFeedbackServer.TEMP_URI}" +
+            "?${SensorFeedbackServer.TEMP_PARAM_KEY_ITEM}=" +
+            "$hardware" +
+            "&${SensorFeedbackServer.TEMP_PARAM_KEY_WARNING}=" +
+            "$warning" +
+            "&${SensorFeedbackServer.TEMP_PARAM_KEY_VALUE}=10"
+        )
+
+    @Test
+    fun `validate error temperatures`() {
+        val ret = doTempRequest()
+        assertThat(ret, `is`(SensorFeedbackServer.formatResponse("ERROR TEMP",
+            SensorFeedbackServer.WARNING_TYPE_NOTHING)))
+    }
     @Test
     fun `validate normal rear left motor temperature`() {
-        val ret = doBlockingRequest(
-            "http://" +
-                    "$ip:" +
-                    "$port" +
-                    "${SensorFeedbackServer.TEMP_URI}" +
-                    "?${SensorFeedbackServer.TEMP_PARAM_KEY_ITEM}=" +
-                    "${SensorFeedbackServer.MOTOR_REAR_LEFT_TEMP}" +
-                    "&${SensorFeedbackServer.TEMP_PARAM_KEY_WARNING}=" +
-                    "${SensorFeedbackServer.WARNING_TYPE_NORMAL}" +
-                    "&${SensorFeedbackServer.TEMP_PARAM_KEY_VALUE}=10"
+        val ret = doTempRequest(SensorFeedbackServer.MOTOR_REAR_LEFT_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_NORMAL
         )
         assertThat(ret,
                 `is`(
@@ -39,18 +56,39 @@ class SensorFeedbackServerTest {
     }
     @Test
     fun `validate medium rear left motor temperature`() {
-
+        val ret = doTempRequest(SensorFeedbackServer.MOTOR_REAR_LEFT_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_MEDIUM
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.MOTOR_REAR_LEFT_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_MEDIUM
+                )))
     }
     @Test
     fun `validate high rear left motor temperature`() {
-
-    }
-    @Test
-    fun `validate unchanged rear left motor temperature`() {
-
+        val ret = doTempRequest(SensorFeedbackServer.MOTOR_REAR_LEFT_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_HIGH
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.MOTOR_REAR_LEFT_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_HIGH
+                )))
     }
     @Test
     fun `validate normal rear right motor temperature`() {
+        val ret = doTempRequest(SensorFeedbackServer.MOTOR_REAR_RIGHT_TEMP,
+            SensorFeedbackServer.WARNING_TYPE_NORMAL
+        )
+        assertThat(ret,
+            `is`(
+                SensorFeedbackServer.formatResponse(
+                    SensorFeedbackServer.MOTOR_REAR_RIGHT_TEMP,
+                    SensorFeedbackServer.WARNING_TYPE_NORMAL
+                )))
     }
     @Test
     fun `validate medium rear right motor temperature`() {
@@ -58,10 +96,6 @@ class SensorFeedbackServerTest {
     }
     @Test
     fun `validate high rear right motor temperature`() {
-
-    }
-    @Test
-    fun `validate unchanged rear right motor temperature`() {
 
     }
     @Test
@@ -76,10 +110,6 @@ class SensorFeedbackServerTest {
 
     }
     @Test
-    fun `validate unchanged front left motor temperature`() {
-
-    }
-    @Test
     fun `validate normal front right motor temperature`() {
     }
     @Test
@@ -88,10 +118,6 @@ class SensorFeedbackServerTest {
     }
     @Test
     fun `validate high front right motor temperature`() {
-
-    }
-    @Test
-    fun `validate unchanged front right motor temperature`() {
 
     }
     // temperature - h bridges
@@ -107,10 +133,6 @@ class SensorFeedbackServerTest {
 
     }
     @Test
-    fun `validate unchanged rear h bridge temperature`() {
-
-    }
-    @Test
     fun `validate normal front h bridge temperature`() {
     }
     @Test
@@ -119,10 +141,6 @@ class SensorFeedbackServerTest {
     }
     @Test
     fun `validate high front h bridge temperature`() {
-
-    }
-    @Test
-    fun `validate unchanged front h bridge temperature`() {
 
     }
     // temperature - raspberry
@@ -137,10 +155,6 @@ class SensorFeedbackServerTest {
     fun `validate high raspberry temperature`() {
 
     }
-    @Test
-    fun `validate unchanged raspberry temperature`() {
-
-    }
     // temperature - batteries
     @Test
     fun `validate normal batteries temperature`() {
@@ -151,10 +165,6 @@ class SensorFeedbackServerTest {
     }
     @Test
     fun `validate high batteries temperature`() {
-
-    }
-    @Test
-    fun `validate unchanged batteries temperature`() {
 
     }
     // temperature - shift registers
@@ -169,16 +179,16 @@ class SensorFeedbackServerTest {
     fun `validate high shift registers temperature`() {
 
     }
-    @Test
-    fun `validate unchanged shift registers temperature`() {
-
-    }
     // for speed
     @Test
     fun `validate speed`() {
 
     }
     // for ecu modules
+    @Test
+    fun `validate error in ecu modules`() {
+
+    }
     @Test
     fun `validate traction control module is on`() {
 
