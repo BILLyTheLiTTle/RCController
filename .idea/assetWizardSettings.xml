@@ -18,7 +18,9 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="foregroundImage" value="C:\Users\Tsap\Documents\DevelopmentProjects\AndroidStudio\RCController\assets\images\launcher\ic_launcher.png" />
+                                      <entry key="backgroundColor" value="800000" />
+                                      <entry key="backgroundImage" value="C:\Users\Tsap\Documents\DevelopmentProjects\AndroidStudio\RCController\app\src\main\res\drawable\ic_launcher_background.xml" />
+                                      <entry key="foregroundImage" value="C:\Users\Tsap\Documents\DevelopmentProjects\AndroidStudio\RCController\assets\images\launcher\ic_launcher_foreground.png" />
                                     </map>
                                   </option>
                                 </PersistentState>
