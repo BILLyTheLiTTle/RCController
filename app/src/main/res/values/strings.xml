@@ -9,6 +9,9 @@
     <string name="tachometer_info">%1s %2s</string>
 
     <string name="long_click_info">Long-click to interact</string>
+
+    <string name="reverse_warning">Leave throttle in neutral to set/unset the reverse</string>
+
     <string name="cruise_control_info">Cruise Control activated.\nUse throttle to deactivate
         it</string>
 

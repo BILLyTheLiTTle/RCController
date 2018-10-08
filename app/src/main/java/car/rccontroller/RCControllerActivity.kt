@@ -165,7 +165,12 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted) {
-                    reverseIntention = !reverseIntention
+                    if (motionState == ACTION_NEUTRAL) {
+                        reverseIntention = !reverseIntention
+                    }
+                    else {
+                        Toast.makeText(context, getString(R.string.reverse_warning), Toast.LENGTH_SHORT).show()
+                    }
                 }
                 if (reverseIntention)
                     reverse_imageView.setImageResourceWithTag(R.drawable.reverse_on)
