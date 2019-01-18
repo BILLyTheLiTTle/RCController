@@ -19,8 +19,6 @@ import org.junit.Before
 import org.junit.BeforeClass
 import android.support.test.uiautomator.UiSelector
 import org.junit.After
-import android.view.KeyEvent
-import kotlinx.coroutines.experimental.launch
 
 
 @RunWith(AndroidJUnit4::class)

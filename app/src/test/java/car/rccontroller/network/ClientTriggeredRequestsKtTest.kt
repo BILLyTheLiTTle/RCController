@@ -2,7 +2,7 @@ package car.rccontroller.network
 
 import car.rccontroller.RCControllerActivity
 import junit.framework.Assert.*
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.CoreMatchers.*
 import org.junit.After

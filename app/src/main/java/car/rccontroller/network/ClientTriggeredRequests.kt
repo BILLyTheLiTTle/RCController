@@ -2,9 +2,6 @@ package car.rccontroller.network
 
 import android.content.Context
 import car.rccontroller.R
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.runBlocking
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
@@ -16,7 +13,7 @@ import android.text.format.Formatter
 import car.rccontroller.RCControllerActivity
 import car.rccontroller.RUN_ON_EMULATOR
 import car.rccontroller.network.server.feedback.SensorFeedbackServer
-import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.*
 
 
 const val OK_STRING = "OK"
@@ -308,9 +305,9 @@ var currentRearDifferentialSlipperyLimiter: Int?
 /////////
 // General use
 /////////
-private fun doNonBlockingRequest(url:String) = launch { doRequest(url) }
+private fun doNonBlockingRequest(url:String) = CoroutineScope(Dispatchers.IO).launch { doRequest(url) }
 
-internal fun doBlockingRequest(url:String) = runBlocking(CommonPool) { doRequest(url) }
+internal fun doBlockingRequest(url:String) = runBlocking(Dispatchers.IO) { doRequest(url) }
 
 private fun doRequest(url: String): String {
     val con: HttpURLConnection?
