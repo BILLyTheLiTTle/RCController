@@ -305,6 +305,7 @@ var currentRearDifferentialSlipperyLimiter: Int?
 /////////
 // General use
 /////////
+// In case of second Activity existence this should be implemented correctly for a CoroutineScope usage
 private fun doNonBlockingRequest(url:String) = CoroutineScope(Dispatchers.IO).launch { doRequest(url) }
 
 internal fun doBlockingRequest(url:String) = runBlocking(Dispatchers.IO) { doRequest(url) }
@@ -318,8 +319,8 @@ private fun doRequest(url: String): String {
         urlGet = URL(url)
         con = urlGet.openConnection() as HttpURLConnection
         requestInputStream = con.run {
-            readTimeout = 10000 /* milliseconds */
-            connectTimeout = 2000 /* milliseconds */
+            readTimeout = 500 /* milliseconds */
+            connectTimeout = 500 /* milliseconds */
             requestMethod = "GET"
             doInput = true
             // Start the query
