@@ -38,16 +38,7 @@ class RCControllerActivity : AppCompatActivity() {
             when (progress) {
                 0 -> setBrakingStill()
                 10 -> setNeutral()
-                20 -> setThrottleBrake(direction, progress)
-                40 -> setThrottleBrake(direction, progress)
-                50 -> setThrottleBrake(direction, progress)
-                65 -> setThrottleBrake(direction, progress)
-                75 -> setThrottleBrake(direction, progress)
-                80 -> setThrottleBrake(direction, progress)
-                85 -> setThrottleBrake(direction, progress)
-                90 -> setThrottleBrake(direction, progress)
-                95 -> setThrottleBrake(direction, progress)
-                100 -> setThrottleBrake(direction, progress)
+                20, 40, 50, 65, 75, 80, 85, 90, 95, 100 -> setThrottleBrake(direction, progress)
             }
         }
 
