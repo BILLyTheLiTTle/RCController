@@ -2,10 +2,11 @@ package car.rccontroller
 
 import android.graphics.drawable.AnimationDrawable
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.app.AlertDialog
+import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -15,10 +16,14 @@ import android.widget.SeekBar
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_rccontroller.*
 import car.rccontroller.network.*
+import car.rccontroller.network.cockpit.*
 import car.rccontroller.network.server.feedback.SensorFeedbackServer
+import retrofit2.Retrofit
+import retrofit2.converter.scalars.ScalarsConverterFactory
 
 
 val RUN_ON_EMULATOR = Build.FINGERPRINT.contains("generic")
+lateinit var retrofit: Retrofit
 /**
  * An full-screen activity in landscape mode.
  */
@@ -55,6 +60,7 @@ class RCControllerActivity : AppCompatActivity() {
         steering_seekBar.isEnabled = false
         throttleNbrake_mySeekBar.isEnabled = false
 
+
         //////
         //setup engine start-n-stop
         //////
@@ -63,19 +69,15 @@ class RCControllerActivity : AppCompatActivity() {
                 if(isEngineStarted) {
                     val status = stopEngine()
                     if (status == OK_STRING) {
-                        /* This code block works even after I set the server ip and port to null
-                            because "bullshit".toBoolean() equals false!
+                        /*
+                            The following problem does not apply anymore due to
+                            @see RequestsBackbone#areNetworkSettingsAvailable().
 
+                            This code block works even after I set the server ip and port to null
+                            because "bullshit".toBoolean() equals false!
                             A problem is when the client waits real String data
                             (for example lights_off). In these situation I fall into the
                             "else" code blocks.
-
-                            TODO or not TODO, that's the question
-                            1. There will be another function which resets the states of the variables
-                            used for updating the UI items,
-                            2. then call the changeInteractiveUIItemsStatus() to update the
-                            UI items
-                            3. and then call the stopEngine().
                          */
                         resetUI()
                     } else {
@@ -85,7 +87,7 @@ class RCControllerActivity : AppCompatActivity() {
                 }
                 else {
                     //start the engine
-                    showServerConnectionDialog(this@RCControllerActivity)
+                    showServerConnectionDialog( this@RCControllerActivity)
                 }
 
                 true
@@ -127,12 +129,12 @@ class RCControllerActivity : AppCompatActivity() {
                 if (event.action == android.view.MotionEvent.ACTION_DOWN) {
                     /* Use the serverIp variable to check if the engine is running.
                        I use the serverIp because I did not want to use a blocking network request. */
-                    if(raspiServerIp != null) {
+                    if(raspiServerIP != null) {
                         handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_on)
                         activateHandbrake(true)
                     }
                 } else if (event.action == android.view.MotionEvent.ACTION_UP) {
-                    if(raspiServerIp != null) {
+                    if(raspiServerIP != null) {
                         handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_off)
                         activateHandbrake(false)
                         // re-throttle automatically to start moving the rear wheels again
@@ -631,16 +633,21 @@ class RCControllerActivity : AppCompatActivity() {
             setTitle(getString(R.string.server_dialog_title))
             setMessage(getString(R.string.server_dialog_msg))
             setPositiveButton(getString(R.string.server_dialog_ok_button)){ _, _ ->
-                val raspiServerIp =
+                 raspiServerIP =
                         if (RUN_ON_EMULATOR)
                             "10.0.2.2"
                         else
                             dialogView.findViewById<EditText>(R.id.serverIp_editText).text
                                     .toString()
-                val raspiServerPort = dialogView.findViewById<EditText>(R.id.serverPort_editText).text
+                raspiServerPort = dialogView.findViewById<EditText>(R.id.serverPort_editText).text
                         .toString().toIntOrNull()
 
-                val status = startEngine(activity, raspiServerIp, raspiServerPort)
+                retrofit = Retrofit.Builder()
+                    .baseUrl("http://$raspiServerIP:$raspiServerPort/")
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .build()
+
+                val status = startEngine(activity, raspiServerIP, raspiServerPort)
                 if (status == OK_STRING) {
                     resetUI()
                 } else {

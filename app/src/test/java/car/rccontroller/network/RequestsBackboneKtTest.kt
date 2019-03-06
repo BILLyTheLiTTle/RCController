@@ -14,7 +14,7 @@ import org.mockito.Mock
 
 
 @RunWith(MockitoJUnitRunner::class)
-class ClientTriggeredRequestsKtTest {
+class RequestsBackboneKtTest {
 
     @Mock
     private var mockedActivity: RCControllerActivity? = null

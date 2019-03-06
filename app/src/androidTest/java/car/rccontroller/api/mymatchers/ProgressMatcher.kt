@@ -1,6 +1,6 @@
 package car.rccontroller.api.mymatchers
 
-import android.support.test.espresso.matcher.BoundedMatcher
+import androidx.test.espresso.matcher.BoundedMatcher
 import android.view.View
 import android.widget.SeekBar
 import org.hamcrest.Description

@@ -1,12 +1,12 @@
 package car.rccontroller
 
-import android.support.test.espresso.Espresso.*
-import android.support.test.espresso.action.ViewActions.*
-import android.support.test.espresso.assertion.ViewAssertions.*
-import android.support.test.espresso.matcher.RootMatchers.*
-import android.support.test.espresso.matcher.ViewMatchers.*
-import android.support.test.filters.MediumTest
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.espresso.Espresso.*
+import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.*
+import androidx.test.espresso.matcher.RootMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.filters.MediumTest
+import androidx.test.runner.AndroidJUnit4
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
 import car.rccontroller.network.*
 import org.hamcrest.Matchers.*

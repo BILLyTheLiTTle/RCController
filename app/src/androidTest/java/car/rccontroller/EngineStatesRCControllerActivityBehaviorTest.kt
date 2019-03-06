@@ -1,19 +1,19 @@
 package car.rccontroller
 
 import android.content.Context
-import android.support.test.espresso.Espresso.*
-import android.support.test.espresso.action.ViewActions.*
-import android.support.test.espresso.assertion.ViewAssertions.*
-import android.support.test.espresso.matcher.RootMatchers.*
-import android.support.test.espresso.matcher.ViewMatchers.*
-import android.support.test.filters.LargeTest
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.espresso.Espresso.*
+import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.*
+import androidx.test.espresso.matcher.RootMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.filters.LargeTest
+import androidx.test.runner.AndroidJUnit4
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.hamcrest.Matchers.*
 import car.rccontroller.network.isEngineStarted
 import android.net.wifi.WifiManager
-import android.support.test.InstrumentationRegistry
+import androidx.test.InstrumentationRegistry
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
 import org.junit.After
 

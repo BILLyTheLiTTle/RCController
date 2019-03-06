@@ -1,7 +1,6 @@
 package car.rccontroller.network
 
 import android.content.Context
-import car.rccontroller.R
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
@@ -11,80 +10,22 @@ import java.net.URL
 import android.net.wifi.WifiManager
 import android.text.format.Formatter
 import car.rccontroller.RCControllerActivity
-import car.rccontroller.RUN_ON_EMULATOR
 import car.rccontroller.network.server.feedback.SensorFeedbackServer
 import kotlinx.coroutines.*
+import retrofit2.Call
 
 
 const val OK_STRING = "OK"
 const val EMPTY_STRING = "NULL"
 const val sensorFeedbackServerPort= 8080
 
-var raspiServerIp: String? = null
+var raspiServerIP: String? = null
 var raspiServerPort: Int? = null
 var context: RCControllerActivity? = null
 
-private lateinit var sensorFeedbackServer: SensorFeedbackServer
-
-/////////
-// Engine
-/////////
-val isEngineStarted: Boolean
-get() = runBlockingRequest("http://${car.rccontroller.network.raspiServerIp}:" +
-            "${car.rccontroller.network.raspiServerPort}/get_engine_state").toBoolean()
-
-fun startEngine(context: RCControllerActivity?, serverIp: String?, serverPort: Int?): String{
-    //reset and get ready for new requests
-    if(context != null) {
-        throttleBrakeActionId = context.resources.getInteger(R.integer.default_throttleBrakeActionId).toLong()
-        steeringDirectionId = context.resources.getInteger(R.integer.default_steeringDirectionId).toLong()
-    }
-
-    /* The server will know when car is moving backward and not when the car is going to move
-        backward in the next throttle action. The default state for this “ImageView” will be
-        false (means not backward). So, this local variable must be reset at every start.
-     */
-    reverseIntention = false
-
-    car.rccontroller.network.raspiServerIp = serverIp
-    car.rccontroller.network.raspiServerPort = serverPort
-    car.rccontroller.network.context = context
-
-    if (context != null) {
-        if (::sensorFeedbackServer.isInitialized) sensorFeedbackServer.stop()
-        sensorFeedbackServer = if (RUN_ON_EMULATOR) SensorFeedbackServer(context) else SensorFeedbackServer(
-                context,
-                myIP,
-                sensorFeedbackServerPort
-        )
-        sensorFeedbackServer.start()
-    }
-
-    //TODO add the nanohttp ip and port when needed as argument to the handshake
-    return runBlockingRequest("http://${car.rccontroller.network.raspiServerIp}:" +
-            "${car.rccontroller.network.raspiServerPort}/start_engine?" +
-            "nanohttp_client_ip=${if (::sensorFeedbackServer.isInitialized) sensorFeedbackServer.ip else myIP}" +
-            "&nanohttp_client_port=${if (::sensorFeedbackServer.isInitialized) sensorFeedbackServer.port else sensorFeedbackServerPort}")
-}
-
-fun stopEngine(): String {
-    val msg = runBlockingRequest("http://$raspiServerIp:" +
-            "$raspiServerPort/stop_engine")
-
-    if(msg == OK_STRING) {
-        raspiServerIp = null
-        raspiServerPort = null
-    }
-
-    // TODO if I don't want to save manual setup settings
-    previousFrontDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
-    previousRearDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
-
-    if(::sensorFeedbackServer.isInitialized) sensorFeedbackServer.stop()
+var sensorFeedbackServer: SensorFeedbackServer? = null
 
 
-    return msg
-}
 
 
 /////////
@@ -101,17 +42,17 @@ var throttleBrakeActionId = 0L
 
 //---- Parking Brake ----
 val isParkingBrakeActive: Boolean
-    get() = runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
             "get_parking_brake_state").toBoolean()
 
 fun activateParkingBrake(state: Boolean) = if (state)
-        runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+        runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
                 "set_throttle_brake_system?" +
                 "id=${throttleBrakeActionId++}" +
                 "&action=$ACTION_PARKING_BRAKE" +
                 "&value=100")
     else
-        runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+        runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
                 "set_throttle_brake_system?" +
                 "id=${throttleBrakeActionId++}" +
                 "&action=$ACTION_PARKING_BRAKE" +
@@ -119,17 +60,17 @@ fun activateParkingBrake(state: Boolean) = if (state)
 
 //---- Handbrake ----
 val isHandbrakeActive: Boolean
-    get() = runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
             "get_handbrake_state").toBoolean()
 
 fun activateHandbrake(state: Boolean) = if (state)
-    launchRequest("http://$raspiServerIp:$raspiServerPort/" +
+    launchRequest("http://$raspiServerIP:$raspiServerPort/" +
             "set_throttle_brake_system?" +
             "id=${throttleBrakeActionId++}" +
             "&action=$ACTION_HANDBRAKE" +
             "&value=100")
 else
-    launchRequest("http://$raspiServerIp:$raspiServerPort/" +
+    launchRequest("http://$raspiServerIP:$raspiServerPort/" +
             "set_throttle_brake_system?" +
             "id=${throttleBrakeActionId++}" +
             "&action=$ACTION_HANDBRAKE" +
@@ -137,26 +78,26 @@ else
 
 //---- Throttle / Brake / Neutral / Reverse ----
 var reverseIntention: Boolean
-    get() = runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
             "get_reverse_lights_state").toBoolean()
-    set(value) {runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+    set(value) {runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
             "set_reverse_lights_state?" +
             "state=$value")}
 
 val motionState: String
-    get() = runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
             "get_motion_state")
 
-fun setNeutral() = launchRequest("http://$raspiServerIp:$raspiServerPort/" +
+fun setNeutral() = launchRequest("http://$raspiServerIP:$raspiServerPort/" +
         "set_throttle_brake_system?id=${throttleBrakeActionId++}&action=$ACTION_NEUTRAL")
 
-fun setBrakingStill() = launchRequest("http://$raspiServerIp:$raspiServerPort/" +
+fun setBrakingStill() = launchRequest("http://$raspiServerIP:$raspiServerPort/" +
         "set_throttle_brake_system?" +
         "id=${throttleBrakeActionId++}" +
         "&action=$ACTION_BRAKING_STILL")
 
 fun setThrottleBrake(direction: String, value: Int) =
-    launchRequest("http://$raspiServerIp:$raspiServerPort/" +
+    launchRequest("http://$raspiServerIP:$raspiServerPort/" +
         "set_throttle_brake_system?" +
         "id=${throttleBrakeActionId++}" +
         "&action=$direction" +
@@ -172,11 +113,11 @@ const val ACTION_STRAIGHT = "straight"
 // Initial value should be 0 cuz in server is -1
 var steeringDirectionId = 0L
 val steeringDirection
-    get() = runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
             "get_steering_direction")
 
 fun setSteering(direction: String, value: Int = 0) =
-    launchRequest("http://$raspiServerIp:$raspiServerPort/" +
+    launchRequest("http://$raspiServerIP:$raspiServerPort/" +
             "set_steering_system?" +
             "id=${steeringDirectionId++}" +
             "&direction=$direction" +
@@ -193,11 +134,11 @@ const val LONG_RANGE_LIGHTS = "long_range_lights"
 const val LONG_RANGE_SIGNAL_LIGHTS = "long_range_signal_lights"
 var mainLightsState: String
     set(value) {
-        runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+        runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
                 "set_main_lights_state?" +
                 "value=$value")
     }
-    get() = runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
                 "get_main_lights_state")
 
 
@@ -209,11 +150,11 @@ const val TURN_LIGHTS_LEFT = "turn_lights_left"
 const val TURN_LIGHTS_STRAIGHT = "turn_lights_straight"
 var turnLights: String
     set(value) {
-        runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+        runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
                 "set_direction_lights?" +
                 "direction=$value")
     }
-    get() = runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
             "get_direction_lights")
 
 
@@ -223,11 +164,11 @@ var turnLights: String
 const val EMERGENCY_LIGHTS = "emergency_lights"
 var emergencyLights: Boolean
     set(value) {
-        runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+        runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
                 "set_emergency_lights_state?" +
                 "state=$value")
     }
-    get() = runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
             "get_emergency_lights_state").toBoolean()
 
 
@@ -240,11 +181,11 @@ const val ASSISTANCE_WARNING = "assistance_warning"
 const val ASSISTANCE_FULL = "assistance_full"
 var handlingAssistanceState: String
     set(value) {
-        runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+        runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
                 "set_handling_assistance?" +
                 "state=$value")
     }
-    get() = runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
             "get_handling_assistance_state")
 
 
@@ -261,11 +202,11 @@ const val MOTOR_SPEED_LIMITER_FAST_SPEED_2 = 0.90
 const val MOTOR_SPEED_LIMITER_FULL_SPEED = 1.00
 var motorSpeedLimiter: Double?
     set(value) {
-        runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+        runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
                 "set_motor_speed_limiter?" +
                 "value=$value")
     }
-    get() = runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
             "get_motor_speed_limiter").toDoubleOrNull()
 
 
@@ -283,22 +224,22 @@ const val DIFFERENTIAL_SLIPPERY_LIMITER_AUTO = 10
 var previousFrontDifferentialSlipperyLimiter: Int? = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
 var currentFrontDifferentialSlipperyLimiter: Int?
     set(value) {
-        runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+        runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
                 "set_front_differential_slippery_limiter?" +
                 "value=$value")
     }
-    get() = runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
             "get_front_differential_slippery_limiter").toIntOrNull()
 
 //---- Rear ----
 var previousRearDifferentialSlipperyLimiter: Int? = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
 var currentRearDifferentialSlipperyLimiter: Int?
     set(value) {
-        runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+        runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
                 "set_rear_differential_slippery_limiter?" +
                 "value=$value")
     }
-    get() = runBlockingRequest("http://$raspiServerIp:$raspiServerPort/" +
+    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
             "get_rear_differential_slippery_limiter").toIntOrNull()
 
 
@@ -306,9 +247,18 @@ var currentRearDifferentialSlipperyLimiter: Int?
 // General use
 /////////
 // In case of second Activity existence this should be implemented correctly for a CoroutineScope usage
-private fun launchRequest(url:String) = CoroutineScope(Dispatchers.IO).launch { doRequest(url) }
+fun launchRequest(url:String) = CoroutineScope(Dispatchers.IO).launch { doRequest(url) }
 
-private fun runBlockingRequest(url:String) = runBlocking(Dispatchers.IO) { doRequest(url) }
+fun runBlockingRequest(url:String) = runBlocking(Dispatchers.IO) { doRequest(url) }
+
+fun <T> runBlockingRequest(block:() -> Call<T>): T? {
+    return if(areNetworkSettingsAvailable())
+        runBlocking(Dispatchers.IO) { block().execute().body() }
+    else
+        null
+}
+
+private fun areNetworkSettingsAvailable() = (raspiServerIP != null) && (raspiServerPort != null)
 
 private fun doRequest(url: String): String {
     val con: HttpURLConnection?

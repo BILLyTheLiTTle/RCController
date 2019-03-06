@@ -1,6 +1,6 @@
 package car.rccontroller.api
 
-import android.support.test.rule.ActivityTestRule
+import androidx.test.rule.ActivityTestRule
 import car.rccontroller.RCControllerActivity
 import org.junit.Rule
 

@@ -1,23 +1,23 @@
 package car.rccontroller
 
-import android.support.test.espresso.Espresso.*
-import android.support.test.espresso.action.ViewActions.*
-import android.support.test.espresso.assertion.ViewAssertions.*
-import android.support.test.espresso.matcher.RootMatchers.*
-import android.support.test.espresso.matcher.ViewMatchers.*
-import android.support.test.filters.MediumTest
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.espresso.Espresso.*
+import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.*
+import androidx.test.espresso.matcher.RootMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.filters.MediumTest
+import androidx.test.runner.AndroidJUnit4
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.hamcrest.Matchers.*
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
-import android.support.test.InstrumentationRegistry
-import android.support.test.uiautomator.UiDevice
+import androidx.test.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
 import car.rccontroller.network.isEngineStarted
 import junit.framework.Assert
 import org.junit.Before
 import org.junit.BeforeClass
-import android.support.test.uiautomator.UiSelector
+import androidx.test.uiautomator.UiSelector
 import org.junit.After
 
 
