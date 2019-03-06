@@ -1,6 +1,7 @@
 package car.rccontroller.network
 
 import car.rccontroller.RCControllerActivity
+import car.rccontroller.network.cockpit.*
 import junit.framework.Assert.*
 import kotlinx.coroutines.*
 import org.hamcrest.MatcherAssert.assertThat
@@ -11,6 +12,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.Mock
+import org.mockito.MockitoAnnotations
+import retrofit2.Retrofit
+import retrofit2.converter.scalars.ScalarsConverterFactory
 
 
 @RunWith(MockitoJUnitRunner::class)
@@ -22,16 +26,27 @@ class RequestsBackboneKtTest {
     private val serverIp = "192.168.200.245"
     private val port = 8080
 
+    private lateinit var retrofit: Retrofit
+    private lateinit var engineApi: Engine
+    private lateinit var throttleBrakeApi: ThrottleBrake
+
     @Before
     fun setUp() {
-        car.rccontroller.network.startEngine(null, serverIp, port)
+        MockitoAnnotations.initMocks(this)
+        retrofit = Retrofit.Builder()
+            .baseUrl("http://$serverIp:$port/")
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build()
+        engineApi = retrofit.create<Engine>(Engine::class.java)
+        throttleBrakeApi = retrofit.create<ThrottleBrake>(ThrottleBrake::class.java)
+        car.rccontroller.network.cockpit.startEngine(engineApi, null, serverIp, port)
         throttleBrakeActionId = System.currentTimeMillis()
         steeringDirectionId = System.currentTimeMillis()
     }
 
     @After
     fun tearDown() {
-        car.rccontroller.network.stopEngine()
+        stopEngine(engineApi)
     }
 
     @Test
@@ -40,50 +55,50 @@ class RequestsBackboneKtTest {
     }
 
     // Engine
-    @Test
+    /*@Test
     fun `validate that engine has started`() {
-        assertThat(isEngineStarted, `is`(true))
+        assertThat(isEngineStarted(engineApi), `is`(true))
     }
     @Test
     fun `validate that engine has stopped`() {
-        car.rccontroller.network.stopEngine()
-        assertThat(isEngineStarted, `is`(false))
+        stopEngine(engineApi)
+        assertThat(isEngineStarted(engineApi), `is`(false))
     }
 
     /*@Test
     fun `validate that local server has started`() {
         car.rccontroller.network.startEngine(null, "192.168.200.245", 8080)
         assertThat(if (::sensorFeedbackServer.isInitialized) sensorFeedbackServer.isAlive else false, `is`(true))
-    }
+    }*/
     @Test
     fun `validate that local server has stopped`() {
 
     }*/
 
     // Parking brake
-    @Test
+    /*@Test
     fun `validate that parking brake is activated`() {
-        car.rccontroller.network.activateParkingBrake(true)
-        assertThat(isParkingBrakeActive, `is`(true))
+        activateParkingBrake(true)
+        assertThat(isParkingBrakeActive(throttleBrakeApi), `is`(true))
     }
     @Test
     fun `validate that parking brake is deactivated`() {
-        car.rccontroller.network.activateParkingBrake(false)
-        assertThat(isParkingBrakeActive, `is`(false))
+        activateParkingBrake(false)
+        assertThat(isParkingBrakeActive(throttleBrakeApi), `is`(false))
     }
 
     // Handbrake
     @Test
     fun `validate that handbrake is activated`() {
         runBlocking {
-            car.rccontroller.network.activateHandbrake(true).join()
+            activateHandbrake(true).join()
         }
         assertThat(isHandbrakeActive, `is`(true))
     }
     @Test
     fun `validate that handbrake is deactivated`() {
         runBlocking {
-            car.rccontroller.network.activateHandbrake(false).join()
+            activateHandbrake(false).join()
         }
         assertThat(isHandbrakeActive, `is`(false))
     }
@@ -91,12 +106,12 @@ class RequestsBackboneKtTest {
     // Reverse
     @Test
     fun `validate that reverse is activated`() {
-        car.rccontroller.network.reverseIntention = true
+        reverseIntention = true
         assertThat(reverseIntention, `is`(true))
     }
     @Test
     fun `validate that reverse is deactivated`() {
-        car.rccontroller.network.reverseIntention = false
+        reverseIntention = false
         assertThat(reverseIntention, `is`(false))
     }
 
@@ -104,7 +119,7 @@ class RequestsBackboneKtTest {
     @Test
     fun `validate that car is in neutral`() {
         runBlocking {
-            car.rccontroller.network.setNeutral().join()
+            setNeutral().join()
         }
         assertThat(motionState, `is`(ACTION_NEUTRAL))
     }
@@ -113,7 +128,7 @@ class RequestsBackboneKtTest {
     @Test
     fun `validate that car is braking still`() {
         runBlocking {
-            car.rccontroller.network.setBrakingStill().join()
+            setBrakingStill().join()
         }
         assertThat(motionState, `is`(ACTION_BRAKING_STILL))
     }
@@ -122,17 +137,17 @@ class RequestsBackboneKtTest {
     @Test
     fun `validate that car is throttling forward or braking`() {
         runBlocking {
-            car.rccontroller.network.setThrottleBrake(ACTION_MOVE_FORWARD, 60).join()
+            setThrottleBrake(ACTION_MOVE_FORWARD, 60).join()
         }
         assertThat(motionState, `is`(ACTION_MOVE_FORWARD))
     }
     @Test
     fun `validate that car is throttling backward or braking`() {
         runBlocking {
-            car.rccontroller.network.setThrottleBrake(ACTION_MOVE_BACKWARD, 40).join()
+            setThrottleBrake(ACTION_MOVE_BACKWARD, 40).join()
         }
         assertThat(motionState, `is`(ACTION_MOVE_BACKWARD))
-    }
+    }*/
 
     // Steering
     @Test

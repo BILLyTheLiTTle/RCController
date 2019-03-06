@@ -12,6 +12,7 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
 import car.rccontroller.network.*
+import car.rccontroller.network.cockpit.isEngineStarted
 import org.hamcrest.Matchers.*
 import org.junit.After
 import org.junit.Before
@@ -166,10 +167,10 @@ class DirectionLightsStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() 
 
     @Before
     fun startEngine() {
-        if (isEngineStarted) {
+        /*if (isEngineStarted()) {
             onView(withId(R.id.engineStartStop_imageView))
                 .perform(longClick())
-        }
+        }*/
         onView(withId(R.id.engineStartStop_imageView))
             .perform(longClick())
         onView(withId(R.id.server_connection_dialog_layout))
@@ -180,7 +181,7 @@ class DirectionLightsStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() 
 
     @After
     fun stopEngine() {
-        if (isEngineStarted) {
+        if (isEngineStarted()) {
             onView(withId(R.id.engineStartStop_imageView))
                 .perform(longClick())
         }

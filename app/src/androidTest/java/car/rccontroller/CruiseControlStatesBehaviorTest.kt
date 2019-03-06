@@ -11,7 +11,7 @@ import androidx.test.runner.AndroidJUnit4
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
-import car.rccontroller.network.isEngineStarted
+import car.rccontroller.network.cockpit.*
 import org.hamcrest.Matchers.*
 import org.junit.After
 import org.junit.Before
@@ -62,10 +62,10 @@ class CruiseControlStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @Before
     fun startEngine() {
-        if (isEngineStarted) {
+        /*if (isEngineStarted()) {
             onView(withId(R.id.engineStartStop_imageView))
                 .perform(longClick())
-        }
+        }*/
         onView(withId(R.id.engineStartStop_imageView))
             .perform(longClick())
         onView(withId(R.id.server_connection_dialog_layout))
@@ -76,7 +76,7 @@ class CruiseControlStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @After
     fun stopEngine() {
-        if (isEngineStarted) {
+        if (isEngineStarted()) {
             onView(withId(R.id.engineStartStop_imageView))
                 .perform(longClick())
         }

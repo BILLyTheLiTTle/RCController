@@ -11,13 +11,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.hamcrest.Matchers.*
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
-import car.rccontroller.network.isParkingBrakeActive
 import androidx.test.espresso.Espresso.onView
-import car.rccontroller.network.isEngineStarted
 import org.junit.After
 import org.junit.Before
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
+import car.rccontroller.network.cockpit.isEngineStarted
+import car.rccontroller.network.cockpit.isParkingBrakeActive
 import org.junit.BeforeClass
 
 
@@ -27,7 +27,7 @@ class ParkingBrakeStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @Test
     fun applyParkingBrake() {
-        if (isParkingBrakeActive) {
+        if (isParkingBrakeActive()) {
             onView(withId(R.id.parkingBrake_imageView))
                 .perform(longClick())
         }
@@ -38,7 +38,7 @@ class ParkingBrakeStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @Test
     fun releaseParkingBrake() {
-        if (!isParkingBrakeActive) {
+        if (!isParkingBrakeActive()) {
             onView(withId(R.id.parkingBrake_imageView))
                 .perform(longClick())
         }
@@ -49,7 +49,7 @@ class ParkingBrakeStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @Test
     fun releaseParkingBrakeOnThrottle() {
-        if (!isParkingBrakeActive) {
+        if (!isParkingBrakeActive()) {
             onView(withId(R.id.parkingBrake_imageView))
                 .perform(longClick())
         }
@@ -61,7 +61,7 @@ class ParkingBrakeStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @Test
     fun releaseParkingBrakeOnHandbrake() {
-        if (!isParkingBrakeActive) {
+        if (!isParkingBrakeActive()) {
             onView(withId(R.id.parkingBrake_imageView))
                 .perform(longClick())
         }
@@ -82,10 +82,10 @@ class ParkingBrakeStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @Before
     fun startEngine() {
-        if (isEngineStarted) {
+        /*if (isEngineStarted()) {
             onView(withId(R.id.engineStartStop_imageView))
                 .perform(longClick())
-        }
+        }*/
         onView(withId(R.id.engineStartStop_imageView))
             .perform(longClick())
         onView(withId(R.id.server_connection_dialog_layout))
@@ -96,7 +96,7 @@ class ParkingBrakeStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @After
     fun stopEngine() {
-        if (isEngineStarted) {
+        if (isEngineStarted()) {
             onView(withId(R.id.engineStartStop_imageView))
                 .perform(longClick())
         }

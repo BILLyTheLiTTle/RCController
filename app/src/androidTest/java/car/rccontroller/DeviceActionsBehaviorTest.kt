@@ -13,7 +13,7 @@ import org.hamcrest.Matchers.*
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
 import androidx.test.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
-import car.rccontroller.network.isEngineStarted
+import car.rccontroller.network.cockpit.*
 import junit.framework.Assert
 import org.junit.Before
 import org.junit.BeforeClass
@@ -76,10 +76,10 @@ class DeviceActionsBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @Before
     fun startEngine() {
-        if (isEngineStarted) {
+        /*if (isEngineStarted()) {
             onView(withId(R.id.engineStartStop_imageView))
                 .perform(longClick())
-        }
+        }*/
         onView(withId(R.id.engineStartStop_imageView))
             .perform(longClick())
         onView(withId(R.id.server_connection_dialog_layout))
@@ -90,7 +90,7 @@ class DeviceActionsBehaviorTest: RCControllerActivityBehaviorTestImpl() {
 
     @After
     fun stopEngine() {
-        if (isEngineStarted) {
+        if (isEngineStarted()) {
             onView(withId(R.id.engineStartStop_imageView))
                 .perform(longClick())
         }

@@ -8,7 +8,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.MediumTest
 import androidx.test.runner.AndroidJUnit4
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
-import car.rccontroller.network.*
+import car.rccontroller.network.cockpit.isEngineStarted
 import org.hamcrest.Matchers.*
 import org.junit.After
 import org.junit.Before
@@ -78,10 +78,10 @@ class HandlingAssistanceStatesBehaviorTest: RCControllerActivityBehaviorTestImpl
 
     @Before
     fun startEngine() {
-        if (isEngineStarted) {
+        /*if (isEngineStarted()) {
             onView(withId(R.id.engineStartStop_imageView))
                 .perform(longClick())
-        }
+        }*/
         onView(withId(R.id.engineStartStop_imageView))
             .perform(longClick())
         onView(withId(R.id.server_connection_dialog_layout))
@@ -92,7 +92,7 @@ class HandlingAssistanceStatesBehaviorTest: RCControllerActivityBehaviorTestImpl
 
     @After
     fun stopEngine() {
-        if (isEngineStarted) {
+        if (isEngineStarted()) {
             onView(withId(R.id.engineStartStop_imageView))
                 .perform(longClick())
         }

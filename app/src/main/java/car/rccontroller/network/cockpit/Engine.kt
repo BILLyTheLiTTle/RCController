@@ -25,10 +25,11 @@ interface Engine {
 
 private val api: Engine by lazy { retrofit.create<Engine>(Engine::class.java) }
 
-val isEngineStarted: Boolean
-    get() = runBlockingRequest { api.getEngineState() } == true
+fun isEngineStarted(retrofitApi: Engine = api): Boolean {
+    return runBlockingRequest { retrofitApi.getEngineState() } == true
+}
 
-fun startEngine(context: RCControllerActivity?, serverIp: String?, serverPort: Int?): String{
+fun startEngine(retrofitApi: Engine = api, context: RCControllerActivity?, serverIp: String?, serverPort: Int?): String{
     //reset and get ready for new requests
     if(context != null) {
         throttleBrakeActionId = context.resources.getInteger(R.integer.default_throttleBrakeActionId).toLong()
@@ -57,15 +58,15 @@ fun startEngine(context: RCControllerActivity?, serverIp: String?, serverPort: I
 
     //TODO add the nanohttp ip and port when needed as argument to the handshake
     return runBlockingRequest {
-        api.startEngine(
+        retrofitApi.startEngine(
             if (sensorFeedbackServer != null) sensorFeedbackServer!!.ip else myIP,
             if (sensorFeedbackServer != null) sensorFeedbackServer!!.port else sensorFeedbackServerPort
         )
     } ?: EMPTY_STRING
 }
 
-fun stopEngine(): String {
-    val msg = runBlockingRequest { api.stopEngine() } ?: EMPTY_STRING
+fun stopEngine(retrofitApi: Engine = api): String {
+    val msg = runBlockingRequest { retrofitApi.stopEngine() } ?: EMPTY_STRING
 
     if(msg == OK_STRING) {
         raspiServerIP = null

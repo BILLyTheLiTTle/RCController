@@ -6,7 +6,7 @@ import org.hamcrest.CoreMatchers.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
-import car.rccontroller.network.doBlockingRequest
+import car.rccontroller.network.runBlockingRequest
 
 @RunWith(MockitoJUnitRunner::class)
 class SensorFeedbackServerTest {
@@ -19,12 +19,12 @@ class SensorFeedbackServerTest {
     ////////
     @Test
     fun `validate no option in serve`() {
-        val ret = doBlockingRequest("http://$ip:$port")
+        val ret = runBlockingRequest("http://$ip:$port")
         assertThat(ret, `is`(SensorFeedbackServer.formatResponse("ERROR SERVE", EMPTY_STRING)))
     }
     // temperature - motors
     private fun doTempRequest(hardware: String = "", warning: String = "") =
-        doBlockingRequest(
+        runBlockingRequest(
             "http://" +
             "$ip:$port" +
             SensorFeedbackServer.TEMP_URI +
@@ -369,7 +369,7 @@ class SensorFeedbackServerTest {
     // for speed
     @Test
     fun `validate speed`() {
-        val ret = doBlockingRequest(
+        val ret = runBlockingRequest(
             "http://" +
                     "$ip:$port" +
                     SensorFeedbackServer.SPEED_URI +
@@ -383,7 +383,7 @@ class SensorFeedbackServerTest {
     }
     // for ecu modules
     private fun doEcuRequest(hardware: String = "", value: String = "") =
-        doBlockingRequest(
+        runBlockingRequest(
             "http://" +
                     "$ip:$port" +
                     SensorFeedbackServer.ECU_URI +

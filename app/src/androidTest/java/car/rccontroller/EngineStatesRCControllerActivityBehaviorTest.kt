@@ -11,10 +11,10 @@ import androidx.test.runner.AndroidJUnit4
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.hamcrest.Matchers.*
-import car.rccontroller.network.isEngineStarted
 import android.net.wifi.WifiManager
 import androidx.test.InstrumentationRegistry
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
+import car.rccontroller.network.cockpit.isEngineStarted
 import org.junit.After
 
 
@@ -24,7 +24,7 @@ class EngineStatesRCControllerActivityBehaviorTest: RCControllerActivityBehavior
 
     @Test
     fun showDialog_onEngineStart() {
-        if (isEngineStarted) {
+        if (isEngineStarted()) {
             onView(withId(R.id.engineStartStop_imageView))
                     .perform(longClick())
         }
@@ -36,10 +36,10 @@ class EngineStatesRCControllerActivityBehaviorTest: RCControllerActivityBehavior
 
     @Test
     fun startEngineFromDialog() {
-        if (isEngineStarted) {
+        /*if (isEngineStarted()) {
             onView(withId(R.id.engineStartStop_imageView))
                     .perform(longClick())
-        }
+        }*/
         onView(withId(R.id.engineStartStop_imageView))
                 .perform(longClick())
         onView(withId(R.id.server_connection_dialog_layout))
@@ -197,7 +197,7 @@ class EngineStatesRCControllerActivityBehaviorTest: RCControllerActivityBehavior
 
     @Test
     fun stopEngine() {
-        if (!isEngineStarted) {
+        if (!isEngineStarted()) {
             onView(withId(R.id.engineStartStop_imageView))
                 .perform(longClick())
             onView(withId(R.id.server_connection_dialog_layout))
@@ -312,7 +312,7 @@ class EngineStatesRCControllerActivityBehaviorTest: RCControllerActivityBehavior
 
     @After
     fun stopEngineAlways() {
-        if (isEngineStarted) {
+        if (isEngineStarted()) {
             onView(withId(R.id.engineStartStop_imageView))
                 .perform(longClick())
         }
