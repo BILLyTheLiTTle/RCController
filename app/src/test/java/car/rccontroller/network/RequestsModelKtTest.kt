@@ -18,7 +18,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 
 @RunWith(MockitoJUnitRunner::class)
-class RequestsBackboneKtTest {
+class RequestsModelKtTest {
 
     @Mock
     private var mockedActivity: RCControllerActivity? = null
@@ -248,6 +248,19 @@ class RequestsBackboneKtTest {
     fun `validate that handling assistance is set to full`(){
         handlingAssistanceState = ASSISTANCE_FULL
         assertThat(handlingAssistanceState, `is`(ASSISTANCE_FULL))
+    }
+
+    // Reverse Lights
+    @Test
+    fun `validate that reverse is activated`() {
+        setReverseIntention (true)
+        assertThat(getReverseIntention(), `is`(true))
+    }
+
+    @Test
+    fun `validate that reverse is deactivated`() {
+        setReverseIntention (false)
+        assertThat(getReverseIntention(), `is`(false))
     }
 
     // Speed limiter

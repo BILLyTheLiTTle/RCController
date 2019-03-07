@@ -1,10 +1,8 @@
 package car.rccontroller.network.cockpit
 
-import car.rccontroller.network.launchRequest
-import car.rccontroller.network.raspiServerIP
-import car.rccontroller.network.raspiServerPort
-import car.rccontroller.network.runBlockingRequest
+import car.rccontroller.network.*
 import car.rccontroller.retrofit
+import kotlinx.coroutines.Job
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -13,7 +11,7 @@ interface ThrottleBrake {
     @GET("/set_throttle_brake_system")
     fun setThrottleBrakeAction(@Query("id") id: Long,
                                @Query("action") action: String,
-                               @Query("value") value: Int): Call<String>
+                               @Query("value") value: Int = 0): Call<String>
 
     @GET("/get_parking_brake_state")
     fun getParkingBrakeState(): Call<Boolean>
@@ -41,62 +39,44 @@ fun isParkingBrakeActive(retrofitApi: ThrottleBrake = api): Boolean {
     return runBlockingRequest { retrofitApi.getParkingBrakeState() } == true
 }
 
-fun activateParkingBrake(state: Boolean) = if (state)
-    runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
-            "set_throttle_brake_system?" +
-            "id=${throttleBrakeActionId++}" +
-            "&action=$ACTION_PARKING_BRAKE" +
-            "&value=100")
-else
-    runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
-            "set_throttle_brake_system?" +
-            "id=${throttleBrakeActionId++}" +
-            "&action=$ACTION_PARKING_BRAKE" +
-            "&value=0")
+fun activateParkingBrake(retrofitApi: ThrottleBrake = api, state: Boolean): String {
+    return runBlockingRequest {
+        if (state)
+            retrofitApi.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_PARKING_BRAKE, 100)
+        else
+            retrofitApi.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_PARKING_BRAKE, 0)
+    } ?: EMPTY_STRING
+}
 
 //---- Handbrake ----
-val isHandbrakeActive: Boolean
-    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
-            "get_handbrake_state").toBoolean()
+fun isHandbrakeActive(retrofitApi: ThrottleBrake = api): Boolean {
+    return runBlockingRequest { retrofitApi.getHandbrakeState() } == true
+}
 
-fun activateHandbrake(state: Boolean) = if (state)
-    launchRequest("http://$raspiServerIP:$raspiServerPort/" +
-            "set_throttle_brake_system?" +
-            "id=${throttleBrakeActionId++}" +
-            "&action=$ACTION_HANDBRAKE" +
-            "&value=100")
-else
-    launchRequest("http://$raspiServerIP:$raspiServerPort/" +
-            "set_throttle_brake_system?" +
-            "id=${throttleBrakeActionId++}" +
-            "&action=$ACTION_HANDBRAKE" +
-            "&value=0")
-
-//---- Throttle / Brake / Neutral / Reverse ----
-var reverseIntention: Boolean
-    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
-            "get_reverse_lights_state").toBoolean()
-    set(value) {
-        runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
-                "set_reverse_lights_state?" +
-                "state=$value")
+fun activateHandbrake(retrofitApi: ThrottleBrake = api, state: Boolean): Job? {
+    return launchRequest {
+        if (state)
+            retrofitApi.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_HANDBRAKE, 100)
+        else
+            retrofitApi.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_HANDBRAKE, 0)
     }
+}
 
-val motionState: String
-    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
-            "get_motion_state")
+//---- Throttle / Brake / Neutral ----
+fun  getMotionState(retrofitApi: ThrottleBrake = api): String {
+    return runBlockingRequest {
+        retrofitApi.getMotionState()
+    } ?: EMPTY_STRING
+}
 
-fun setNeutral() = launchRequest("http://$raspiServerIP:$raspiServerPort/" +
-        "set_throttle_brake_system?id=${throttleBrakeActionId++}&action=$ACTION_NEUTRAL")
+fun setNeutral(retrofitApi: ThrottleBrake = api): Job? {
+    return launchRequest { retrofitApi.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_NEUTRAL) }
+}
 
-fun setBrakingStill() = launchRequest("http://$raspiServerIP:$raspiServerPort/" +
-        "set_throttle_brake_system?" +
-        "id=${throttleBrakeActionId++}" +
-        "&action=$ACTION_BRAKING_STILL")
+fun setBrakingStill(retrofitApi: ThrottleBrake = api): Job? {
+    return launchRequest { retrofitApi.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_BRAKING_STILL) }
+}
 
-fun setThrottleBrake(direction: String, value: Int) =
-    launchRequest("http://$raspiServerIP:$raspiServerPort/" +
-            "set_throttle_brake_system?" +
-            "id=${throttleBrakeActionId++}" +
-            "&action=$direction" +
-            "&value=$value")
+fun setThrottleBrake(retrofitApi: ThrottleBrake = api, direction: String, value: Int): Job? {
+    return launchRequest { retrofitApi.setThrottleBrakeAction(throttleBrakeActionId++, direction, value) }
+}

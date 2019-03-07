@@ -67,13 +67,13 @@ class ThrottleBrakeKtTest {
     // Parking brake
     @Test
     fun `validate that parking brake is activated`() {
-        activateParkingBrake(true)
+        activateParkingBrake(throttleBrakeApi, true)
         assertThat(isParkingBrakeActive(throttleBrakeApi), `is`(true))
     }
 
     @Test
     fun `validate that parking brake is deactivated`() {
-        activateParkingBrake(false)
+        activateParkingBrake(throttleBrakeApi, false)
         assertThat(isParkingBrakeActive(throttleBrakeApi), `is`(false))
     }
 
@@ -81,64 +81,51 @@ class ThrottleBrakeKtTest {
     @Test
     fun `validate that handbrake is activated`() {
         runBlocking {
-            activateHandbrake(true).join()
+            activateHandbrake(throttleBrakeApi, true)?.join()
         }
-        assertThat(isHandbrakeActive, `is`(true))
+        assertThat(isHandbrakeActive(throttleBrakeApi), `is`(true))
     }
 
     @Test
     fun `validate that handbrake is deactivated`() {
         runBlocking {
-            activateHandbrake(false).join()
+            activateHandbrake(throttleBrakeApi, false)?.join()
         }
-        assertThat(isHandbrakeActive, `is`(false))
-    }
-
-    // Reverse
-    @Test
-    fun `validate that reverse is activated`() {
-        reverseIntention = true
-        assertThat(reverseIntention, `is`(true))
-    }
-
-    @Test
-    fun `validate that reverse is deactivated`() {
-        reverseIntention = false
-        assertThat(reverseIntention, `is`(false))
+        assertThat(isHandbrakeActive(throttleBrakeApi), `is`(false))
     }
 
     // Neutral
     @Test
     fun `validate that car is in neutral`() {
         runBlocking {
-            setNeutral().join()
+            setNeutral(throttleBrakeApi)?.join()
         }
-        assertThat(motionState, `is`(ACTION_NEUTRAL))
+        assertThat(getMotionState(throttleBrakeApi), `is`(ACTION_NEUTRAL))
     }
 
     // Braking still
     @Test
     fun `validate that car is braking still`() {
         runBlocking {
-            setBrakingStill().join()
+            setBrakingStill(throttleBrakeApi)?.join()
         }
-        assertThat(motionState, `is`(ACTION_BRAKING_STILL))
+        assertThat(getMotionState(throttleBrakeApi), `is`(ACTION_BRAKING_STILL))
     }
 
     // Throttle -n- Brake
     @Test
     fun `validate that car is throttling forward or braking`() {
         runBlocking {
-            setThrottleBrake(ACTION_MOVE_FORWARD, 60).join()
+            setThrottleBrake(throttleBrakeApi, ACTION_MOVE_FORWARD, 60)?.join()
         }
-        assertThat(motionState, `is`(ACTION_MOVE_FORWARD))
+        assertThat(getMotionState(throttleBrakeApi), `is`(ACTION_MOVE_FORWARD))
     }
 
     @Test
     fun `validate that car is throttling backward or braking`() {
         runBlocking {
-            setThrottleBrake(ACTION_MOVE_BACKWARD, 40).join()
+            setThrottleBrake(throttleBrakeApi, ACTION_MOVE_BACKWARD, 40)?.join()
         }
-        assertThat(motionState, `is`(ACTION_MOVE_BACKWARD))
+        assertThat(getMotionState(throttleBrakeApi), `is`(ACTION_MOVE_BACKWARD))
     }
 }

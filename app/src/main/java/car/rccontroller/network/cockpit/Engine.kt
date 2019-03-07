@@ -40,7 +40,7 @@ fun startEngine(retrofitApi: Engine = api, context: RCControllerActivity?, serve
         backward in the next throttle action. The default state for this “ImageView” will be
         false (means not backward). So, this local variable must be reset at every start.
      */
-    reverseIntention = false
+    setReverseIntention(false)
 
     raspiServerIP = serverIp
     raspiServerPort = serverPort

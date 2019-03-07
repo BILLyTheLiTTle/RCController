@@ -24,8 +24,9 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 val RUN_ON_EMULATOR = Build.FINGERPRINT.contains("generic")
 lateinit var retrofit: Retrofit
+
 /**
- * An full-screen activity in landscape mode.
+ * A full-screen activity in landscape mode.
  */
 class RCControllerActivity : AppCompatActivity() {
 
@@ -39,11 +40,11 @@ class RCControllerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // declare local function
         fun throttle(progress: Int){
-            val direction = if (reverseIntention) ACTION_MOVE_BACKWARD else ACTION_MOVE_FORWARD
+            val direction = if (getReverseIntention()) ACTION_MOVE_BACKWARD else ACTION_MOVE_FORWARD
             when (progress) {
                 0 -> setBrakingStill()
                 10 -> setNeutral()
-                20, 40, 50, 65, 75, 80, 85, 90, 95, 100 -> setThrottleBrake(direction, progress)
+                20, 40, 50, 65, 75, 80, 85, 90, 95, 100 -> setThrottleBrake(direction = direction, value = progress)
             }
         }
 
@@ -105,7 +106,7 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
-                    val status = activateParkingBrake(!isParkingBrakeActive())
+                    val status = activateParkingBrake(state = !isParkingBrakeActive())
                     if (status == OK_STRING) {
                         updateMotionUIItems()
                     } else {
@@ -131,12 +132,12 @@ class RCControllerActivity : AppCompatActivity() {
                        I use the serverIp because I did not want to use a blocking network request. */
                     if(raspiServerIP != null) {
                         handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_on)
-                        activateHandbrake(true)
+                        activateHandbrake(state = true)
                     }
                 } else if (event.action == android.view.MotionEvent.ACTION_UP) {
                     if(raspiServerIP != null) {
                         handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_off)
-                        activateHandbrake(false)
+                        activateHandbrake(state = false)
                         // re-throttle automatically to start moving the rear wheels again
                         throttle(throttleNbrake_mySeekBar.progress)
                     }
@@ -158,14 +159,14 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
-                    if (motionState == ACTION_NEUTRAL) {
-                        reverseIntention = !reverseIntention
+                    if (getMotionState() == ACTION_NEUTRAL) {
+                        setReverseIntention(!getReverseIntention())
                     }
                     else {
                         Toast.makeText(context, getString(R.string.reverse_warning), Toast.LENGTH_SHORT).show()
                     }
                 }
-                if (reverseIntention)
+                if (getReverseIntention())
                     reverse_imageView.setImageResourceWithTag(R.drawable.reverse_on)
                 else
                     reverse_imageView.setImageResourceWithTag(R.drawable.reverse_off)
@@ -608,8 +609,8 @@ class RCControllerActivity : AppCompatActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar) {
                 cruiseControlActive = false
 
-                activateHandbrake(false)
-                activateParkingBrake(false)
+                activateHandbrake(state = false)
+                activateParkingBrake(state = false)
                 /* It would be better to let the car be at braking still status than neutral
                     because the car may be stopped in uphill or downhill and could slide down
                     when the user touches the slider.
@@ -680,7 +681,7 @@ class RCControllerActivity : AppCompatActivity() {
             throttleNbrake_mySeekBar.progress = resources.
                 getInteger(R.integer.default_throttle_n_brake)
 
-            if (reverseIntention)
+            if (getReverseIntention())
                 reverse_imageView.setImageResourceWithTag(R.drawable.reverse_on)
             else
                 reverse_imageView.setImageResourceWithTag(R.drawable.reverse_off)
@@ -744,7 +745,7 @@ class RCControllerActivity : AppCompatActivity() {
         else
             parkingBrake_imageView.setImageResourceWithTag(R.drawable.parking_brake_off)
 
-        if(isHandbrakeActive)
+        if(isHandbrakeActive())
             handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_on)
         else
             handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_off)
@@ -1140,7 +1141,7 @@ class RCControllerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        val status = activateParkingBrake(true)
+        val status = activateParkingBrake(state = true)
         if(status == OK_STRING)
             parkingBrake_imageView.setImageResourceWithTag(R.drawable.parking_brake_on)
     }

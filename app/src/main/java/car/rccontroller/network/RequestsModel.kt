@@ -1,5 +1,10 @@
 package car.rccontroller.network
 
+/*
+This file is designed to store and manage network-related data,
+somehow like the ViewModel class is designed to store and manage UI-related data
+ */
+
 import android.content.Context
 import java.io.BufferedReader
 import java.io.IOException
@@ -93,6 +98,19 @@ var emergencyLights: Boolean
     get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
             "get_emergency_lights_state").toBoolean()
 
+/////////
+// Reverse Lights
+/////////
+fun setReverseIntention(value: Boolean): String {
+    return runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
+            "set_reverse_lights_state?" +
+            "state=$value")
+}
+
+fun getReverseIntention(): Boolean {
+    return runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
+            "get_reverse_lights_state").toBoolean()
+}
 
 /////////
 // Handling Assistance
@@ -172,6 +190,13 @@ var currentRearDifferentialSlipperyLimiter: Int?
 fun launchRequest(url:String) = CoroutineScope(Dispatchers.IO).launch { doRequest(url) }
 
 fun runBlockingRequest(url:String) = runBlocking(Dispatchers.IO) { doRequest(url) }
+
+fun <T> launchRequest(block:() -> Call<T>): Job? {
+    return if(areNetworkSettingsAvailable())
+        CoroutineScope(Dispatchers.IO).launch { block().execute().body() }
+    else
+        null
+}
 
 fun <T> runBlockingRequest(block:() -> Call<T>): T? {
     return if(areNetworkSettingsAvailable())
