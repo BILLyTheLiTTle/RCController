@@ -1,9 +1,7 @@
-package car.rccontroller.network
+package car.rccontroller.network.cockpit
 
 import car.rccontroller.RCControllerActivity
-import car.rccontroller.network.cockpit.*
 import junit.framework.Assert.*
-import kotlinx.coroutines.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.CoreMatchers.*
 import org.junit.After
@@ -27,7 +25,8 @@ class EngineKtTest {
     private val port = 8080
 
     private lateinit var retrofit: Retrofit
-    private lateinit var engineApi: Engine
+    private lateinit var engineAPI: Engine
+    private lateinit var electricsAPI: Electrics
 
     @Before
     fun setUp() {
@@ -36,15 +35,16 @@ class EngineKtTest {
             .baseUrl("http://$serverIp:$port/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
-        engineApi = retrofit.create<Engine>(Engine::class.java)
-        car.rccontroller.network.cockpit.startEngine(null, serverIp, port, engineApi)
-        throttleBrakeActionId = System.currentTimeMillis()
-        steeringDirectionId = System.currentTimeMillis()
+        engineAPI = retrofit.create<Engine>(Engine::class.java)
+        electricsAPI = retrofit.create<Electrics>(Electrics::class.java)
+        car.rccontroller.network.cockpit.startEngine(null, serverIp, port, engineAPI, electricsAPI)
+        //throttleBrakeActionId = System.currentTimeMillis()
+        //steeringDirectionId = System.currentTimeMillis()
     }
 
     @After
     fun tearDown() {
-        stopEngine(engineApi)
+        stopEngine(engineAPI)
     }
 
     @Test
@@ -55,12 +55,12 @@ class EngineKtTest {
     // Engine
     @Test
     fun `validate that engine has started`() {
-        assertThat(isEngineStarted(engineApi), `is`(true))
+        assertThat(isEngineStarted(engineAPI), `is`(true))
     }
     @Test
     fun `validate that engine has stopped`() {
-        stopEngine(engineApi)
-        assertThat(isEngineStarted(engineApi), `is`(false))
+        stopEngine(engineAPI)
+        assertThat(isEngineStarted(engineAPI), `is`(false))
     }
 
     /*@Test

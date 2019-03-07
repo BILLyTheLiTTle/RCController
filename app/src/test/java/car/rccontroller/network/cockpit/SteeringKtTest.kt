@@ -1,7 +1,7 @@
-package car.rccontroller.network
+package car.rccontroller.network.cockpit
 
 import car.rccontroller.RCControllerActivity
-import car.rccontroller.network.cockpit.*
+import car.rccontroller.electricsAPI
 import junit.framework.Assert.*
 import kotlinx.coroutines.*
 import org.hamcrest.MatcherAssert.assertThat
@@ -27,8 +27,9 @@ class SteeringKtTest {
     private val port = 8080
 
     private lateinit var retrofit: Retrofit
-    private lateinit var engineApi: Engine
-    private lateinit var steeringApi: Steering
+    private lateinit var engineAPI: Engine
+    private lateinit var electricsAPI: Electrics
+    private lateinit var steeringAPI: Steering
 
     @Before
     fun setUp() {
@@ -37,16 +38,17 @@ class SteeringKtTest {
             .baseUrl("http://$serverIp:$port/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
-        engineApi = retrofit.create<Engine>(Engine::class.java)
-        steeringApi = retrofit.create<Steering>(Steering::class.java)
-        car.rccontroller.network.cockpit.startEngine(null, serverIp, port, engineApi)
-        throttleBrakeActionId = System.currentTimeMillis()
+        engineAPI = retrofit.create<Engine>(Engine::class.java)
+        steeringAPI = retrofit.create<Steering>(Steering::class.java)
+        electricsAPI = retrofit.create<Electrics>(Electrics::class.java)
+        car.rccontroller.network.cockpit.startEngine(null, serverIp, port, engineAPI, electricsAPI)
+        //throttleBrakeActionId = System.currentTimeMillis()
         steeringDirectionId = System.currentTimeMillis()
     }
 
     @After
     fun tearDown() {
-        stopEngine(engineApi)
+        stopEngine(engineAPI)
     }
 
     @Test
@@ -57,29 +59,29 @@ class SteeringKtTest {
     @Test
     fun `validate that car is turning left`(){
         runBlocking {
-            setSteering(ACTION_TURN_LEFT, 20, steeringApi)?.join()
+            setSteering(ACTION_TURN_LEFT, 20, steeringAPI)?.join()
         }
-        assertThat(getSteeringDirection(steeringApi), `is`(ACTION_TURN_LEFT))
+        assertThat(getSteeringDirection(steeringAPI), `is`(ACTION_TURN_LEFT))
     }
     @Test
     fun `validate that car is turning right`(){
         runBlocking {
-            setSteering(ACTION_TURN_RIGHT, 80, steeringApi)?.join()
+            setSteering(ACTION_TURN_RIGHT, 80, steeringAPI)?.join()
         }
-        assertThat(getSteeringDirection(steeringApi), `is`(ACTION_TURN_RIGHT))
+        assertThat(getSteeringDirection(steeringAPI), `is`(ACTION_TURN_RIGHT))
     }
     @Test
     fun `validate that car is going straight with value`(){
         runBlocking {
-            setSteering(ACTION_STRAIGHT, 20, steeringApi)?.join()
+            setSteering(ACTION_STRAIGHT, 20, steeringAPI)?.join()
         }
-        assertThat(getSteeringDirection(steeringApi), `is`(ACTION_STRAIGHT))
+        assertThat(getSteeringDirection(steeringAPI), `is`(ACTION_STRAIGHT))
     }
     @Test
     fun `validate that car is going straight without value`(){
         runBlocking {
-            setSteering(ACTION_STRAIGHT, retrofitApi = steeringApi)?.join()
+            setSteering(ACTION_STRAIGHT, retrofitAPI = steeringAPI)?.join()
         }
-        assertThat(getSteeringDirection(steeringApi), `is`(ACTION_STRAIGHT))
+        assertThat(getSteeringDirection(steeringAPI), `is`(ACTION_STRAIGHT))
     }
 }

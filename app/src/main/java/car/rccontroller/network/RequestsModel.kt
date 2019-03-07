@@ -31,67 +31,6 @@ var context: RCControllerActivity? = null
 var sensorFeedbackServer: SensorFeedbackServer? = null
 
 /////////
-// Main Lights
-/////////
-const val LIGHTS_OFF = "lights_off"
-const val POSITION_LIGHTS = "position_lights"
-const val DRIVING_LIGHTS = "driving_lights"
-const val LONG_RANGE_LIGHTS = "long_range_lights"
-const val LONG_RANGE_SIGNAL_LIGHTS = "long_range_signal_lights"
-var mainLightsState: String
-    set(value) {
-        runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
-                "set_main_lights_state?" +
-                "value=$value")
-    }
-    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
-                "get_main_lights_state")
-
-
-/////////
-// Turn Lights (Left/Right/Straight)
-/////////
-const val TURN_LIGHTS_RIGHT = "turn_lights_right"
-const val TURN_LIGHTS_LEFT = "turn_lights_left"
-const val TURN_LIGHTS_STRAIGHT = "turn_lights_straight"
-var turnLights: String
-    set(value) {
-        runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
-                "set_direction_lights?" +
-                "direction=$value")
-    }
-    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
-            "get_direction_lights")
-
-
-/////////
-// Emergency Lights
-/////////
-const val EMERGENCY_LIGHTS = "emergency_lights"
-var emergencyLights: Boolean
-    set(value) {
-        runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
-                "set_emergency_lights_state?" +
-                "state=$value")
-    }
-    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
-            "get_emergency_lights_state").toBoolean()
-
-/////////
-// Reverse Lights
-/////////
-fun setReverseIntention(value: Boolean): String {
-    return runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
-            "set_reverse_lights_state?" +
-            "state=$value")
-}
-
-fun getReverseIntention(): Boolean {
-    return runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
-            "get_reverse_lights_state").toBoolean()
-}
-
-/////////
 // Handling Assistance
 /////////
 const val ASSISTANCE_NULL = EMPTY_STRING

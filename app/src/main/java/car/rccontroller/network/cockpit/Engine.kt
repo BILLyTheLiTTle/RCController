@@ -1,11 +1,8 @@
 package car.rccontroller.network.cockpit
 
-import car.rccontroller.R
-import car.rccontroller.RCControllerActivity
-import car.rccontroller.RUN_ON_EMULATOR
+import car.rccontroller.*
 import car.rccontroller.network.*
 import car.rccontroller.network.server.feedback.SensorFeedbackServer
-import car.rccontroller.retrofit
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -23,13 +20,14 @@ interface Engine {
     fun stopEngine(): Call<String>
 }
 
-private val api: Engine by lazy { retrofit.create<Engine>(Engine::class.java) }
-
-fun isEngineStarted(retrofitApi: Engine = api): Boolean {
-    return runBlockingRequest { retrofitApi.getEngineState() } == true
+fun isEngineStarted(retrofitAPI: Engine = engineAPI): Boolean {
+    return runBlockingRequest { retrofitAPI.getEngineState() } == true
 }
 
-fun startEngine(context: RCControllerActivity?, serverIp: String?, serverPort: Int?, retrofitApi: Engine = api): String{
+fun startEngine(context: RCControllerActivity?,
+                serverIp: String?, serverPort: Int?,
+                retrofitEngineAPI: Engine = engineAPI, retrofitElectricsAPI: Electrics = electricsAPI
+): String{
     //reset and get ready for new requests
     if(context != null) {
         throttleBrakeActionId = context.resources.getInteger(R.integer.default_throttleBrakeActionId).toLong()
@@ -40,7 +38,7 @@ fun startEngine(context: RCControllerActivity?, serverIp: String?, serverPort: I
         backward in the next throttle action. The default state for this “ImageView” will be
         false (means not backward). So, this local variable must be reset at every start.
      */
-    setReverseIntention(false)
+    setReverseIntention(false, retrofitElectricsAPI)
 
     raspiServerIP = serverIp
     raspiServerPort = serverPort
@@ -58,15 +56,15 @@ fun startEngine(context: RCControllerActivity?, serverIp: String?, serverPort: I
 
     //TODO add the nanohttp ip and port when needed as argument to the handshake
     return runBlockingRequest {
-        retrofitApi.startEngine(
+        retrofitEngineAPI.startEngine(
             if (sensorFeedbackServer != null) sensorFeedbackServer!!.ip else myIP,
             if (sensorFeedbackServer != null) sensorFeedbackServer!!.port else sensorFeedbackServerPort
         )
     } ?: EMPTY_STRING
 }
 
-fun stopEngine(retrofitApi: Engine = api): String {
-    val msg = runBlockingRequest { retrofitApi.stopEngine() } ?: EMPTY_STRING
+fun stopEngine(retrofitAPI: Engine = engineAPI): String {
+    val msg = runBlockingRequest { retrofitAPI.stopEngine() } ?: EMPTY_STRING
 
     if(msg == OK_STRING) {
         raspiServerIP = null

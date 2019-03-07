@@ -2,6 +2,7 @@ package car.rccontroller.network.cockpit
 
 import car.rccontroller.network.*
 import car.rccontroller.retrofit
+import car.rccontroller.steeringAPI
 import kotlinx.coroutines.Job
 import retrofit2.Call
 import retrofit2.http.GET
@@ -17,17 +18,17 @@ interface Steering {
     fun getSteeringDirection(): Call<String>
 }
 
-private val api: Steering by lazy { retrofit.create<Steering>(Steering::class.java) }
+
 
 const val ACTION_TURN_RIGHT = "right"
 const val ACTION_TURN_LEFT = "left"
 const val ACTION_STRAIGHT = "straight"
 // Initial value should be 0 cuz in server is -1
 var steeringDirectionId = 0L
-fun getSteeringDirection(retrofitApi: Steering = api): String {
-    return runBlockingRequest { retrofitApi.getSteeringDirection() } ?: EMPTY_STRING
+fun getSteeringDirection(retrofitAPI: Steering = steeringAPI): String {
+    return runBlockingRequest { retrofitAPI.getSteeringDirection() } ?: EMPTY_STRING
 }
 
-fun setSteering(direction: String, value: Int = 0, retrofitApi: Steering = api): Job? {
-    return launchRequest { retrofitApi.setSteeringAction(steeringDirectionId++, direction, value) }
+fun setSteering(direction: String, value: Int = 0, retrofitAPI: Steering = steeringAPI): Job? {
+    return launchRequest { retrofitAPI.setSteeringAction(steeringDirectionId++, direction, value) }
 }

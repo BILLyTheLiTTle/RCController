@@ -2,6 +2,7 @@ package car.rccontroller.network.cockpit
 
 import car.rccontroller.network.*
 import car.rccontroller.retrofit
+import car.rccontroller.throttleBrakeAPI
 import kotlinx.coroutines.Job
 import retrofit2.Call
 import retrofit2.http.GET
@@ -23,8 +24,6 @@ interface ThrottleBrake {
     fun getMotionState(): Call<String>
 }
 
-private val api: ThrottleBrake by lazy { retrofit.create<ThrottleBrake>(ThrottleBrake::class.java) }
-
 const val ACTION_MOVE_FORWARD = "forward"
 const val ACTION_MOVE_BACKWARD = "backward"
 const val ACTION_NEUTRAL = "neutral"
@@ -35,48 +34,48 @@ const val ACTION_HANDBRAKE = "handbrake"
 var throttleBrakeActionId = 0L
 
 //---- Parking Brake ----
-fun isParkingBrakeActive(retrofitApi: ThrottleBrake = api): Boolean {
-    return runBlockingRequest { retrofitApi.getParkingBrakeState() } == true
+fun isParkingBrakeActive(retrofitAPI: ThrottleBrake = throttleBrakeAPI): Boolean {
+    return runBlockingRequest { retrofitAPI.getParkingBrakeState() } == true
 }
 
-fun activateParkingBrake(state: Boolean, retrofitApi: ThrottleBrake = api): String {
+fun activateParkingBrake(state: Boolean, retrofitAPI: ThrottleBrake = throttleBrakeAPI): String {
     return runBlockingRequest {
         if (state)
-            retrofitApi.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_PARKING_BRAKE, 100)
+            retrofitAPI.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_PARKING_BRAKE, 100)
         else
-            retrofitApi.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_PARKING_BRAKE, 0)
+            retrofitAPI.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_PARKING_BRAKE, 0)
     } ?: EMPTY_STRING
 }
 
 //---- Handbrake ----
-fun isHandbrakeActive(retrofitApi: ThrottleBrake = api): Boolean {
-    return runBlockingRequest { retrofitApi.getHandbrakeState() } == true
+fun isHandbrakeActive(retrofitAPI: ThrottleBrake = throttleBrakeAPI): Boolean {
+    return runBlockingRequest { retrofitAPI.getHandbrakeState() } == true
 }
 
-fun activateHandbrake(state: Boolean, retrofitApi: ThrottleBrake = api): Job? {
+fun activateHandbrake(state: Boolean, retrofitAPI: ThrottleBrake = throttleBrakeAPI): Job? {
     return launchRequest {
         if (state)
-            retrofitApi.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_HANDBRAKE, 100)
+            retrofitAPI.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_HANDBRAKE, 100)
         else
-            retrofitApi.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_HANDBRAKE, 0)
+            retrofitAPI.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_HANDBRAKE, 0)
     }
 }
 
 //---- Throttle / Brake / Neutral ----
-fun  getMotionState(retrofitApi: ThrottleBrake = api): String {
+fun  getMotionState(retrofitAPI: ThrottleBrake = throttleBrakeAPI): String {
     return runBlockingRequest {
-        retrofitApi.getMotionState()
+        retrofitAPI.getMotionState()
     } ?: EMPTY_STRING
 }
 
-fun setNeutral(retrofitApi: ThrottleBrake = api): Job? {
-    return launchRequest { retrofitApi.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_NEUTRAL) }
+fun setNeutral(retrofitAPI: ThrottleBrake = throttleBrakeAPI): Job? {
+    return launchRequest { retrofitAPI.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_NEUTRAL) }
 }
 
-fun setBrakingStill(retrofitApi: ThrottleBrake = api): Job? {
-    return launchRequest { retrofitApi.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_BRAKING_STILL) }
+fun setBrakingStill(retrofitAPI: ThrottleBrake = throttleBrakeAPI): Job? {
+    return launchRequest { retrofitAPI.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_BRAKING_STILL) }
 }
 
-fun setThrottleBrake(direction: String, value: Int, retrofitApi: ThrottleBrake = api): Job? {
-    return launchRequest { retrofitApi.setThrottleBrakeAction(throttleBrakeActionId++, direction, value) }
+fun setThrottleBrake(direction: String, value: Int, retrofitAPI: ThrottleBrake = throttleBrakeAPI): Job? {
+    return launchRequest { retrofitAPI.setThrottleBrakeAction(throttleBrakeActionId++, direction, value) }
 }

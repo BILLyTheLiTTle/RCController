@@ -24,6 +24,10 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 val RUN_ON_EMULATOR = Build.FINGERPRINT.contains("generic")
 lateinit var retrofit: Retrofit
+val engineAPI: Engine by lazy { retrofit.create<Engine>(Engine::class.java) }
+val throttleBrakeAPI: ThrottleBrake by lazy { retrofit.create<ThrottleBrake>(ThrottleBrake::class.java) }
+val steeringAPI: Steering by lazy { retrofit.create<Steering>(Steering::class.java) }
+val electricsAPI: Electrics by lazy { retrofit.create<Electrics>(Electrics::class.java) }
 
 /**
  * A full-screen activity in landscape mode.
@@ -33,8 +37,8 @@ class RCControllerActivity : AppCompatActivity() {
     private var doubleBackToExitPressedOnce = false
     private var cruiseControlActive = false
 
-    private val leftTurnLightsAnimation = AnimationDrawable()
-    private val rightTurnLightsAnimation= AnimationDrawable()
+    private val leftDirectionLightsAnimation = AnimationDrawable()
+    private val rightDirectionLightsAnimation= AnimationDrawable()
     private val emergencyLightsAnimation= AnimationDrawable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -212,7 +216,7 @@ class RCControllerActivity : AppCompatActivity() {
                 override fun onDoubleTap(e: MotionEvent): Boolean {
                     // If, for any reason, engine is stopped I should not do anything
                     if(isEngineStarted()) {
-                        mainLightsState = LONG_RANGE_SIGNAL_LIGHTS
+                        setMainLightsState(LONG_RANGE_SIGNAL_LIGHTS)
                     }
                     updateMainLightsUIItems()
                     return true
@@ -220,10 +224,10 @@ class RCControllerActivity : AppCompatActivity() {
 
                 override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                     if (isEngineStarted()){
-                        when (mainLightsState) {
-                            LONG_RANGE_LIGHTS -> mainLightsState = DRIVING_LIGHTS
-                            DRIVING_LIGHTS -> mainLightsState = POSITION_LIGHTS
-                            POSITION_LIGHTS -> mainLightsState = LIGHTS_OFF
+                        when (getMainLightsState()) {
+                            LONG_RANGE_LIGHTS -> setMainLightsState(DRIVING_LIGHTS)
+                            DRIVING_LIGHTS -> setMainLightsState(POSITION_LIGHTS)
+                            POSITION_LIGHTS -> setMainLightsState(LIGHTS_OFF)
                             LIGHTS_OFF ->
                                 Toast.makeText(context,
                                     getString(R.string.lights_off_warning),
@@ -239,10 +243,10 @@ class RCControllerActivity : AppCompatActivity() {
             setOnTouchListener{_, event -> gestureDetector.onTouchEvent(event);}
             setOnLongClickListener { _ ->
                 if (isEngineStarted()){
-                    when (mainLightsState) {
-                        LIGHTS_OFF -> mainLightsState = POSITION_LIGHTS
-                        POSITION_LIGHTS -> mainLightsState = DRIVING_LIGHTS
-                        DRIVING_LIGHTS -> mainLightsState = LONG_RANGE_LIGHTS
+                    when (getMainLightsState()) {
+                        LIGHTS_OFF -> setMainLightsState(POSITION_LIGHTS)
+                        POSITION_LIGHTS -> setMainLightsState(DRIVING_LIGHTS)
+                        DRIVING_LIGHTS -> setMainLightsState(LONG_RANGE_LIGHTS)
                         LONG_RANGE_LIGHTS -> Toast.makeText(car.rccontroller.network.context,
                                 getString(R.string.long_range_lights_warning),
                                 Toast.LENGTH_SHORT).show()
@@ -257,15 +261,15 @@ class RCControllerActivity : AppCompatActivity() {
         //////
         // setup left turn lights
         //////
-        leftTurnLightsAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_off),400)
-        leftTurnLightsAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_on),400)
-        leftTurnLightsAnimation.isOneShot = false
+        leftDirectionLightsAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_off),400)
+        leftDirectionLightsAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_on),400)
+        leftDirectionLightsAnimation.isOneShot = false
         leftTurn_imageView. apply {
-            setBackgroundDrawable(leftTurnLightsAnimation)
+            setBackgroundDrawable(leftDirectionLightsAnimation)
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
-                    turnLights = TURN_LIGHTS_LEFT
+                    setDirectionLightsState(DIRECTION_LIGHTS_LEFT)
                 }
                 updateTurnLightsUIItems()
                 true
@@ -278,15 +282,15 @@ class RCControllerActivity : AppCompatActivity() {
         //////
         // setup right turn lights
         //////
-        rightTurnLightsAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_off),400)
-        rightTurnLightsAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_on),400)
-        rightTurnLightsAnimation.isOneShot = false
+        rightDirectionLightsAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_off),400)
+        rightDirectionLightsAnimation.addFrame(resources.getDrawable(R.drawable.turn_light_on),400)
+        rightDirectionLightsAnimation.isOneShot = false
         rightTurn_imageView. apply {
-            setBackgroundDrawable(rightTurnLightsAnimation)
+            setBackgroundDrawable(rightDirectionLightsAnimation)
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
-                    turnLights = TURN_LIGHTS_RIGHT
+                    setDirectionLightsState(DIRECTION_LIGHTS_RIGHT)
                 }
                 updateTurnLightsUIItems()
                 true
@@ -308,9 +312,9 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if (isEngineStarted()) {
-                    emergencyLights = !emergencyLights
+                    setEmergencyLightsState(!getEmergencyLightsState())
                 }
-                if (emergencyLights) {
+                if (getEmergencyLightsState()) {
                     emergencyLightsAnimation.start()
                 }
                 else {
@@ -686,7 +690,7 @@ class RCControllerActivity : AppCompatActivity() {
             else
                 reverse_imageView.setImageResourceWithTag(R.drawable.reverse_off)
 
-            if (emergencyLights) {
+            if (getEmergencyLightsState()) {
                 emergencyLightsAnimation.start()
             }
             else {
@@ -961,7 +965,7 @@ class RCControllerActivity : AppCompatActivity() {
         and if they don't check the set functions between client-server.
      */
     private fun updateMainLightsUIItems(){
-        when (mainLightsState) {
+        when (getMainLightsState()) {
             LONG_RANGE_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_long_range)
             DRIVING_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_driving)
             POSITION_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_position)
@@ -976,28 +980,28 @@ class RCControllerActivity : AppCompatActivity() {
         and if they don't check the set functions between client-server.
      */
     private fun updateTurnLightsUIItems() {
-        when (turnLights) {
-            TURN_LIGHTS_STRAIGHT -> {
-                leftTurnLightsAnimation.stop()
-                leftTurnLightsAnimation.selectDrawable(0)
-                rightTurnLightsAnimation.stop()
-                rightTurnLightsAnimation.selectDrawable(0)
+        when (getDirectionLightsState()) {
+            DIRECTION_LIGHTS_STRAIGHT -> {
+                leftDirectionLightsAnimation.stop()
+                leftDirectionLightsAnimation.selectDrawable(0)
+                rightDirectionLightsAnimation.stop()
+                rightDirectionLightsAnimation.selectDrawable(0)
             }
-            TURN_LIGHTS_LEFT -> {
-                rightTurnLightsAnimation.stop()
-                rightTurnLightsAnimation.selectDrawable(0)
-                leftTurnLightsAnimation.start()
+            DIRECTION_LIGHTS_LEFT -> {
+                rightDirectionLightsAnimation.stop()
+                rightDirectionLightsAnimation.selectDrawable(0)
+                leftDirectionLightsAnimation.start()
             }
-            TURN_LIGHTS_RIGHT -> {
-                leftTurnLightsAnimation.stop()
-                leftTurnLightsAnimation.selectDrawable(0)
-                rightTurnLightsAnimation.start()
+            DIRECTION_LIGHTS_RIGHT -> {
+                leftDirectionLightsAnimation.stop()
+                leftDirectionLightsAnimation.selectDrawable(0)
+                rightDirectionLightsAnimation.start()
             }
             else -> {
-                leftTurnLightsAnimation.stop()
-                leftTurnLightsAnimation.selectDrawable(1)
-                rightTurnLightsAnimation.stop()
-                rightTurnLightsAnimation.selectDrawable(1)
+                leftDirectionLightsAnimation.stop()
+                leftDirectionLightsAnimation.selectDrawable(1)
+                rightDirectionLightsAnimation.stop()
+                rightDirectionLightsAnimation.selectDrawable(1)
             }
         }
     }

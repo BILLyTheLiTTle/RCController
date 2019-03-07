@@ -28,7 +28,7 @@ class RequestsModelKtTest {
 
     private lateinit var retrofit: Retrofit
     private lateinit var engineApi: Engine
-    private lateinit var throttleBrakeApi: ThrottleBrake
+    private lateinit var electricsAPI: Electrics
 
     @Before
     fun setUp() {
@@ -38,8 +38,8 @@ class RequestsModelKtTest {
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
         engineApi = retrofit.create<Engine>(Engine::class.java)
-        throttleBrakeApi = retrofit.create<ThrottleBrake>(ThrottleBrake::class.java)
-        car.rccontroller.network.cockpit.startEngine(null, serverIp, port, engineApi)
+        electricsAPI = retrofit.create<Electrics>(Electrics::class.java)
+        car.rccontroller.network.cockpit.startEngine(null, serverIp, port, engineApi, electricsAPI)
         throttleBrakeActionId = System.currentTimeMillis()
         steeringDirectionId = System.currentTimeMillis()
     }
@@ -52,60 +52,6 @@ class RequestsModelKtTest {
     @Test
     fun sanityCheck() {
         assertNotNull(mockedActivity)
-    }
-
-    // Main Lights
-    @Test
-    fun `validate that main lights are off`(){
-        mainLightsState = LIGHTS_OFF
-        assertThat(mainLightsState, `is`(LIGHTS_OFF))
-    }
-    @Test
-    fun `validate that position lights are on`(){
-        mainLightsState = POSITION_LIGHTS
-        assertThat(mainLightsState, `is`(POSITION_LIGHTS))
-    }
-    @Test
-    fun `validate that driving lights are on`(){
-        mainLightsState = POSITION_LIGHTS
-        mainLightsState = DRIVING_LIGHTS
-        assertThat(mainLightsState, `is`(DRIVING_LIGHTS))
-    }
-    @Test
-    fun `validate that long range lights are on`(){
-        mainLightsState = POSITION_LIGHTS
-        mainLightsState = DRIVING_LIGHTS
-        mainLightsState = LONG_RANGE_LIGHTS
-        assertThat(mainLightsState, `is`(LONG_RANGE_LIGHTS))
-    }
-
-    // Turn Lights
-    @Test
-    fun `validate that turn lights are off`(){
-        turnLights = TURN_LIGHTS_STRAIGHT
-        assertThat(turnLights, `is`(TURN_LIGHTS_STRAIGHT))
-    }
-    @Test
-    fun `validate that left turn lights are on`(){
-        turnLights = TURN_LIGHTS_LEFT
-        assertThat(turnLights, `is`(TURN_LIGHTS_LEFT))
-    }
-    @Test
-    fun `validate that right turn lights are on`(){
-        turnLights = TURN_LIGHTS_RIGHT
-        assertThat(turnLights, `is`(TURN_LIGHTS_RIGHT))
-    }
-
-    // Emergency Lights
-    @Test
-    fun `validate that emergency lights are off`(){
-        emergencyLights = false
-        assertThat(emergencyLights, `is`(false))
-    }
-    @Test
-    fun `validate that emergency lights are on`(){
-        emergencyLights = true
-        assertThat(emergencyLights, `is`(true))
     }
 
     // Handling Assistance
@@ -123,19 +69,6 @@ class RequestsModelKtTest {
     fun `validate that handling assistance is set to full`(){
         handlingAssistanceState = ASSISTANCE_FULL
         assertThat(handlingAssistanceState, `is`(ASSISTANCE_FULL))
-    }
-
-    // Reverse Lights
-    @Test
-    fun `validate that reverse is activated`() {
-        setReverseIntention (true)
-        assertThat(getReverseIntention(), `is`(true))
-    }
-
-    @Test
-    fun `validate that reverse is deactivated`() {
-        setReverseIntention (false)
-        assertThat(getReverseIntention(), `is`(false))
     }
 
     // Speed limiter
