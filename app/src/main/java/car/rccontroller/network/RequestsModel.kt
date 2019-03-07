@@ -30,27 +30,6 @@ var context: RCControllerActivity? = null
 
 var sensorFeedbackServer: SensorFeedbackServer? = null
 
-
-/////////
-// Steering
-/////////
-const val ACTION_TURN_RIGHT = "right"
-const val ACTION_TURN_LEFT = "left"
-const val ACTION_STRAIGHT = "straight"
-// Initial value should be 0 cuz in server is -1
-var steeringDirectionId = 0L
-val steeringDirection
-    get() = runBlockingRequest("http://$raspiServerIP:$raspiServerPort/" +
-            "get_steering_direction")
-
-fun setSteering(direction: String, value: Int = 0) =
-    launchRequest("http://$raspiServerIP:$raspiServerPort/" +
-            "set_steering_system?" +
-            "id=${steeringDirectionId++}" +
-            "&direction=$direction" +
-            "&value=$value")
-
-
 /////////
 // Main Lights
 /////////

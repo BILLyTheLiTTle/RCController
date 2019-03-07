@@ -39,7 +39,7 @@ fun isParkingBrakeActive(retrofitApi: ThrottleBrake = api): Boolean {
     return runBlockingRequest { retrofitApi.getParkingBrakeState() } == true
 }
 
-fun activateParkingBrake(retrofitApi: ThrottleBrake = api, state: Boolean): String {
+fun activateParkingBrake(state: Boolean, retrofitApi: ThrottleBrake = api): String {
     return runBlockingRequest {
         if (state)
             retrofitApi.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_PARKING_BRAKE, 100)
@@ -53,7 +53,7 @@ fun isHandbrakeActive(retrofitApi: ThrottleBrake = api): Boolean {
     return runBlockingRequest { retrofitApi.getHandbrakeState() } == true
 }
 
-fun activateHandbrake(retrofitApi: ThrottleBrake = api, state: Boolean): Job? {
+fun activateHandbrake(state: Boolean, retrofitApi: ThrottleBrake = api): Job? {
     return launchRequest {
         if (state)
             retrofitApi.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_HANDBRAKE, 100)
@@ -77,6 +77,6 @@ fun setBrakingStill(retrofitApi: ThrottleBrake = api): Job? {
     return launchRequest { retrofitApi.setThrottleBrakeAction(throttleBrakeActionId++, ACTION_BRAKING_STILL) }
 }
 
-fun setThrottleBrake(retrofitApi: ThrottleBrake = api, direction: String, value: Int): Job? {
+fun setThrottleBrake(direction: String, value: Int, retrofitApi: ThrottleBrake = api): Job? {
     return launchRequest { retrofitApi.setThrottleBrakeAction(throttleBrakeActionId++, direction, value) }
 }

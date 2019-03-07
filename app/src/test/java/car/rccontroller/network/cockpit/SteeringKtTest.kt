@@ -18,7 +18,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 
 @RunWith(MockitoJUnitRunner::class)
-class EngineKtTest {
+class SteeringKtTest {
 
     @Mock
     private var mockedActivity: RCControllerActivity? = null
@@ -28,6 +28,7 @@ class EngineKtTest {
 
     private lateinit var retrofit: Retrofit
     private lateinit var engineApi: Engine
+    private lateinit var steeringApi: Steering
 
     @Before
     fun setUp() {
@@ -37,6 +38,7 @@ class EngineKtTest {
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
         engineApi = retrofit.create<Engine>(Engine::class.java)
+        steeringApi = retrofit.create<Steering>(Steering::class.java)
         car.rccontroller.network.cockpit.startEngine(null, serverIp, port, engineApi)
         throttleBrakeActionId = System.currentTimeMillis()
         steeringDirectionId = System.currentTimeMillis()
@@ -52,25 +54,32 @@ class EngineKtTest {
         assertNotNull(mockedActivity)
     }
 
-    // Engine
     @Test
-    fun `validate that engine has started`() {
-        assertThat(isEngineStarted(engineApi), `is`(true))
+    fun `validate that car is turning left`(){
+        runBlocking {
+            setSteering(ACTION_TURN_LEFT, 20, steeringApi)?.join()
+        }
+        assertThat(getSteeringDirection(steeringApi), `is`(ACTION_TURN_LEFT))
     }
     @Test
-    fun `validate that engine has stopped`() {
-        stopEngine(engineApi)
-        assertThat(isEngineStarted(engineApi), `is`(false))
-    }
-
-    /*@Test
-    fun `validate that local server has started`() {
-        car.rccontroller.network.startEngine(null, "192.168.200.245", 8080)
-        assertThat(if (::sensorFeedbackServer.isInitialized) sensorFeedbackServer.isAlive else false, `is`(true))
+    fun `validate that car is turning right`(){
+        runBlocking {
+            setSteering(ACTION_TURN_RIGHT, 80, steeringApi)?.join()
+        }
+        assertThat(getSteeringDirection(steeringApi), `is`(ACTION_TURN_RIGHT))
     }
     @Test
-    fun `validate that local server has stopped`() {
-
-    }*/
+    fun `validate that car is going straight with value`(){
+        runBlocking {
+            setSteering(ACTION_STRAIGHT, 20, steeringApi)?.join()
+        }
+        assertThat(getSteeringDirection(steeringApi), `is`(ACTION_STRAIGHT))
+    }
+    @Test
+    fun `validate that car is going straight without value`(){
+        runBlocking {
+            setSteering(ACTION_STRAIGHT, retrofitApi = steeringApi)?.join()
+        }
+        assertThat(getSteeringDirection(steeringApi), `is`(ACTION_STRAIGHT))
+    }
 }
-

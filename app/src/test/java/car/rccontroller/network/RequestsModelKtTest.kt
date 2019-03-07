@@ -39,7 +39,7 @@ class RequestsModelKtTest {
             .build()
         engineApi = retrofit.create<Engine>(Engine::class.java)
         throttleBrakeApi = retrofit.create<ThrottleBrake>(ThrottleBrake::class.java)
-        car.rccontroller.network.cockpit.startEngine(engineApi, null, serverIp, port)
+        car.rccontroller.network.cockpit.startEngine(null, serverIp, port, engineApi)
         throttleBrakeActionId = System.currentTimeMillis()
         steeringDirectionId = System.currentTimeMillis()
     }
@@ -52,131 +52,6 @@ class RequestsModelKtTest {
     @Test
     fun sanityCheck() {
         assertNotNull(mockedActivity)
-    }
-
-    // Engine
-    /*@Test
-    fun `validate that engine has started`() {
-        assertThat(isEngineStarted(engineApi), `is`(true))
-    }
-    @Test
-    fun `validate that engine has stopped`() {
-        stopEngine(engineApi)
-        assertThat(isEngineStarted(engineApi), `is`(false))
-    }
-
-    /*@Test
-    fun `validate that local server has started`() {
-        car.rccontroller.network.startEngine(null, "192.168.200.245", 8080)
-        assertThat(if (::sensorFeedbackServer.isInitialized) sensorFeedbackServer.isAlive else false, `is`(true))
-    }*/
-    @Test
-    fun `validate that local server has stopped`() {
-
-    }*/
-
-    // Parking brake
-    /*@Test
-    fun `validate that parking brake is activated`() {
-        activateParkingBrake(true)
-        assertThat(isParkingBrakeActive(throttleBrakeApi), `is`(true))
-    }
-    @Test
-    fun `validate that parking brake is deactivated`() {
-        activateParkingBrake(false)
-        assertThat(isParkingBrakeActive(throttleBrakeApi), `is`(false))
-    }
-
-    // Handbrake
-    @Test
-    fun `validate that handbrake is activated`() {
-        runBlocking {
-            activateHandbrake(true).join()
-        }
-        assertThat(isHandbrakeActive, `is`(true))
-    }
-    @Test
-    fun `validate that handbrake is deactivated`() {
-        runBlocking {
-            activateHandbrake(false).join()
-        }
-        assertThat(isHandbrakeActive, `is`(false))
-    }
-
-    // Reverse
-    @Test
-    fun `validate that reverse is activated`() {
-        reverseIntention = true
-        assertThat(reverseIntention, `is`(true))
-    }
-    @Test
-    fun `validate that reverse is deactivated`() {
-        reverseIntention = false
-        assertThat(reverseIntention, `is`(false))
-    }
-
-    // Neutral
-    @Test
-    fun `validate that car is in neutral`() {
-        runBlocking {
-            setNeutral().join()
-        }
-        assertThat(motionState, `is`(ACTION_NEUTRAL))
-    }
-
-    // Braking still
-    @Test
-    fun `validate that car is braking still`() {
-        runBlocking {
-            setBrakingStill().join()
-        }
-        assertThat(motionState, `is`(ACTION_BRAKING_STILL))
-    }
-
-    // Throttle -n- Brake
-    @Test
-    fun `validate that car is throttling forward or braking`() {
-        runBlocking {
-            setThrottleBrake(ACTION_MOVE_FORWARD, 60).join()
-        }
-        assertThat(motionState, `is`(ACTION_MOVE_FORWARD))
-    }
-    @Test
-    fun `validate that car is throttling backward or braking`() {
-        runBlocking {
-            setThrottleBrake(ACTION_MOVE_BACKWARD, 40).join()
-        }
-        assertThat(motionState, `is`(ACTION_MOVE_BACKWARD))
-    }*/
-
-    // Steering
-    @Test
-    fun `validate that car is turning left`(){
-        runBlocking {
-            car.rccontroller.network.setSteering(ACTION_TURN_LEFT, 20).join()
-        }
-        assertThat(steeringDirection, `is`(ACTION_TURN_LEFT))
-    }
-    @Test
-    fun `validate that car is turning right`(){
-        runBlocking {
-            car.rccontroller.network.setSteering(ACTION_TURN_RIGHT, 80).join()
-        }
-        assertThat(steeringDirection, `is`(ACTION_TURN_RIGHT))
-    }
-    @Test
-    fun `validate that car is going straight with value`(){
-        runBlocking {
-            car.rccontroller.network.setSteering(ACTION_STRAIGHT, 20).join()
-        }
-        assertThat(steeringDirection, `is`(ACTION_STRAIGHT))
-    }
-    @Test
-    fun `validate that car is going straight without value`(){
-        runBlocking {
-            car.rccontroller.network.setSteering(ACTION_STRAIGHT).join()
-        }
-        assertThat(steeringDirection, `is`(ACTION_STRAIGHT))
     }
 
     // Main Lights

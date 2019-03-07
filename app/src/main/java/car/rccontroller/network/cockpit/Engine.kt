@@ -29,7 +29,7 @@ fun isEngineStarted(retrofitApi: Engine = api): Boolean {
     return runBlockingRequest { retrofitApi.getEngineState() } == true
 }
 
-fun startEngine(retrofitApi: Engine = api, context: RCControllerActivity?, serverIp: String?, serverPort: Int?): String{
+fun startEngine(context: RCControllerActivity?, serverIp: String?, serverPort: Int?, retrofitApi: Engine = api): String{
     //reset and get ready for new requests
     if(context != null) {
         throttleBrakeActionId = context.resources.getInteger(R.integer.default_throttleBrakeActionId).toLong()

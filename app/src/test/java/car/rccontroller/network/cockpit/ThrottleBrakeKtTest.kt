@@ -39,7 +39,7 @@ class ThrottleBrakeKtTest {
             .build()
         engineApi = retrofit.create<Engine>(Engine::class.java)
         throttleBrakeApi = retrofit.create<ThrottleBrake>(ThrottleBrake::class.java)
-        car.rccontroller.network.cockpit.startEngine(engineApi, null, serverIp, port)
+        car.rccontroller.network.cockpit.startEngine( null, serverIp, port, engineApi)
         throttleBrakeActionId = System.currentTimeMillis()
         steeringDirectionId = System.currentTimeMillis()
     }
@@ -67,13 +67,13 @@ class ThrottleBrakeKtTest {
     // Parking brake
     @Test
     fun `validate that parking brake is activated`() {
-        activateParkingBrake(throttleBrakeApi, true)
+        activateParkingBrake(true, throttleBrakeApi)
         assertThat(isParkingBrakeActive(throttleBrakeApi), `is`(true))
     }
 
     @Test
     fun `validate that parking brake is deactivated`() {
-        activateParkingBrake(throttleBrakeApi, false)
+        activateParkingBrake(false, throttleBrakeApi)
         assertThat(isParkingBrakeActive(throttleBrakeApi), `is`(false))
     }
 
@@ -81,7 +81,7 @@ class ThrottleBrakeKtTest {
     @Test
     fun `validate that handbrake is activated`() {
         runBlocking {
-            activateHandbrake(throttleBrakeApi, true)?.join()
+            activateHandbrake(true, throttleBrakeApi)?.join()
         }
         assertThat(isHandbrakeActive(throttleBrakeApi), `is`(true))
     }
@@ -89,7 +89,7 @@ class ThrottleBrakeKtTest {
     @Test
     fun `validate that handbrake is deactivated`() {
         runBlocking {
-            activateHandbrake(throttleBrakeApi, false)?.join()
+            activateHandbrake(false, throttleBrakeApi)?.join()
         }
         assertThat(isHandbrakeActive(throttleBrakeApi), `is`(false))
     }
@@ -116,7 +116,7 @@ class ThrottleBrakeKtTest {
     @Test
     fun `validate that car is throttling forward or braking`() {
         runBlocking {
-            setThrottleBrake(throttleBrakeApi, ACTION_MOVE_FORWARD, 60)?.join()
+            setThrottleBrake(ACTION_MOVE_FORWARD, 60, throttleBrakeApi)?.join()
         }
         assertThat(getMotionState(throttleBrakeApi), `is`(ACTION_MOVE_FORWARD))
     }
@@ -124,7 +124,7 @@ class ThrottleBrakeKtTest {
     @Test
     fun `validate that car is throttling backward or braking`() {
         runBlocking {
-            setThrottleBrake(throttleBrakeApi, ACTION_MOVE_BACKWARD, 40)?.join()
+            setThrottleBrake(ACTION_MOVE_BACKWARD, 40, throttleBrakeApi)?.join()
         }
         assertThat(getMotionState(throttleBrakeApi), `is`(ACTION_MOVE_BACKWARD))
     }
