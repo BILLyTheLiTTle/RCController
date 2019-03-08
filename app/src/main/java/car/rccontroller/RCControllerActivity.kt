@@ -28,6 +28,7 @@ val engineAPI: Engine by lazy { retrofit.create<Engine>(Engine::class.java) }
 val throttleBrakeAPI: ThrottleBrake by lazy { retrofit.create<ThrottleBrake>(ThrottleBrake::class.java) }
 val steeringAPI: Steering by lazy { retrofit.create<Steering>(Steering::class.java) }
 val electricsAPI: Electrics by lazy { retrofit.create<Electrics>(Electrics::class.java) }
+val setupAPI: Setup by lazy { retrofit.create<Setup>(Setup::class.java) }
 
 /**
  * A full-screen activity in landscape mode.
@@ -336,9 +337,9 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
-                    when (handlingAssistanceState) {
-                        ASSISTANCE_NONE -> handlingAssistanceState = ASSISTANCE_WARNING
-                        ASSISTANCE_WARNING -> handlingAssistanceState = ASSISTANCE_FULL
+                    when (getHandlingAssistanceState()) {
+                        ASSISTANCE_NONE -> setHandlingAssistanceState(ASSISTANCE_WARNING)
+                        ASSISTANCE_WARNING -> setHandlingAssistanceState(ASSISTANCE_FULL)
                         ASSISTANCE_FULL ->
                             Toast.makeText(context,
                                     getString(R.string.handling_assistance_full_warning),
@@ -349,9 +350,9 @@ class RCControllerActivity : AppCompatActivity() {
                 true
             }
             setOnClickListener {_ ->
-                when (handlingAssistanceState) {
-                    ASSISTANCE_FULL -> handlingAssistanceState = ASSISTANCE_WARNING
-                    ASSISTANCE_WARNING -> handlingAssistanceState = ASSISTANCE_NONE
+                when (getHandlingAssistanceState()) {
+                    ASSISTANCE_FULL -> setHandlingAssistanceState(ASSISTANCE_WARNING)
+                    ASSISTANCE_WARNING -> setHandlingAssistanceState(ASSISTANCE_NONE)
                     ASSISTANCE_NONE ->
                         Toast.makeText(context,
                                 getString(R.string.handling_assistance_none_warning),
@@ -369,21 +370,21 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
-                    when (motorSpeedLimiter) {
+                    when (getMotorSpeedLimiter()) {
                         MOTOR_SPEED_LIMITER_NO_SPEED ->
-                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_SLOW_SPEED_1
+                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_SLOW_SPEED_1)
                         MOTOR_SPEED_LIMITER_SLOW_SPEED_1 ->
-                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_SLOW_SPEED_2
+                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_SLOW_SPEED_2)
                         MOTOR_SPEED_LIMITER_SLOW_SPEED_2 ->
-                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1
+                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1)
                         MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1 ->
-                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2
+                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2)
                         MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2 ->
-                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_FAST_SPEED_1
+                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_FAST_SPEED_1)
                         MOTOR_SPEED_LIMITER_FAST_SPEED_1 ->
-                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_FAST_SPEED_2
+                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_FAST_SPEED_2)
                         MOTOR_SPEED_LIMITER_FAST_SPEED_2 ->
-                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_FULL_SPEED
+                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_FULL_SPEED)
                         MOTOR_SPEED_LIMITER_FULL_SPEED -> Toast.
                             makeText(context,
                             getString(R.string.motor_speed_limiter_full_warning),
@@ -396,21 +397,21 @@ class RCControllerActivity : AppCompatActivity() {
             }
             setOnClickListener {_ ->
                 if(isEngineStarted()) {
-                    when (motorSpeedLimiter) {
+                    when (getMotorSpeedLimiter()) {
                         MOTOR_SPEED_LIMITER_FULL_SPEED ->
-                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_FAST_SPEED_2
+                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_FAST_SPEED_2)
                         MOTOR_SPEED_LIMITER_FAST_SPEED_2 ->
-                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_FAST_SPEED_1
+                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_FAST_SPEED_1)
                         MOTOR_SPEED_LIMITER_FAST_SPEED_1 ->
-                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2
+                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2)
                         MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2 ->
-                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1
+                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1)
                         MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1 ->
-                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_SLOW_SPEED_2
+                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_SLOW_SPEED_2)
                         MOTOR_SPEED_LIMITER_SLOW_SPEED_2 ->
-                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_SLOW_SPEED_1
+                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_SLOW_SPEED_1)
                         MOTOR_SPEED_LIMITER_SLOW_SPEED_1 ->
-                            motorSpeedLimiter = MOTOR_SPEED_LIMITER_NO_SPEED
+                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_NO_SPEED)
                         MOTOR_SPEED_LIMITER_NO_SPEED -> Toast.
                             makeText(context,
                                 getString(R.string.motor_speed_limiter_none_warning),
@@ -430,20 +431,16 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
-                    if (handlingAssistanceState != ASSISTANCE_FULL) {
-                        when (currentFrontDifferentialSlipperyLimiter) {
+                    if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
+                        when (getFrontDifferentialSlipperyLimiter()) {
                             DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED ->
-                                currentFrontDifferentialSlipperyLimiter =
-                                        DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2
+                                setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2)
                             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2 ->
-                                currentFrontDifferentialSlipperyLimiter =
-                                        DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1
+                                setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1)
                             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1 ->
-                                currentFrontDifferentialSlipperyLimiter =
-                                        DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0
+                                setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0)
                             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 ->
-                                currentFrontDifferentialSlipperyLimiter =
-                                        DIFFERENTIAL_SLIPPERY_LIMITER_OPEN
+                                setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_OPEN)
                             DIFFERENTIAL_SLIPPERY_LIMITER_OPEN -> Toast.makeText(
                                 context,
                                 getString(R.string.differential_slippery_limiter_open_warning),
@@ -451,7 +448,7 @@ class RCControllerActivity : AppCompatActivity() {
                             ).show()
                         }
                         previousFrontDifferentialSlipperyLimiter =
-                                    currentFrontDifferentialSlipperyLimiter
+                                    getFrontDifferentialSlipperyLimiter()
                     }
                     else {
                         Toast.makeText(
@@ -465,20 +462,16 @@ class RCControllerActivity : AppCompatActivity() {
             }
             setOnClickListener {_ ->
                 if(isEngineStarted()) {
-                    if (handlingAssistanceState != ASSISTANCE_FULL) {
-                        when (currentFrontDifferentialSlipperyLimiter) {
+                    if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
+                        when (getFrontDifferentialSlipperyLimiter()) {
                             DIFFERENTIAL_SLIPPERY_LIMITER_OPEN ->
-                                currentFrontDifferentialSlipperyLimiter =
-                                        DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0
+                                setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0)
                             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 ->
-                                currentFrontDifferentialSlipperyLimiter =
-                                        DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1
+                                setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1)
                             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1 ->
-                                currentFrontDifferentialSlipperyLimiter =
-                                        DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2
+                                setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2)
                             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2 ->
-                                currentFrontDifferentialSlipperyLimiter =
-                                        DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
+                                setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED)
                             DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED -> Toast.makeText(
                                 context,
                                 getString(R.string.differential_slippery_limiter_locked_warning),
@@ -486,7 +479,7 @@ class RCControllerActivity : AppCompatActivity() {
                             ).show()
                         }
                         previousFrontDifferentialSlipperyLimiter =
-                                currentFrontDifferentialSlipperyLimiter
+                                getFrontDifferentialSlipperyLimiter()
                     }
                     else {
                         Toast.makeText(
@@ -507,20 +500,16 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
-                    if (handlingAssistanceState != ASSISTANCE_FULL) {
-                        when (currentRearDifferentialSlipperyLimiter) {
+                    if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
+                        when (getRearDifferentialSlipperyLimiter()) {
                             DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED ->
-                                currentRearDifferentialSlipperyLimiter =
-                                        DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2
+                                setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2)
                             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2 ->
-                                currentRearDifferentialSlipperyLimiter =
-                                        DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1
+                                setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1)
                             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1 ->
-                                currentRearDifferentialSlipperyLimiter =
-                                        DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0
+                                setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0)
                             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 ->
-                                currentRearDifferentialSlipperyLimiter =
-                                        DIFFERENTIAL_SLIPPERY_LIMITER_OPEN
+                                setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_OPEN)
                             DIFFERENTIAL_SLIPPERY_LIMITER_OPEN -> Toast.makeText(
                                 context,
                                 getString(R.string.differential_slippery_limiter_open_warning),
@@ -528,7 +517,7 @@ class RCControllerActivity : AppCompatActivity() {
                             ).show()
                         }
                         previousRearDifferentialSlipperyLimiter =
-                                currentRearDifferentialSlipperyLimiter
+                                getRearDifferentialSlipperyLimiter()
                     }
                     else {
                         Toast.makeText(
@@ -542,20 +531,16 @@ class RCControllerActivity : AppCompatActivity() {
             }
             setOnClickListener {_ ->
                 if(isEngineStarted()) {
-                    if (handlingAssistanceState != ASSISTANCE_FULL) {
-                        when (currentRearDifferentialSlipperyLimiter) {
+                    if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
+                        when (getRearDifferentialSlipperyLimiter()) {
                             DIFFERENTIAL_SLIPPERY_LIMITER_OPEN ->
-                                currentRearDifferentialSlipperyLimiter =
-                                        DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0
+                                setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0)
                             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 ->
-                                currentRearDifferentialSlipperyLimiter =
-                                        DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1
+                                setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1)
                             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1 ->
-                                currentRearDifferentialSlipperyLimiter =
-                                        DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2
+                                setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2)
                             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2 ->
-                                currentRearDifferentialSlipperyLimiter =
-                                        DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
+                                setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED)
                             DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED -> Toast.makeText(
                                 context,
                                 getString(R.string.differential_slippery_limiter_locked_warning),
@@ -563,7 +548,7 @@ class RCControllerActivity : AppCompatActivity() {
                             ).show()
                         }
                         previousRearDifferentialSlipperyLimiter =
-                                currentRearDifferentialSlipperyLimiter
+                                getRearDifferentialSlipperyLimiter()
                     }
                     else {
                         Toast.makeText(
@@ -766,7 +751,7 @@ class RCControllerActivity : AppCompatActivity() {
         and if they don't check the set functions between client-server.
      */
     private fun updateRearDifferentialSlipperyLimiterUIItem(){
-        when (currentRearDifferentialSlipperyLimiter) {
+        when (getRearDifferentialSlipperyLimiter()) {
             DIFFERENTIAL_SLIPPERY_LIMITER_OPEN -> differential_slippery_limiter_rear_imageView.
                 setImageResourceWithTag(R.drawable.differential_rear_manual_0_open)
             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 -> differential_slippery_limiter_rear_imageView.
@@ -779,8 +764,8 @@ class RCControllerActivity : AppCompatActivity() {
                 setImageResourceWithTag(R.drawable.differential_rear_manual_4_locked)
             DIFFERENTIAL_SLIPPERY_LIMITER_AUTO -> differential_slippery_limiter_rear_imageView.
                 setImageResourceWithTag(R.drawable.differential_rear_auto)
-        //null -> differential_slippery_limiter_rear_imageView.
-        //   setImageResourceWithTag(R.drawable.differential_rear_off)
+            DIFFERENTIAL_SLIPPERY_LIMITER_ERROR -> differential_slippery_limiter_rear_imageView.
+                setImageResourceWithTag(R.drawable.differential_rear_error)
             else -> differential_slippery_limiter_rear_imageView.
                 setImageResourceWithTag(R.drawable.differential_rear_off)
         }
@@ -792,7 +777,7 @@ class RCControllerActivity : AppCompatActivity() {
         and if they don't check the set functions between client-server.
      */
     private fun updateFrontDifferentialSlipperyLimiterUIItem(){
-        when (currentFrontDifferentialSlipperyLimiter) {
+        when (getFrontDifferentialSlipperyLimiter()) {
             DIFFERENTIAL_SLIPPERY_LIMITER_OPEN -> differential_slippery_limiter_front_imageView.
                 setImageResourceWithTag(R.drawable.differential_front_manual_0_open)
             DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 -> differential_slippery_limiter_front_imageView.
@@ -805,8 +790,8 @@ class RCControllerActivity : AppCompatActivity() {
                 setImageResourceWithTag(R.drawable.differential_front_manual_4_locked)
             DIFFERENTIAL_SLIPPERY_LIMITER_AUTO -> differential_slippery_limiter_front_imageView.
                 setImageResourceWithTag(R.drawable.differential_front_auto)
-            //null -> differential_slippery_limiter_front_imageView.
-             //   setImageResourceWithTag(R.drawable.differential_front_off)
+            DIFFERENTIAL_SLIPPERY_LIMITER_ERROR -> differential_slippery_limiter_front_imageView.
+                setImageResourceWithTag(R.drawable.differential_front_error)
             else -> differential_slippery_limiter_front_imageView.
                 setImageResourceWithTag(R.drawable.differential_front_off)
         }
@@ -818,7 +803,7 @@ class RCControllerActivity : AppCompatActivity() {
         and if they don't check the set functions between client-server.
      */
     private fun updateMotorSpeedLimiterUIItem(){
-        when (motorSpeedLimiter) {
+        when (getMotorSpeedLimiter()) {
             MOTOR_SPEED_LIMITER_FULL_SPEED -> motor_speed_limiter_imageView.
                 setImageResourceWithTag(R.drawable.speed_limiter_manual_100)
             MOTOR_SPEED_LIMITER_FAST_SPEED_2 -> motor_speed_limiter_imageView.
@@ -835,8 +820,8 @@ class RCControllerActivity : AppCompatActivity() {
                 setImageResourceWithTag(R.drawable.speed_limiter_manual_020)
             MOTOR_SPEED_LIMITER_NO_SPEED -> motor_speed_limiter_imageView.
                 setImageResourceWithTag(R.drawable.speed_limiter_manual_000)
-            //null -> motor_speed_limiter_imageView.
-            //    setImageResourceWithTag(R.drawable.speed_limiter_off)
+            MOTOR_SPEED_LIMITER_ERROR_SPEED -> motor_speed_limiter_imageView.
+                setImageResourceWithTag(R.drawable.speed_limiter_error)
             else -> motor_speed_limiter_imageView.
                 setImageResourceWithTag(R.drawable.speed_limiter_off)
         }
@@ -847,15 +832,15 @@ class RCControllerActivity : AppCompatActivity() {
         This function here should get these states which must be as I want,
         and if they don't check the set functions between client-server.
 
-        Also, here are updated the ImageViews of the items, which are connected
+        Also, here update the ImageViews of the items, which are connected
         to handling assistance (ex. differential, suspension) and some of their
         functionality values.
      */
     private fun updateHandlingAssistanceUIItem(){
-        when (handlingAssistanceState) {
+        when (getHandlingAssistanceState()) {
             ASSISTANCE_FULL -> {
-                currentFrontDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_AUTO
-                currentRearDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_AUTO
+                setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_AUTO)
+                setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_AUTO)
 
                 handling_assistance_imageView.
                     setImageResourceWithTag(R.drawable.handling_assistance_full)
@@ -868,8 +853,8 @@ class RCControllerActivity : AppCompatActivity() {
                 cdmState = SensorFeedbackServer.MODULE_IDLE_STATE)
             }
             ASSISTANCE_WARNING -> {
-                currentFrontDifferentialSlipperyLimiter = previousFrontDifferentialSlipperyLimiter
-                currentRearDifferentialSlipperyLimiter = previousRearDifferentialSlipperyLimiter
+                setFrontDifferentialSlipperyLimiter(previousFrontDifferentialSlipperyLimiter)
+                setRearDifferentialSlipperyLimiter(previousRearDifferentialSlipperyLimiter)
 
                 handling_assistance_imageView.
                     setImageResourceWithTag(R.drawable.handling_assistance_warning)
@@ -882,8 +867,8 @@ class RCControllerActivity : AppCompatActivity() {
                         cdmState = SensorFeedbackServer.MODULE_IDLE_STATE)
             }
             ASSISTANCE_NONE -> {
-                currentFrontDifferentialSlipperyLimiter = previousFrontDifferentialSlipperyLimiter
-                currentRearDifferentialSlipperyLimiter = previousRearDifferentialSlipperyLimiter
+                setFrontDifferentialSlipperyLimiter(previousFrontDifferentialSlipperyLimiter)
+                setRearDifferentialSlipperyLimiter(previousRearDifferentialSlipperyLimiter)
 
                 handling_assistance_imageView.
                     setImageResourceWithTag(R.drawable.handling_assistance_manual)

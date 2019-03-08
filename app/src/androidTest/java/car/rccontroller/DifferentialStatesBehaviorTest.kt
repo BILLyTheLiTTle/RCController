@@ -151,6 +151,16 @@ class DifferentialStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() {
             .check(matches(isDisplayed()))
     }
 
+    @Test
+    fun verifyFrontDifferentialDrawableForErrorState(){
+
+    }
+
+    @Test
+    fun verifyRearDifferentialDrawableForErrorState(){
+
+    }
+
     @Before
     fun startEngine() {
         /*if (isEngineStarted()) {
