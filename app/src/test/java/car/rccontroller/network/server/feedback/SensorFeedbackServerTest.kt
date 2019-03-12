@@ -8,6 +8,7 @@ import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 import car.rccontroller.network.runBlockingRequest
 
+// Start raspi server, start the app, start the engine, close raspi server, run these tests
 @RunWith(MockitoJUnitRunner::class)
 class SensorFeedbackServerTest {
 
