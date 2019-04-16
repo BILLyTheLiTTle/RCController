@@ -34,12 +34,6 @@ fun startEngine(context: RCControllerActivity?,
         steeringDirectionId = context.resources.getInteger(R.integer.default_steeringDirectionId).toLong()
     }
 
-    /* The server will know when car is moving backward and not when the car is going to move
-        backward in the next throttle action. The default state for this “ImageView” will be
-        false (means not backward). So, this local variable must be reset at every start.
-     */
-    setReverseIntention(false, retrofitElectricsAPI)
-
     raspiServerIP = serverIp
     raspiServerPort = serverPort
     car.rccontroller.network.context = context

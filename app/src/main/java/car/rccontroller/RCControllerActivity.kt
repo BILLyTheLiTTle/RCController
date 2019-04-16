@@ -14,6 +14,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_rccontroller.*
 import car.rccontroller.network.*
 import car.rccontroller.network.cockpit.*
@@ -36,11 +38,12 @@ val setupAPI: Setup by lazy { retrofit.create<Setup>(Setup::class.java) }
 class RCControllerActivity : AppCompatActivity() {
 
     private var doubleBackToExitPressedOnce = false
-    private var cruiseControlActive = false
 
     private val leftDirectionLightsAnimation = AnimationDrawable()
     private val rightDirectionLightsAnimation= AnimationDrawable()
     private val emergencyLightsAnimation= AnimationDrawable()
+
+    private lateinit var viewModel: RCControllerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // declare local function
@@ -57,15 +60,25 @@ class RCControllerActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_rccontroller)
 
+        viewModel = ViewModelProviders.of(this).get(RCControllerViewModel::class.java)
+
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(false)
             hide()
         }
 
         // disable them from here cuz it did not work from xml
-        steering_seekBar.isEnabled = false
-        throttleNbrake_mySeekBar.isEnabled = false
+        viewModel.steeringStatusLiveData.observe(this, Observer<Boolean> {
+            steering_seekBar.isEnabled = it
+        })
+        viewModel.throttleStatusLiveData.observe(this, Observer<Boolean> {
+            throttleNbrake_mySeekBar.isEnabled = it
+        })
 
+        viewModel.speedLiveData.observe(this, Observer<String>{
+            vehicle_speed_textView.text = resources.getString(R.string.tachometer_info,
+                it, resources.getString(R.string.tachometer_unit))
+        })
 
         //////
         //setup engine start-n-stop
@@ -85,7 +98,7 @@ class RCControllerActivity : AppCompatActivity() {
                             (for example lights_off). In these situation I fall into the
                             "else" code blocks.
                          */
-                        resetUI()
+                        viewModel.engineStatusLiveData.value = false
                     } else {
                         Toast.makeText(context, "${resources.getString(R.string.error)}: $status",
                                 Toast.LENGTH_LONG).show()
@@ -103,6 +116,55 @@ class RCControllerActivity : AppCompatActivity() {
                 true
             }
         }
+
+        viewModel.engineStatusLiveData.observe(this, Observer<Boolean> {
+
+            viewModel.steeringStatusLiveData.value = it
+            steering_seekBar.progress = resources.getInteger(R.integer.default_steering)
+            viewModel.throttleStatusLiveData.value = it
+            throttleNbrake_mySeekBar.progress =
+                    resources.getInteger(R.integer.default_throttle_n_brake)
+
+            if (it) {
+                engineStartStop_imageView.setImageResourceWithTag(R.drawable.engine_started_stop_action)
+
+                // The values change at the same state as they are currently at the server.
+                viewModel.reverseStatusLiveData.value = getReverseIntention()
+                viewModel.emergencyLightsStatusLiveData.value = getEmergencyLightsState()
+                viewModel.speedLiveData.value = resources.getString(R.string.tachometer_value)
+            } else {
+                engineStartStop_imageView.setImageResourceWithTag(R.drawable.engine_stopped_start_action)
+
+                viewModel.reverseStatusLiveData.value = it
+
+                //reset the cruise control flag
+                viewModel.cruiseControlStatusLiveData.value = it
+
+                viewModel.emergencyLightsStatusLiveData.value = false
+
+                /*updateTempUIItems(
+                    rearLeftMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
+                    rearRightMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
+                    frontLeftMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
+                    frontRightMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
+                    rearHBridge = SensorFeedbackServer.WARNING_TYPE_NOTHING,
+                    frontHBridge = SensorFeedbackServer.WARNING_TYPE_NOTHING,
+                    raspberryPi = SensorFeedbackServer.WARNING_TYPE_NOTHING,
+                    batteries = SensorFeedbackServer.WARNING_TYPE_NOTHING,
+                    shiftRegisters = SensorFeedbackServer.WARNING_TYPE_NOTHING
+                )*/
+
+                viewModel.speedLiveData.value = getString(R.string.tachometer_null_value)
+            }
+
+            /*updateMotionUIItems()
+            updateMainLightsUIItems()
+            updateTurnLightsUIItems()
+            // The following function is updating some other ImageViews and more
+            updateHandlingAssistanceUIItem()
+            updateMotorSpeedLimiterUIItem()*/
+            })
+
 
         //////
         // setup parking brake
@@ -171,10 +233,7 @@ class RCControllerActivity : AppCompatActivity() {
                         Toast.makeText(context, getString(R.string.reverse_warning), Toast.LENGTH_SHORT).show()
                     }
                 }
-                if (getReverseIntention())
-                    reverse_imageView.setImageResourceWithTag(R.drawable.reverse_on)
-                else
-                    reverse_imageView.setImageResourceWithTag(R.drawable.reverse_off)
+                viewModel.reverseStatusLiveData.value = getReverseIntention()
                 true
             }
             setOnClickListener {_ ->
@@ -182,6 +241,13 @@ class RCControllerActivity : AppCompatActivity() {
                 true
             }
         }
+
+        viewModel.reverseStatusLiveData.observe(this, Observer<Boolean> {
+            if (it)
+                reverse_imageView.setImageResourceWithTag(R.drawable.reverse_on)
+            else
+                reverse_imageView.setImageResourceWithTag(R.drawable.reverse_off)
+        })
 
         //////
         // setup cruise control
@@ -190,15 +256,11 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener { _ ->
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
-                    if (cruiseControlActive) {
+                    if (viewModel.cruiseControlStatusLiveData.value == true) {
                         Toast.makeText(context, getString(R.string.cruise_control_info), Toast.LENGTH_SHORT).show()
                     }
-                    cruiseControlActive = true
+                    viewModel.cruiseControlStatusLiveData.value = true
                 }
-                if (cruiseControlActive)
-                    cruiseControl_imageView.setImageResourceWithTag(R.drawable.cruise_control_on)
-                else
-                    cruiseControl_imageView.setImageResourceWithTag(R.drawable.cruise_control_off)
 
                 true
             }
@@ -207,6 +269,12 @@ class RCControllerActivity : AppCompatActivity() {
                 true
             }
         }
+        viewModel.cruiseControlStatusLiveData.observe(this, Observer<Boolean> {
+            if (it)
+                cruiseControl_imageView.setImageResourceWithTag(R.drawable.cruise_control_on)
+            else
+                cruiseControl_imageView.setImageResourceWithTag(R.drawable.cruise_control_off)
+        })
 
 
         //////
@@ -315,13 +383,7 @@ class RCControllerActivity : AppCompatActivity() {
                 if (isEngineStarted()) {
                     setEmergencyLightsState(!getEmergencyLightsState())
                 }
-                if (getEmergencyLightsState()) {
-                    emergencyLightsAnimation.start()
-                }
-                else {
-                    emergencyLightsAnimation.stop()
-                    emergencyLightsAnimation.selectDrawable(0)
-                }
+                viewModel.emergencyLightsStatusLiveData.value = getEmergencyLightsState()
                 true
             }
             setOnClickListener {_ ->
@@ -329,6 +391,15 @@ class RCControllerActivity : AppCompatActivity() {
                 true
             }
         }
+        viewModel.emergencyLightsStatusLiveData.observe(this, Observer<Boolean> {
+            if (it) {
+                emergencyLightsAnimation.start()
+            }
+            else {
+                emergencyLightsAnimation.stop()
+                emergencyLightsAnimation.selectDrawable(0)
+            }
+        })
 
         //////
         // setup handling assistance
@@ -591,12 +662,12 @@ class RCControllerActivity : AppCompatActivity() {
 
         throttleNbrake_mySeekBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                if(!cruiseControlActive) {
+                if(viewModel.cruiseControlStatusLiveData.value == false) {
                     seekBar.progress = resources.getInteger(R.integer.default_throttle_n_brake)
                 }
             }
             override fun onStartTrackingTouch(seekBar: SeekBar) {
-                cruiseControlActive = false
+                viewModel.cruiseControlStatusLiveData.value = false
 
                 activateHandbrake( false)
                 activateParkingBrake(false)
@@ -639,8 +710,9 @@ class RCControllerActivity : AppCompatActivity() {
 
                 val status = startEngine(activity, raspiServerIP, raspiServerPort)
                 if (status == OK_STRING) {
-                    resetUI()
+                    viewModel.engineStatusLiveData.value = true
                 } else {
+                    viewModel.engineStatusLiveData.value = false
                     Toast.makeText(context, "${resources.getString(R.string.error)}: $status",
                             Toast.LENGTH_LONG).show()
                 }
@@ -650,77 +722,6 @@ class RCControllerActivity : AppCompatActivity() {
             }
             show()
         }
-    }
-
-    /* After every interaction with interactive actions all icons must get
-        their state from the server for client to be up-to-date with
-        server's data.
-
-        This function should be called for initial set-up at the beginning and
-        resetting at the end.
-     */
-    private fun resetUI(){
-        if (isEngineStarted()) {
-            engineStartStop_imageView.setImageResourceWithTag(R.drawable.engine_started_stop_action)
-
-            steering_seekBar.isEnabled = true
-            steering_seekBar.progress = resources.getInteger(R.integer.default_steering)
-
-            throttleNbrake_mySeekBar.isEnabled = true
-            throttleNbrake_mySeekBar.progress = resources.
-                getInteger(R.integer.default_throttle_n_brake)
-
-            if (getReverseIntention())
-                reverse_imageView.setImageResourceWithTag(R.drawable.reverse_on)
-            else
-                reverse_imageView.setImageResourceWithTag(R.drawable.reverse_off)
-
-            if (getEmergencyLightsState()) {
-                emergencyLightsAnimation.start()
-            }
-            else {
-                emergencyLightsAnimation.stop()
-                emergencyLightsAnimation.selectDrawable(0)
-            }
-
-            updateSpeedUIItem(resources.getString(R.string.tachometer_value))
-        }
-        else {
-            engineStartStop_imageView.setImageResourceWithTag(R.drawable.engine_stopped_start_action)
-
-            steering_seekBar.isEnabled = false
-            throttleNbrake_mySeekBar.isEnabled = false
-
-            reverse_imageView.setImageResourceWithTag(R.drawable.reverse_off)
-
-            //reset the cruise control flag
-            cruiseControlActive = false
-            cruiseControl_imageView.setImageResourceWithTag(R.drawable.cruise_control_off)
-
-            emergencyLightsAnimation.stop()
-            emergencyLightsAnimation.selectDrawable(0)
-
-            updateTempUIItems(
-                rearLeftMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
-                rearRightMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
-                frontLeftMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
-                frontRightMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
-                rearHBridge = SensorFeedbackServer.WARNING_TYPE_NOTHING,
-                frontHBridge = SensorFeedbackServer.WARNING_TYPE_NOTHING,
-                raspberryPi = SensorFeedbackServer.WARNING_TYPE_NOTHING,
-                batteries = SensorFeedbackServer.WARNING_TYPE_NOTHING,
-                shiftRegisters = SensorFeedbackServer.WARNING_TYPE_NOTHING
-            )
-
-            updateSpeedUIItem(getString(R.string.tachometer_null_value))
-        }
-
-        updateMotionUIItems()
-        updateMainLightsUIItems()
-        updateTurnLightsUIItems()
-        // The following function is updating some other ImageViews and more
-        updateHandlingAssistanceUIItem()
-        updateMotorSpeedLimiterUIItem()
     }
 
     /* Motion interactive actions must be depending on each other.
@@ -739,10 +740,10 @@ class RCControllerActivity : AppCompatActivity() {
         else
             handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_off)
 
-        if (cruiseControlActive)
+        /*if (cruiseControlActive)
             cruiseControl_imageView.setImageResourceWithTag(R.drawable.cruise_control_on)
         else
-            cruiseControl_imageView.setImageResourceWithTag(R.drawable.cruise_control_off)
+            cruiseControl_imageView.setImageResourceWithTag(R.drawable.cruise_control_off)*/
     }
 
     /* Rear differential slippery limiter interactive actions must be depending on each other.
@@ -1116,15 +1117,6 @@ class RCControllerActivity : AppCompatActivity() {
                     shiftRegisterTemp_imageView.
                         setImageResourceWithTag(R.drawable.shift_register_temp_off)
             }
-        }
-    }
-
-    /* This function is for setting and resetting purposes.
-    */
-    fun updateSpeedUIItem(speed: String){
-        runOnUiThread {
-            vehicle_speed_textView.text = resources.getString(R.string.tachometer_info,
-                speed, resources.getString(R.string.tachometer_unit))
         }
     }
 
