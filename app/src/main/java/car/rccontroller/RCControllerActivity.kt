@@ -5,11 +5,9 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.SeekBar
@@ -19,12 +17,13 @@ import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_rccontroller.*
 import car.rccontroller.network.*
 import car.rccontroller.network.cockpit.*
-import car.rccontroller.network.server.feedback.SensorFeedbackServer
+import car.rccontroller.network.server.feedback.NanoHTTPDLifecycleAware
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 
 val RUN_ON_EMULATOR = Build.FINGERPRINT.contains("generic")
+
 lateinit var retrofit: Retrofit
 val engineAPI: Engine by lazy { retrofit.create<Engine>(Engine::class.java) }
 val throttleBrakeAPI: ThrottleBrake by lazy { retrofit.create<ThrottleBrake>(ThrottleBrake::class.java) }
@@ -42,6 +41,8 @@ class RCControllerActivity : AppCompatActivity() {
     private val leftDirectionLightsAnimation = AnimationDrawable()
     private val rightDirectionLightsAnimation= AnimationDrawable()
     private val emergencyLightsAnimation= AnimationDrawable()
+
+    private lateinit var nano: NanoHTTPDLifecycleAware
 
     private lateinit var viewModel: RCControllerViewModel
 
@@ -61,6 +62,9 @@ class RCControllerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_rccontroller)
 
         viewModel = ViewModelProviders.of(this).get(RCControllerViewModel::class.java)
+
+        nano = NanoHTTPDLifecycleAware(viewModel)
+        lifecycle.addObserver(nano)
 
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(false)
@@ -84,7 +88,7 @@ class RCControllerActivity : AppCompatActivity() {
         //setup engine start-n-stop
         //////
         engineStartStop_imageView.apply {
-            setOnLongClickListener { _ ->
+            setOnLongClickListener {
                 if(::retrofit.isInitialized && isEngineStarted()) {
                     val status = stopEngine()
                     if (status == OK_STRING) {
@@ -111,9 +115,9 @@ class RCControllerActivity : AppCompatActivity() {
 
                 true
             }
-            setOnClickListener {_ ->
+            setOnClickListener {
                 Toast.makeText(context, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
-                true
+                //true
             }
         }
 
@@ -170,7 +174,7 @@ class RCControllerActivity : AppCompatActivity() {
         // setup parking brake
         //////
         parkingBrake_imageView.apply {
-            setOnLongClickListener { _ ->
+            setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
                     val status = activateParkingBrake(!isParkingBrakeActive())
@@ -183,9 +187,9 @@ class RCControllerActivity : AppCompatActivity() {
                 }
                 true
             }
-            setOnClickListener {_ ->
+            setOnClickListener {
                 Toast.makeText(context, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
-                true
+                //true
             }
         }
 
@@ -209,13 +213,13 @@ class RCControllerActivity : AppCompatActivity() {
                         throttle(throttleNbrake_mySeekBar.progress)
                     }
                 }
-                false;
+                false
             }
             //The blocking actions should not interfere with driving,
             // that's why they are on different listener
-            setOnClickListener {_ ->
+            setOnClickListener {
                 updateMotionUIItems()
-                true
+                //true
             }
         }
 
@@ -223,7 +227,7 @@ class RCControllerActivity : AppCompatActivity() {
         // setup reverse
         //////
         reverse_imageView. apply {
-            setOnLongClickListener { _ ->
+            setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
                     if (getMotionState() == ACTION_NEUTRAL) {
@@ -236,9 +240,9 @@ class RCControllerActivity : AppCompatActivity() {
                 viewModel.reverseStatusLiveData.value = getReverseIntention()
                 true
             }
-            setOnClickListener {_ ->
+            setOnClickListener {
                 Toast.makeText(context, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
-                true
+                //true
             }
         }
 
@@ -253,7 +257,7 @@ class RCControllerActivity : AppCompatActivity() {
         // setup cruise control
         //////
         cruiseControl_imageView. apply {
-            setOnLongClickListener { _ ->
+            setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
                     if (viewModel.cruiseControlStatusLiveData.value == true) {
@@ -264,9 +268,9 @@ class RCControllerActivity : AppCompatActivity() {
 
                 true
             }
-            setOnClickListener {_ ->
+            setOnClickListener {
                 Toast.makeText(context, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
-                true
+                //true
             }
         }
         viewModel.cruiseControlStatusLiveData.observe(this, Observer<Boolean> {
@@ -298,7 +302,7 @@ class RCControllerActivity : AppCompatActivity() {
                             DRIVING_LIGHTS -> setMainLightsState(POSITION_LIGHTS)
                             POSITION_LIGHTS -> setMainLightsState(LIGHTS_OFF)
                             LIGHTS_OFF ->
-                                Toast.makeText(context,
+                                Toast.makeText(this@RCControllerActivity,
                                     getString(R.string.lights_off_warning),
                                     Toast.LENGTH_SHORT).show()
                         }
@@ -310,13 +314,13 @@ class RCControllerActivity : AppCompatActivity() {
         })
         lights_imageView. apply {
             setOnTouchListener{_, event -> gestureDetector.onTouchEvent(event);}
-            setOnLongClickListener { _ ->
+            setOnLongClickListener {
                 if (isEngineStarted()){
                     when (getMainLightsState()) {
                         LIGHTS_OFF -> setMainLightsState(POSITION_LIGHTS)
                         POSITION_LIGHTS -> setMainLightsState(DRIVING_LIGHTS)
                         DRIVING_LIGHTS -> setMainLightsState(LONG_RANGE_LIGHTS)
-                        LONG_RANGE_LIGHTS -> Toast.makeText(car.rccontroller.network.context,
+                        LONG_RANGE_LIGHTS -> Toast.makeText(this@RCControllerActivity,
                                 getString(R.string.long_range_lights_warning),
                                 Toast.LENGTH_SHORT).show()
                     }
@@ -335,7 +339,7 @@ class RCControllerActivity : AppCompatActivity() {
         leftDirectionLightsAnimation.isOneShot = false
         leftTurn_imageView. apply {
             setBackgroundDrawable(leftDirectionLightsAnimation)
-            setOnLongClickListener { _ ->
+            setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
                     setDirectionLightsState(DIRECTION_LIGHTS_LEFT)
@@ -343,9 +347,9 @@ class RCControllerActivity : AppCompatActivity() {
                 updateTurnLightsUIItems()
                 true
             }
-            setOnClickListener {_ ->
+            setOnClickListener {
                 Toast.makeText(context, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
-                true
+                //true
             }
         }
         //////
@@ -356,7 +360,7 @@ class RCControllerActivity : AppCompatActivity() {
         rightDirectionLightsAnimation.isOneShot = false
         rightTurn_imageView. apply {
             setBackgroundDrawable(rightDirectionLightsAnimation)
-            setOnLongClickListener { _ ->
+            setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
                     setDirectionLightsState(DIRECTION_LIGHTS_RIGHT)
@@ -364,9 +368,9 @@ class RCControllerActivity : AppCompatActivity() {
                 updateTurnLightsUIItems()
                 true
             }
-            setOnClickListener {_ ->
+            setOnClickListener {
                 Toast.makeText(context, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
-                true
+                //true
             }
         }
 
@@ -378,7 +382,7 @@ class RCControllerActivity : AppCompatActivity() {
         emergencyLightsAnimation.isOneShot = false
         emergency_imageView. apply {
             setBackgroundDrawable(emergencyLightsAnimation)
-            setOnLongClickListener { _ ->
+            setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if (isEngineStarted()) {
                     setEmergencyLightsState(!getEmergencyLightsState())
@@ -386,9 +390,9 @@ class RCControllerActivity : AppCompatActivity() {
                 viewModel.emergencyLightsStatusLiveData.value = getEmergencyLightsState()
                 true
             }
-            setOnClickListener {_ ->
+            setOnClickListener {
                 Toast.makeText(context, getString(R.string.long_click_info), Toast.LENGTH_SHORT).show()
-                true
+                //true
             }
         }
         viewModel.emergencyLightsStatusLiveData.observe(this, Observer<Boolean> {
@@ -405,7 +409,7 @@ class RCControllerActivity : AppCompatActivity() {
         // setup handling assistance
         //////
         handling_assistance_imageView.apply {
-            setOnLongClickListener { _ ->
+            setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
                     when (getHandlingAssistanceState()) {
@@ -420,7 +424,7 @@ class RCControllerActivity : AppCompatActivity() {
                 }
                 true
             }
-            setOnClickListener {_ ->
+            setOnClickListener {
                 when (getHandlingAssistanceState()) {
                     ASSISTANCE_FULL -> setHandlingAssistanceState(ASSISTANCE_WARNING)
                     ASSISTANCE_WARNING -> setHandlingAssistanceState(ASSISTANCE_NONE)
@@ -430,7 +434,7 @@ class RCControllerActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT).show()
                 }
                 updateHandlingAssistanceUIItem()
-                true
+                //true
             }
         }
 
@@ -438,7 +442,7 @@ class RCControllerActivity : AppCompatActivity() {
         // setup motor speed limiter
         //////
         motor_speed_limiter_imageView.apply {
-            setOnLongClickListener { _ ->
+            setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
                     when (getMotorSpeedLimiter()) {
@@ -466,7 +470,7 @@ class RCControllerActivity : AppCompatActivity() {
                 }
                 true
             }
-            setOnClickListener {_ ->
+            setOnClickListener {
                 if(isEngineStarted()) {
                     when (getMotorSpeedLimiter()) {
                         MOTOR_SPEED_LIMITER_FULL_SPEED ->
@@ -491,7 +495,7 @@ class RCControllerActivity : AppCompatActivity() {
                     }
                     updateMotorSpeedLimiterUIItem()
                 }
-                true
+                //true
             }
         }
 
@@ -499,7 +503,7 @@ class RCControllerActivity : AppCompatActivity() {
         // setup front differential slippery limiter
         //////
         differential_slippery_limiter_front_imageView.apply {
-            setOnLongClickListener { _ ->
+            setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
                     if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
@@ -531,7 +535,7 @@ class RCControllerActivity : AppCompatActivity() {
                 }
                 true
             }
-            setOnClickListener {_ ->
+            setOnClickListener {
                 if(isEngineStarted()) {
                     if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
                         when (getFrontDifferentialSlipperyLimiter()) {
@@ -560,7 +564,7 @@ class RCControllerActivity : AppCompatActivity() {
                     }
                     updateFrontDifferentialSlipperyLimiterUIItem()
                 }
-                true
+                //true
             }
         }
 
@@ -568,7 +572,7 @@ class RCControllerActivity : AppCompatActivity() {
         // setup rear differential slippery limiter
         //////
         differential_slippery_limiter_rear_imageView.apply {
-            setOnLongClickListener { _ ->
+            setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
                     if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
@@ -600,7 +604,7 @@ class RCControllerActivity : AppCompatActivity() {
                 }
                 true
             }
-            setOnClickListener {_ ->
+            setOnClickListener {
                 if(isEngineStarted()) {
                     if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
                         when (getRearDifferentialSlipperyLimiter()) {
@@ -629,7 +633,7 @@ class RCControllerActivity : AppCompatActivity() {
                     }
                     updateRearDifferentialSlipperyLimiterUIItem()
                 }
-                true
+                //true
             }
         }
 
@@ -708,7 +712,7 @@ class RCControllerActivity : AppCompatActivity() {
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build()
 
-                val status = startEngine(activity, raspiServerIP, raspiServerPort)
+                val status = startEngine(applicationContext as RCControllerApplication, raspiServerIP, raspiServerPort)
                 if (status == OK_STRING) {
                     viewModel.engineStatusLiveData.value = true
                 } else {
@@ -846,12 +850,12 @@ class RCControllerActivity : AppCompatActivity() {
                 handling_assistance_imageView.
                     setImageResourceWithTag(R.drawable.handling_assistance_full)
 
-                updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_IDLE_STATE,
+                /*updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_IDLE_STATE,
                 abmState = SensorFeedbackServer.MODULE_IDLE_STATE,
                 esmState = SensorFeedbackServer.MODULE_IDLE_STATE,
                 udmState = SensorFeedbackServer.MODULE_IDLE_STATE,
                 odmState = SensorFeedbackServer.MODULE_IDLE_STATE,
-                cdmState = SensorFeedbackServer.MODULE_IDLE_STATE)
+                cdmState = SensorFeedbackServer.MODULE_IDLE_STATE)*/
             }
             ASSISTANCE_WARNING -> {
                 setFrontDifferentialSlipperyLimiter(previousFrontDifferentialSlipperyLimiter)
@@ -860,12 +864,12 @@ class RCControllerActivity : AppCompatActivity() {
                 handling_assistance_imageView.
                     setImageResourceWithTag(R.drawable.handling_assistance_warning)
 
-                updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_IDLE_STATE,
+                /*updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_IDLE_STATE,
                         abmState = SensorFeedbackServer.MODULE_IDLE_STATE,
                         esmState = SensorFeedbackServer.MODULE_IDLE_STATE,
                         udmState = SensorFeedbackServer.MODULE_IDLE_STATE,
                         odmState = SensorFeedbackServer.MODULE_IDLE_STATE,
-                        cdmState = SensorFeedbackServer.MODULE_IDLE_STATE)
+                        cdmState = SensorFeedbackServer.MODULE_IDLE_STATE)*/
             }
             ASSISTANCE_NONE -> {
                 setFrontDifferentialSlipperyLimiter(previousFrontDifferentialSlipperyLimiter)
@@ -874,23 +878,23 @@ class RCControllerActivity : AppCompatActivity() {
                 handling_assistance_imageView.
                     setImageResourceWithTag(R.drawable.handling_assistance_manual)
 
-                updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_OFF_STATE,
+                /*updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_OFF_STATE,
                         abmState = SensorFeedbackServer.MODULE_OFF_STATE,
                         esmState = SensorFeedbackServer.MODULE_OFF_STATE,
                         udmState = SensorFeedbackServer.MODULE_OFF_STATE,
                         odmState = SensorFeedbackServer.MODULE_OFF_STATE,
-                        cdmState = SensorFeedbackServer.MODULE_OFF_STATE)
+                        cdmState = SensorFeedbackServer.MODULE_OFF_STATE)*/
             }
             else -> {
                 handling_assistance_imageView.
                     setImageResourceWithTag(R.drawable.handling_assistance_off)
 
-                updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_OFF_STATE,
+                /*updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_OFF_STATE,
                         abmState = SensorFeedbackServer.MODULE_OFF_STATE,
                         esmState = SensorFeedbackServer.MODULE_OFF_STATE,
                         udmState = SensorFeedbackServer.MODULE_OFF_STATE,
                         odmState = SensorFeedbackServer.MODULE_OFF_STATE,
-                        cdmState = SensorFeedbackServer.MODULE_OFF_STATE)
+                        cdmState = SensorFeedbackServer.MODULE_OFF_STATE)*/
             }
         }
         updateFrontDifferentialSlipperyLimiterUIItem()
@@ -903,7 +907,7 @@ class RCControllerActivity : AppCompatActivity() {
         Also, here we update the ImageViews of the items, of the advanced sensors
         according to the initial (off, idle) state only.
      */
-    fun updateAdvancedSensorUIItems(
+    /*fun updateAdvancedSensorUIItems(
             tcmState: String = SensorFeedbackServer.MODULE_UNCHANGED_STATE,
             abmState: String = SensorFeedbackServer.MODULE_UNCHANGED_STATE,
             esmState: String = SensorFeedbackServer.MODULE_UNCHANGED_STATE,
@@ -943,7 +947,7 @@ class RCControllerActivity : AppCompatActivity() {
                 R.drawable.odm_on, R.drawable.odm_idle, R.drawable.odm_off)
         updateItems(cdmState, cdm_imageView,
                 R.drawable.cdm_on, R.drawable.cdm_idle, R.drawable.cdm_off)
-    }
+    }*/
 
     /* Main lights interactive actions must be depending on each other.
         Their states on the server should be changed by set methods.
@@ -994,7 +998,7 @@ class RCControllerActivity : AppCompatActivity() {
 
     /* This function is for setting and resetting purposes.
      */
-    fun updateTempUIItems(
+    /*fun updateTempUIItems(
         rearLeftMotor: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
         rearRightMotor: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
         frontLeftMotor: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
@@ -1118,7 +1122,7 @@ class RCControllerActivity : AppCompatActivity() {
                         setImageResourceWithTag(R.drawable.shift_register_temp_off)
             }
         }
-    }
+    }*/
 
     override fun onPause() {
         super.onPause()

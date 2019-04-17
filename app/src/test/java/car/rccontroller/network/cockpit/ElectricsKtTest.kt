@@ -1,6 +1,8 @@
 package car.rccontroller.network.cockpit
 
 import car.rccontroller.RCControllerActivity
+import car.rccontroller.RCControllerViewModel
+import car.rccontroller.network.server.feedback.NanoHTTPDLifecycleAware
 import junit.framework.Assert.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.CoreMatchers.*

@@ -5,38 +5,26 @@ This file is designed to store and manage network-related data,
 somehow like the ViewModel class is designed to store and manage UI-related data
  */
 
-import android.content.Context
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
-import android.net.wifi.WifiManager
-import android.text.format.Formatter
-import car.rccontroller.RCControllerActivity
-import car.rccontroller.network.server.feedback.SensorFeedbackServer
 import kotlinx.coroutines.*
 import retrofit2.Call
 
 
 const val OK_STRING = "OK"
 const val EMPTY_STRING = "NULL"
-const val sensorFeedbackServerPort= 8080
 
 var raspiServerIP: String? = null
 var raspiServerPort: Int? = null
-var context: RCControllerActivity? = null
-
-var sensorFeedbackServer: SensorFeedbackServer? = null
 
 
 /////////
 // General use
 /////////
-// In case of second Activity existence this should be implemented correctly for a CoroutineScope usage
-fun launchRequest(url:String) = CoroutineScope(Dispatchers.IO).launch { doRequest(url) }
-
 fun runBlockingRequest(url:String) = runBlocking(Dispatchers.IO) { doRequest(url) }
 
 fun <T> launchRequest(block:() -> Call<T>): Job? {
@@ -88,14 +76,3 @@ private fun doRequest(url: String): String {
     }
     return sb.toString()
 }
-
-val myIP:String
-    get() {
-        val wifiMgr = context?.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager?
-        val wifiInfo = wifiMgr?.connectionInfo
-        return if (wifiInfo != null) {
-            Formatter.formatIpAddress(wifiInfo.ipAddress)
-        }
-        else
-            EMPTY_STRING
-    }

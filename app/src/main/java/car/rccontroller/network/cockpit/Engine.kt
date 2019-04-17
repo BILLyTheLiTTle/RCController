@@ -2,7 +2,7 @@ package car.rccontroller.network.cockpit
 
 import car.rccontroller.*
 import car.rccontroller.network.*
-import car.rccontroller.network.server.feedback.SensorFeedbackServer
+import car.rccontroller.network.server.feedback.NanoHTTPDLifecycleAware
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -24,7 +24,7 @@ fun isEngineStarted(retrofitAPI: Engine = engineAPI): Boolean {
     return runBlockingRequest { retrofitAPI.getEngineState() } == true
 }
 
-fun startEngine(context: RCControllerActivity?,
+fun startEngine(context: RCControllerApplication?,
                 serverIp: String?, serverPort: Int?,
                 retrofitEngineAPI: Engine = engineAPI, retrofitElectricsAPI: Electrics = electricsAPI
 ): String{
@@ -36,23 +36,12 @@ fun startEngine(context: RCControllerActivity?,
 
     raspiServerIP = serverIp
     raspiServerPort = serverPort
-    car.rccontroller.network.context = context
-
-    if (context != null) {
-        if (sensorFeedbackServer != null) sensorFeedbackServer!!.stop()
-        sensorFeedbackServer = if (RUN_ON_EMULATOR) SensorFeedbackServer(context) else SensorFeedbackServer(
-            context,
-            myIP,
-            sensorFeedbackServerPort
-        )
-        sensorFeedbackServer!!.start()
-    }
 
     //TODO add the nanohttp ip and port when needed as argument to the handshake
     return runBlockingRequest {
         retrofitEngineAPI.startEngine(
-            if (sensorFeedbackServer != null) sensorFeedbackServer!!.ip else myIP,
-            if (sensorFeedbackServer != null) sensorFeedbackServer!!.port else sensorFeedbackServerPort
+            NanoHTTPDLifecycleAware.ip,
+            NanoHTTPDLifecycleAware.port
         )
     } ?: EMPTY_STRING
 }
@@ -68,8 +57,6 @@ fun stopEngine(retrofitAPI: Engine = engineAPI): String {
     // TODO if I don't want to save manual setup settings
     previousFrontDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
     previousRearDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
-
-    if(sensorFeedbackServer != null) sensorFeedbackServer!!.stop()
 
     return msg
 }
