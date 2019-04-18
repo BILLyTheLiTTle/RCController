@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.activity_rccontroller.*
 import car.rccontroller.network.*
 import car.rccontroller.network.cockpit.*
 import car.rccontroller.network.server.feedback.NanoHTTPDLifecycleAware
+import car.rccontroller.network.server.feedback.data.TemperatureWarningType
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
@@ -83,6 +84,18 @@ class RCControllerActivity : AppCompatActivity() {
             vehicle_speed_textView.text = resources.getString(R.string.tachometer_info,
                 it, resources.getString(R.string.tachometer_unit))
         })
+        viewModel.rearLeftMotorTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
+            when (it) {
+                TemperatureWarningType.NORMAL ->
+                    rearLeftMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_normal)
+                TemperatureWarningType.MEDIUM ->
+                    rearLeftMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_medium)
+                TemperatureWarningType.HIGH ->
+                    rearLeftMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_high)
+                TemperatureWarningType.NOTHING ->
+                    rearLeftMotorTemps_imageView.setImageResourceWithTag(android.R.color.transparent)
+            }
+        })
 
         //////
         //setup engine start-n-stop
@@ -146,6 +159,7 @@ class RCControllerActivity : AppCompatActivity() {
 
                 viewModel.emergencyLightsStatusLiveData.value = false
 
+                viewModel.rearLeftMotorTemperatureLiveData.value = TemperatureWarningType.NOTHING
                 /*updateTempUIItems(
                     rearLeftMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
                     rearRightMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,

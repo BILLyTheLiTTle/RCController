@@ -10,7 +10,7 @@ import car.rccontroller.network.*
 import car.rccontroller.network.server.feedback.data.CarModule
 import car.rccontroller.network.server.feedback.data.CarPartTemperature
 import car.rccontroller.network.server.feedback.data.ModuleState
-import car.rccontroller.network.server.feedback.data.WarningType
+import car.rccontroller.network.server.feedback.data.TemperatureWarningType
 import fi.iki.elonen.NanoHTTPD
 
 
@@ -55,14 +55,14 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                     TEMP_URI -> {
                         when (params[TEMP_PARAM_KEY_ITEM]?.get(0)) {
                             CarPartTemperature.MOTOR_REAR_LEFT.id -> {
-                                /*activity.updateTempUIItems(
-                                    rearLeftMotor = params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WARNING_TYPE_UNCHANGED
-                                )*/
-                                formatResponse(
-                                    CarPartTemperature.MOTOR_REAR_LEFT.id,
+                                val warningType = TemperatureWarningType.valueOf(
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WarningType.UNCHANGED.id
+                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.name
+                                )
+                                model.rearLeftMotorTemperatureLiveData.postValue(warningType)
+
+                                formatResponse(
+                                    CarPartTemperature.MOTOR_REAR_LEFT.name, warningType.name
                                 )
                             }
                             CarPartTemperature.MOTOR_REAR_RIGHT.id -> {
@@ -73,7 +73,7 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                                 formatResponse(
                                     CarPartTemperature.MOTOR_REAR_RIGHT.id,
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WarningType.UNCHANGED.id
+                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.id
                                 )
                             }
                             CarPartTemperature.MOTOR_FRONT_LEFT.id -> {
@@ -84,7 +84,7 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                                 formatResponse(
                                     CarPartTemperature.MOTOR_FRONT_LEFT.id,
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WarningType.UNCHANGED.id
+                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.id
                                 )
                             }
                             CarPartTemperature.MOTOR_FRONT_RIGHT.id -> {
@@ -95,7 +95,7 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                                 formatResponse(
                                     CarPartTemperature.MOTOR_FRONT_RIGHT.id,
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WarningType.UNCHANGED.id
+                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.id
                                 )
                             }
                             CarPartTemperature.H_BRIDGE_REAR.id -> {
@@ -106,7 +106,7 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                                 formatResponse(
                                     CarPartTemperature.H_BRIDGE_REAR.id,
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WarningType.UNCHANGED.id
+                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.id
                                 )
                             }
                             CarPartTemperature.H_BRIDGE_FRONT.id -> {
@@ -117,7 +117,7 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                                 formatResponse(
                                     CarPartTemperature.H_BRIDGE_FRONT.id,
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WarningType.UNCHANGED.id
+                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.id
                                 )
                             }
                             CarPartTemperature.RASPBERRY_PI.id -> {
@@ -128,7 +128,7 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                                 formatResponse(
                                     CarPartTemperature.RASPBERRY_PI.id,
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WarningType.UNCHANGED.id
+                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.id
                                 )
                             }
                             CarPartTemperature.BATTERIES.id -> {
@@ -139,7 +139,7 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                                 formatResponse(
                                     CarPartTemperature.BATTERIES.id,
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WarningType.UNCHANGED.id
+                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.id
                                 )
                             }
                             CarPartTemperature.SHIFT_REGISTERS.id -> {
@@ -150,11 +150,11 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                                 formatResponse(
                                     CarPartTemperature.SHIFT_REGISTERS.id,
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WarningType.UNCHANGED.id
+                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.id
                                 )
                             }
                             else ->
-                                formatResponse("ERROR TEMP", WarningType.NOTHING.id)
+                                formatResponse("ERROR TEMP", TemperatureWarningType.NOTHING.id)
                         }
                     }
                     SPEED_URI -> {
