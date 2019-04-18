@@ -7,6 +7,10 @@ import car.rccontroller.RCControllerApplication
 import car.rccontroller.RCControllerViewModel
 import car.rccontroller.RUN_ON_EMULATOR
 import car.rccontroller.network.*
+import car.rccontroller.network.server.feedback.data.CarModule
+import car.rccontroller.network.server.feedback.data.CarPartTemperature
+import car.rccontroller.network.server.feedback.data.ModuleState
+import car.rccontroller.network.server.feedback.data.WarningType
 import fi.iki.elonen.NanoHTTPD
 
 
@@ -45,111 +49,112 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
             val params = session.parameters
             val uri = session.uri
 
+            // TODO instead of id (example: "unchanged") use the name (example: UNCHANGED) of the enums
             return newFixedLengthResponse(
                 when (uri) {
                     TEMP_URI -> {
                         when (params[TEMP_PARAM_KEY_ITEM]?.get(0)) {
-                            MOTOR_REAR_LEFT_TEMP -> {
+                            CarPartTemperature.MOTOR_REAR_LEFT.id -> {
                                 /*activity.updateTempUIItems(
                                     rearLeftMotor = params[TEMP_PARAM_KEY_WARNING]
                                         ?.get(0) ?: WARNING_TYPE_UNCHANGED
                                 )*/
                                 formatResponse(
-                                    MOTOR_REAR_LEFT_TEMP,
+                                    CarPartTemperature.MOTOR_REAR_LEFT.id,
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WARNING_TYPE_UNCHANGED
+                                        ?.get(0) ?: WarningType.UNCHANGED.id
                                 )
                             }
-                            MOTOR_REAR_RIGHT_TEMP -> {
+                            CarPartTemperature.MOTOR_REAR_RIGHT.id -> {
                                 /*activity.updateTempUIItems(
                                     rearRightMotor = params[TEMP_PARAM_KEY_WARNING]
                                         ?.get(0) ?: WARNING_TYPE_UNCHANGED
                                 )*/
                                 formatResponse(
-                                    MOTOR_REAR_RIGHT_TEMP,
+                                    CarPartTemperature.MOTOR_REAR_RIGHT.id,
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WARNING_TYPE_UNCHANGED
+                                        ?.get(0) ?: WarningType.UNCHANGED.id
                                 )
                             }
-                            MOTOR_FRONT_LEFT_TEMP -> {
+                            CarPartTemperature.MOTOR_FRONT_LEFT.id -> {
                                 /*activity.updateTempUIItems(
                                     frontLeftMotor = params[TEMP_PARAM_KEY_WARNING]
                                         ?.get(0) ?: WARNING_TYPE_UNCHANGED
                                 )*/
                                 formatResponse(
-                                    MOTOR_FRONT_LEFT_TEMP,
+                                    CarPartTemperature.MOTOR_FRONT_LEFT.id,
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WARNING_TYPE_UNCHANGED
+                                        ?.get(0) ?: WarningType.UNCHANGED.id
                                 )
                             }
-                            MOTOR_FRONT_RIGHT_TEMP -> {
+                            CarPartTemperature.MOTOR_FRONT_RIGHT.id -> {
                                 /*activity.updateTempUIItems(
                                     frontRightMotor = params[TEMP_PARAM_KEY_WARNING]
                                         ?.get(0) ?: WARNING_TYPE_UNCHANGED
                                 )*/
                                 formatResponse(
-                                    MOTOR_FRONT_RIGHT_TEMP,
+                                    CarPartTemperature.MOTOR_FRONT_RIGHT.id,
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WARNING_TYPE_UNCHANGED
+                                        ?.get(0) ?: WarningType.UNCHANGED.id
                                 )
                             }
-                            H_BRIDGE_REAR_TEMP -> {
+                            CarPartTemperature.H_BRIDGE_REAR.id -> {
                                 /*activity.updateTempUIItems(
                                     rearHBridge = params[TEMP_PARAM_KEY_WARNING]
                                         ?.get(0) ?: WARNING_TYPE_UNCHANGED
                                 )*/
                                 formatResponse(
-                                    H_BRIDGE_REAR_TEMP,
+                                    CarPartTemperature.H_BRIDGE_REAR.id,
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WARNING_TYPE_UNCHANGED
+                                        ?.get(0) ?: WarningType.UNCHANGED.id
                                 )
                             }
-                            H_BRIDGE_FRONT_TEMP -> {
+                            CarPartTemperature.H_BRIDGE_FRONT.id -> {
                                 /*activity.updateTempUIItems(
                                     frontHBridge = params[TEMP_PARAM_KEY_WARNING]
                                         ?.get(0) ?: WARNING_TYPE_UNCHANGED
                                 )*/
                                 formatResponse(
-                                    H_BRIDGE_FRONT_TEMP,
+                                    CarPartTemperature.H_BRIDGE_FRONT.id,
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WARNING_TYPE_UNCHANGED
+                                        ?.get(0) ?: WarningType.UNCHANGED.id
                                 )
                             }
-                            RASPBERRY_PI_TEMP -> {
+                            CarPartTemperature.RASPBERRY_PI.id -> {
                                 /*activity.updateTempUIItems(
                                     raspberryPi = params[TEMP_PARAM_KEY_WARNING]
                                         ?.get(0) ?: WARNING_TYPE_UNCHANGED
                                 )*/
                                 formatResponse(
-                                    RASPBERRY_PI_TEMP,
+                                    CarPartTemperature.RASPBERRY_PI.id,
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WARNING_TYPE_UNCHANGED
+                                        ?.get(0) ?: WarningType.UNCHANGED.id
                                 )
                             }
-                            BATTERIES_TEMP -> {
+                            CarPartTemperature.BATTERIES.id -> {
                                 /*activity.updateTempUIItems(
                                     batteries = params[TEMP_PARAM_KEY_WARNING]
                                         ?.get(0) ?: WARNING_TYPE_UNCHANGED
                                 )*/
                                 formatResponse(
-                                    BATTERIES_TEMP,
+                                    CarPartTemperature.BATTERIES.id,
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WARNING_TYPE_UNCHANGED
+                                        ?.get(0) ?: WarningType.UNCHANGED.id
                                 )
                             }
-                            SHIFT_REGISTER_TEMP -> {
+                            CarPartTemperature.SHIFT_REGISTERS.id -> {
                                 /*activity.updateTempUIItems(
                                     shiftRegisters = params[TEMP_PARAM_KEY_WARNING]
                                         ?.get(0) ?: WARNING_TYPE_UNCHANGED
                                 )*/
                                 formatResponse(
-                                    SHIFT_REGISTER_TEMP,
+                                    CarPartTemperature.SHIFT_REGISTERS.id,
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WARNING_TYPE_UNCHANGED
+                                        ?.get(0) ?: WarningType.UNCHANGED.id
                                 )
                             }
                             else ->
-                                formatResponse("ERROR TEMP", WARNING_TYPE_NOTHING)
+                                formatResponse("ERROR TEMP", WarningType.NOTHING.id)
                         }
                     }
                     SPEED_URI -> {
@@ -160,74 +165,74 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                     }
                     ECU_URI -> {
                         when (params[ECU_PARAM_KEY_ITEM]?.get(0)) {
-                            TRACTION_CONTROL_MODULE -> {
+                            CarModule.TRACTION_CONTROL.id -> {
                                 /*activity.updateAdvancedSensorUIItems(
                                     tcmState = params[ECU_PARAM_KEY_VALUE]
                                         ?.get(0) ?: MODULE_UNCHANGED_STATE
                                 )*/
                                 formatResponse(
-                                    TRACTION_CONTROL_MODULE,
+                                    CarModule.TRACTION_CONTROL.id,
                                     params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: MODULE_UNCHANGED_STATE
+                                        ?.get(0) ?: ModuleState.UNCHANGED.id
                                 )
                             }
-                            ANTILOCK_BRAKING_MODULE -> {
+                            CarModule.ANTILOCK_BRAKING.id -> {
                                 /*activity.updateAdvancedSensorUIItems(
                                     abmState = params[ECU_PARAM_KEY_VALUE]
                                         ?.get(0) ?: MODULE_UNCHANGED_STATE
                                 )*/
                                 formatResponse(
-                                    ANTILOCK_BRAKING_MODULE,
+                                    CarModule.ANTILOCK_BRAKING.id,
                                     params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: MODULE_UNCHANGED_STATE
+                                        ?.get(0) ?: ModuleState.UNCHANGED.id
                                 )
                             }
-                            ELECTRONIC_STABILITY_MODULE -> {
+                            CarModule.ELECTRONIC_STABILITY.id -> {
                                 /*activity.updateAdvancedSensorUIItems(
                                     esmState = params[ECU_PARAM_KEY_VALUE]
                                         ?.get(0) ?: MODULE_UNCHANGED_STATE
                                 )*/
                                 formatResponse(
-                                    ELECTRONIC_STABILITY_MODULE,
+                                    CarModule.ELECTRONIC_STABILITY.id,
                                     params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: MODULE_UNCHANGED_STATE
+                                        ?.get(0) ?: ModuleState.UNCHANGED.id
                                 )
                             }
-                            UNDERSTEER_DETECTION_MODULE -> {
+                            CarModule.UNDERSTEER_DETECTION.id -> {
                                 /*activity.updateAdvancedSensorUIItems(
                                     udmState = params[ECU_PARAM_KEY_VALUE]
                                         ?.get(0) ?: MODULE_UNCHANGED_STATE
                                 )*/
                                 formatResponse(
-                                    UNDERSTEER_DETECTION_MODULE,
+                                    CarModule.UNDERSTEER_DETECTION.id,
                                     params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: MODULE_UNCHANGED_STATE
+                                        ?.get(0) ?: ModuleState.UNCHANGED.id
                                 )
                             }
-                            OVERSTEER_DETECTION_MODULE -> {
+                            CarModule.OVERSTEER_DETECTION.id -> {
                                 /*activity.updateAdvancedSensorUIItems(
                                     odmState = params[ECU_PARAM_KEY_VALUE]
                                         ?.get(0) ?: MODULE_UNCHANGED_STATE
                                 )*/
                                 formatResponse(
-                                    OVERSTEER_DETECTION_MODULE,
+                                    CarModule.OVERSTEER_DETECTION.id,
                                     params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: MODULE_UNCHANGED_STATE
+                                        ?.get(0) ?: ModuleState.UNCHANGED.id
                                 )
                             }
-                            COLLISION_DETECTION_MODULE -> {
+                            CarModule.COLLISION_DETECTION.id -> {
                                 /*activity.updateAdvancedSensorUIItems(
                                     cdmState = params[ECU_PARAM_KEY_VALUE]
                                         ?.get(0) ?: MODULE_UNCHANGED_STATE
                                 )*/
                                 formatResponse(
-                                    COLLISION_DETECTION_MODULE,
+                                    CarModule.COLLISION_DETECTION.id,
                                     params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: MODULE_UNCHANGED_STATE
+                                        ?.get(0) ?: ModuleState.UNCHANGED.id
                                 )
                             }
                             else ->
-                                formatResponse("ERROR ECU", MODULE_NOTHING_STATE)
+                                formatResponse("ERROR ECU", ModuleState.NOTHING.id)
                         }
                     }
                     else ->
@@ -243,44 +248,17 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
         var port = 8080
             private set
 
-        const val WARNING_TYPE_NOTHING = EMPTY_STRING
-        const val WARNING_TYPE_UNCHANGED = "unchanged"
-        const val WARNING_TYPE_NORMAL = "normal"
-        const val WARNING_TYPE_MEDIUM = "medium"
-        const val WARNING_TYPE_HIGH = "high"
+        private const val TEMP_URI = "/temp"
+        private const val TEMP_PARAM_KEY_ITEM = "item"
+        private const val TEMP_PARAM_KEY_WARNING = "warning"
+        private const val TEMP_PARAM_KEY_VALUE = "value"
 
-        const val MODULE_NOTHING_STATE = EMPTY_STRING
-        const val MODULE_OFF_STATE = "module_off_state"
-        const val MODULE_ON_STATE = "module_on_state"
-        const val MODULE_IDLE_STATE = "module_idle_state"
-        const val MODULE_UNCHANGED_STATE = "module_unchanged_state"
+        private const val SPEED_URI = "/speed"
+        private const val SPEED_PARAM_KEY_VALUE = "value"
 
-        const val MOTOR_REAR_LEFT_TEMP = "motor_rear_left_temp"
-        const val MOTOR_REAR_RIGHT_TEMP = "motor_rear_right_temp"
-        const val MOTOR_FRONT_LEFT_TEMP = "motor_front_left_temp"
-        const val MOTOR_FRONT_RIGHT_TEMP = "motor_front_right_temp"
-        const val H_BRIDGE_REAR_TEMP = "h_bridge_rear_temp"
-        const val H_BRIDGE_FRONT_TEMP = "h_bridge_front_temp"
-        const val RASPBERRY_PI_TEMP = "raspberry_pi_temp"
-        const val BATTERIES_TEMP = "batteries_temp"
-        const val SHIFT_REGISTER_TEMP = "shift_registers_temp"
-        const val TEMP_URI = "/temp"
-        const val TEMP_PARAM_KEY_ITEM = "item"
-        const val TEMP_PARAM_KEY_WARNING = "warning"
-        const val TEMP_PARAM_KEY_VALUE = "value"
-
-        const val SPEED_URI = "/speed"
-        const val SPEED_PARAM_KEY_VALUE = "value"
-
-        const val ECU_URI = "/ecu"
-        const val ECU_PARAM_KEY_ITEM = "item"
-        const val ECU_PARAM_KEY_VALUE = "value"
-        const val TRACTION_CONTROL_MODULE = "TCM"
-        const val ANTILOCK_BRAKING_MODULE = "ABM"
-        const val ELECTRONIC_STABILITY_MODULE = "ESM"
-        const val UNDERSTEER_DETECTION_MODULE = "UDM"
-        const val OVERSTEER_DETECTION_MODULE = "ODM"
-        const val COLLISION_DETECTION_MODULE = "CDM"
+        private const val ECU_URI = "/ecu"
+        private const val ECU_PARAM_KEY_ITEM = "item"
+        private const val ECU_PARAM_KEY_VALUE = "value"
 
         fun formatResponse(item: String, warningType: String, delimiter: String = ":") =
             String.format("%s $delimiter %s", item, warningType)
