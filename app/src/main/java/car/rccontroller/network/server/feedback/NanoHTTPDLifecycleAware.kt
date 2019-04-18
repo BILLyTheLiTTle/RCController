@@ -248,17 +248,17 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
         var port = 8080
             private set
 
-        private const val TEMP_URI = "/temp"
-        private const val TEMP_PARAM_KEY_ITEM = "item"
-        private const val TEMP_PARAM_KEY_WARNING = "warning"
-        private const val TEMP_PARAM_KEY_VALUE = "value"
+        const val TEMP_URI = "/temp"
+        const val TEMP_PARAM_KEY_ITEM = "item"
+        const val TEMP_PARAM_KEY_WARNING = "warning"
+        const val TEMP_PARAM_KEY_VALUE = "value"
 
-        private const val SPEED_URI = "/speed"
-        private const val SPEED_PARAM_KEY_VALUE = "value"
+        const val SPEED_URI = "/speed"
+        const val SPEED_PARAM_KEY_VALUE = "value"
 
-        private const val ECU_URI = "/ecu"
-        private const val ECU_PARAM_KEY_ITEM = "item"
-        private const val ECU_PARAM_KEY_VALUE = "value"
+        const val ECU_URI = "/ecu"
+        const val ECU_PARAM_KEY_ITEM = "item"
+        const val ECU_PARAM_KEY_VALUE = "value"
 
         fun formatResponse(item: String, warningType: String, delimiter: String = ":") =
             String.format("%s $delimiter %s", item, warningType)

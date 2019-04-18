@@ -214,12 +214,12 @@ class RCControllerActivity : AppCompatActivity() {
                 if (event.action == android.view.MotionEvent.ACTION_DOWN) {
                     /* Use the serverIp variable to check if the engine is running.
                        I use the serverIp because I did not want to use a blocking network request. */
-                    if(raspiServerIP != null) {
+                    if(viewModel.engineStatusLiveData.value == true) {
                         handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_on)
                         activateHandbrake( true)
                     }
                 } else if (event.action == android.view.MotionEvent.ACTION_UP) {
-                    if(raspiServerIP != null) {
+                    if(viewModel.engineStatusLiveData.value == true) {
                         handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_off)
                         activateHandbrake(false)
                         // re-throttle automatically to start moving the rear wheels again
@@ -711,13 +711,13 @@ class RCControllerActivity : AppCompatActivity() {
             setTitle(getString(R.string.server_dialog_title))
             setMessage(getString(R.string.server_dialog_msg))
             setPositiveButton(getString(R.string.server_dialog_ok_button)){ _, _ ->
-                 raspiServerIP =
+                 val raspiServerIP =
                         if (RUN_ON_EMULATOR)
                             "10.0.2.2"
                         else
                             dialogView.findViewById<EditText>(R.id.serverIp_editText).text
                                     .toString()
-                raspiServerPort = dialogView.findViewById<EditText>(R.id.serverPort_editText).text
+                val raspiServerPort = dialogView.findViewById<EditText>(R.id.serverPort_editText).text
                         .toString().toIntOrNull()
 
                 retrofit = Retrofit.Builder()

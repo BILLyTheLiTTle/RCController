@@ -34,8 +34,8 @@ fun startEngine(context: RCControllerApplication?,
         steeringDirectionId = context.resources.getInteger(R.integer.default_steeringDirectionId).toLong()
     }
 
-    raspiServerIP = serverIp
-    raspiServerPort = serverPort
+    //raspiServerIP = serverIp
+    //raspiServerPort = serverPort
 
     //TODO add the nanohttp ip and port when needed as argument to the handshake
     return runBlockingRequest {
@@ -49,10 +49,10 @@ fun startEngine(context: RCControllerApplication?,
 fun stopEngine(retrofitAPI: Engine = engineAPI): String {
     val msg = runBlockingRequest { retrofitAPI.stopEngine() } ?: EMPTY_STRING
 
-    if(msg == OK_STRING) {
+    /*if(msg == OK_STRING) {
         raspiServerIP = null
         raspiServerPort = null
-    }
+    }*/
 
     // TODO if I don't want to save manual setup settings
     previousFrontDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED

@@ -2,8 +2,6 @@ package car.rccontroller.network.cockpit
 
 import car.rccontroller.electricsAPI
 import car.rccontroller.network.EMPTY_STRING
-import car.rccontroller.network.raspiServerIP
-import car.rccontroller.network.raspiServerPort
 import car.rccontroller.network.runBlockingRequest
 import car.rccontroller.retrofit
 import retrofit2.Call
