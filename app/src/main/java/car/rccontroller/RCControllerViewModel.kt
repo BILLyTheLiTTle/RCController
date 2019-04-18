@@ -15,6 +15,8 @@ class RCControllerViewModel: ViewModel() {
     val speedLiveData = MutableLiveData<String>()
     val rearLeftMotorTemperatureLiveData = MutableLiveData<TemperatureWarningType>()
     val rearRightMotorTemperatureLiveData = MutableLiveData<TemperatureWarningType>()
+    val frontLeftMotorTemperatureLiveData = MutableLiveData<TemperatureWarningType>()
+    val frontRightMotorTemperatureLiveData = MutableLiveData<TemperatureWarningType>()
 
     /* The values are initialized at false or empty state because
     I want the grey icons at start because
@@ -32,6 +34,8 @@ class RCControllerViewModel: ViewModel() {
         //speedLiveData.value = "-/-"
         rearLeftMotorTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
         rearRightMotorTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
+        frontLeftMotorTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
+        frontRightMotorTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
     }
 
 

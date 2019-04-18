@@ -77,25 +77,25 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                                 )
                             }
                             CarPartTemperature.MOTOR_FRONT_LEFT.id -> {
-                                /*activity.updateTempUIItems(
-                                    frontLeftMotor = params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WARNING_TYPE_UNCHANGED
-                                )*/
-                                formatResponse(
-                                    CarPartTemperature.MOTOR_FRONT_LEFT.id,
+                                val warningType = TemperatureWarningType.valueOf(
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.id
+                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.name
+                                )
+                                model.frontLeftMotorTemperatureLiveData.postValue(warningType)
+
+                                formatResponse(
+                                    CarPartTemperature.MOTOR_FRONT_LEFT.name, warningType.name
                                 )
                             }
                             CarPartTemperature.MOTOR_FRONT_RIGHT.id -> {
-                                /*activity.updateTempUIItems(
-                                    frontRightMotor = params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WARNING_TYPE_UNCHANGED
-                                )*/
-                                formatResponse(
-                                    CarPartTemperature.MOTOR_FRONT_RIGHT.id,
+                                val warningType = TemperatureWarningType.valueOf(
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.id
+                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.name
+                                )
+                                model.frontRightMotorTemperatureLiveData.postValue(warningType)
+
+                                formatResponse(
+                                    CarPartTemperature.MOTOR_FRONT_RIGHT.name, warningType.name
                                 )
                             }
                             CarPartTemperature.H_BRIDGE_REAR.id -> {

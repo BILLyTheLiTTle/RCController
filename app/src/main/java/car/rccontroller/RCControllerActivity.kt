@@ -90,6 +90,12 @@ class RCControllerActivity : AppCompatActivity() {
         viewModel.rearRightMotorTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
             updateUITempItems(it, rearRightMotorTemps_imageView)
         })
+        viewModel.frontLeftMotorTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
+            updateUITempItems(it, frontLeftMotorTemps_imageView)
+        })
+        viewModel.frontRightMotorTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
+            updateUITempItems(it, frontRightMotorTemps_imageView)
+        })
 
         //////
         //setup engine start-n-stop
@@ -155,11 +161,9 @@ class RCControllerActivity : AppCompatActivity() {
 
                 viewModel.rearLeftMotorTemperatureLiveData.value = TemperatureWarningType.NOTHING
                 viewModel.rearRightMotorTemperatureLiveData.value = TemperatureWarningType.NOTHING
+                viewModel.frontLeftMotorTemperatureLiveData.value = TemperatureWarningType.NOTHING
+                viewModel.frontRightMotorTemperatureLiveData.value = TemperatureWarningType.NOTHING
                 /*updateTempUIItems(
-                    rearLeftMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
-                    rearRightMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
-                    frontLeftMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
-                    frontRightMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
                     rearHBridge = SensorFeedbackServer.WARNING_TYPE_NOTHING,
                     frontHBridge = SensorFeedbackServer.WARNING_TYPE_NOTHING,
                     raspberryPi = SensorFeedbackServer.WARNING_TYPE_NOTHING,
