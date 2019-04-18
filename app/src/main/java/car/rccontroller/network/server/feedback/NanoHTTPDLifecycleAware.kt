@@ -62,7 +62,7 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                                 model.rearLeftMotorTemperatureLiveData.postValue(warningType)
 
                                 formatResponse(
-                                    CarPartTemperature.MOTOR_REAR_LEFT.name, warningType.name
+                                    CarPartTemperature.MOTOR_REAR_LEFT.id, warningType.name
                                 )
                             }
                             CarPartTemperature.MOTOR_REAR_RIGHT.id -> {
@@ -73,7 +73,7 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                                 model.rearRightMotorTemperatureLiveData.postValue(warningType)
 
                                 formatResponse(
-                                    CarPartTemperature.MOTOR_REAR_RIGHT.name, warningType.name
+                                    CarPartTemperature.MOTOR_REAR_RIGHT.id, warningType.name
                                 )
                             }
                             CarPartTemperature.MOTOR_FRONT_LEFT.id -> {
@@ -84,7 +84,7 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                                 model.frontLeftMotorTemperatureLiveData.postValue(warningType)
 
                                 formatResponse(
-                                    CarPartTemperature.MOTOR_FRONT_LEFT.name, warningType.name
+                                    CarPartTemperature.MOTOR_FRONT_LEFT.id, warningType.name
                                 )
                             }
                             CarPartTemperature.MOTOR_FRONT_RIGHT.id -> {
@@ -95,7 +95,7 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                                 model.frontRightMotorTemperatureLiveData.postValue(warningType)
 
                                 formatResponse(
-                                    CarPartTemperature.MOTOR_FRONT_RIGHT.name, warningType.name
+                                    CarPartTemperature.MOTOR_FRONT_RIGHT.id, warningType.name
                                 )
                             }
                             CarPartTemperature.H_BRIDGE_REAR.id -> {
