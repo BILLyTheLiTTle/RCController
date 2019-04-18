@@ -96,6 +96,18 @@ class RCControllerActivity : AppCompatActivity() {
                     rearLeftMotorTemps_imageView.setImageResourceWithTag(android.R.color.transparent)
             }
         })
+        viewModel.rearRightMotorTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
+            when (it) {
+                TemperatureWarningType.NORMAL ->
+                    rearRightMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_normal)
+                TemperatureWarningType.MEDIUM ->
+                    rearRightMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_medium)
+                TemperatureWarningType.HIGH ->
+                    rearRightMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_high)
+                TemperatureWarningType.NOTHING ->
+                    rearRightMotorTemps_imageView.setImageResourceWithTag(android.R.color.transparent)
+            }
+        })
 
         //////
         //setup engine start-n-stop
@@ -160,6 +172,7 @@ class RCControllerActivity : AppCompatActivity() {
                 viewModel.emergencyLightsStatusLiveData.value = false
 
                 viewModel.rearLeftMotorTemperatureLiveData.value = TemperatureWarningType.NOTHING
+                viewModel.rearRightMotorTemperatureLiveData.value = TemperatureWarningType.NOTHING
                 /*updateTempUIItems(
                     rearLeftMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
                     rearRightMotor = SensorFeedbackServer.WARNING_TYPE_NOTHING,
