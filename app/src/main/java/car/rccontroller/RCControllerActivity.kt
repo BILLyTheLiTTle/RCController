@@ -85,28 +85,10 @@ class RCControllerActivity : AppCompatActivity() {
                 it, resources.getString(R.string.tachometer_unit))
         })
         viewModel.rearLeftMotorTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
-            when (it) {
-                TemperatureWarningType.NORMAL ->
-                    rearLeftMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_normal)
-                TemperatureWarningType.MEDIUM ->
-                    rearLeftMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_medium)
-                TemperatureWarningType.HIGH ->
-                    rearLeftMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_high)
-                TemperatureWarningType.NOTHING ->
-                    rearLeftMotorTemps_imageView.setImageResourceWithTag(android.R.color.transparent)
-            }
+            updateUITempItems(it, rearLeftMotorTemps_imageView)
         })
         viewModel.rearRightMotorTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
-            when (it) {
-                TemperatureWarningType.NORMAL ->
-                    rearRightMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_normal)
-                TemperatureWarningType.MEDIUM ->
-                    rearRightMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_medium)
-                TemperatureWarningType.HIGH ->
-                    rearRightMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_high)
-                TemperatureWarningType.NOTHING ->
-                    rearRightMotorTemps_imageView.setImageResourceWithTag(android.R.color.transparent)
-            }
+            updateUITempItems(it, rearRightMotorTemps_imageView)
         })
 
         //////
@@ -755,6 +737,19 @@ class RCControllerActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateUITempItems(warningType: TemperatureWarningType, item: ImageView){
+        when (warningType) {
+            TemperatureWarningType.NORMAL ->
+                item.setImageResourceWithTag(R.drawable.motor_temp_normal)
+            TemperatureWarningType.MEDIUM ->
+                item.setImageResourceWithTag(R.drawable.motor_temp_medium)
+            TemperatureWarningType.HIGH ->
+                item.setImageResourceWithTag(R.drawable.motor_temp_high)
+            TemperatureWarningType.NOTHING ->
+                item.setImageResourceWithTag(android.R.color.transparent)
+        }
+    }
+
     /* Motion interactive actions must be depending on each other.
         Their states on the server should be changed by set methods.
         This function here should get these states which must be as I want,
@@ -1045,28 +1040,6 @@ class RCControllerActivity : AppCompatActivity() {
                 carTemps_imageView.setImageResourceWithTag(R.drawable.car_temps_off)
             else
                 carTemps_imageView.setImageResourceWithTag(R.drawable.car_temps_on)
-
-            when (rearLeftMotor) {
-                SensorFeedbackServer.WARNING_TYPE_NORMAL ->
-                    rearLeftMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_normal)
-                SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
-                    rearLeftMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_medium)
-                SensorFeedbackServer.WARNING_TYPE_HIGH ->
-                    rearLeftMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_high)
-                SensorFeedbackServer.WARNING_TYPE_NOTHING ->
-                    rearLeftMotorTemps_imageView.setImageResourceWithTag(android.R.color.transparent)
-            }
-
-            when (rearRightMotor) {
-                SensorFeedbackServer.WARNING_TYPE_NORMAL ->
-                    rearRightMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_normal)
-                SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
-                    rearRightMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_medium)
-                SensorFeedbackServer.WARNING_TYPE_HIGH ->
-                    rearRightMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_high)
-                SensorFeedbackServer.WARNING_TYPE_NOTHING ->
-                    rearRightMotorTemps_imageView.setImageResourceWithTag(android.R.color.transparent)
-            }
 
             when (frontLeftMotor) {
                 SensorFeedbackServer.WARNING_TYPE_NORMAL ->
