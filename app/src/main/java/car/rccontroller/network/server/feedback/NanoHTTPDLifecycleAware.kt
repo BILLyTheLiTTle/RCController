@@ -132,14 +132,14 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                                 )
                             }
                             CarPartTemperature.RASPBERRY_PI.id -> {
-                                /*activity.updateTempUIItems(
-                                    raspberryPi = params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WARNING_TYPE_UNCHANGED
-                                )*/
-                                formatResponse(
-                                    CarPartTemperature.RASPBERRY_PI.id,
+                                val warningType = TemperatureWarningType.valueOf(
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.id
+                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.name
+                                )
+                                model.raspberryPiTemperatureLiveData.postValue(warningType)
+
+                                formatResponse(
+                                    CarPartTemperature.RASPBERRY_PI.id, warningType.name
                                 )
                             }
                             CarPartTemperature.BATTERIES.id -> {
