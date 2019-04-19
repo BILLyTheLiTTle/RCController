@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer-array name="motor_temperature_states">
+        <item>@android:color/transparent</item>
+        <item>@drawable/motor_temp_normal</item>
+        <item>@drawable/motor_temp_medium</item>
+        <item>@drawable/motor_temp_high</item>
+    </integer-array>
+
+    <integer-array name="h_bridge_temperature_states">
+        <item>@android:color/transparent</item>
+        <item>@drawable/h_bridge_temp_normal</item>
+        <item>@drawable/h_bridge_temp_medium</item>
+        <item>@drawable/h_bridge_temp_high</item>
+    </integer-array>
+
+    <integer-array name="raspberry_pi_temperature_states">
+        <item>@drawable/raspi_temp_off</item>
+        <item>@drawable/raspi_temp_normal</item>
+        <item>@drawable/raspi_temp_medium</item>
+        <item>@drawable/raspi_temp_high</item>
+    </integer-array>
+
+</resources>

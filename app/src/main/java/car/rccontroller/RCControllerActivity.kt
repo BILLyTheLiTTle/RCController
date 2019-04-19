@@ -1,5 +1,6 @@
 package car.rccontroller
 
+import android.content.res.TypedArray
 import android.graphics.drawable.AnimationDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -85,25 +86,32 @@ class RCControllerActivity : AppCompatActivity() {
                 it, resources.getString(R.string.tachometer_unit))
         })
         viewModel.rearLeftMotorTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
-            updateUITempItems(it, rearLeftMotorTemps_imageView)
+            updateUITempItems(it, rearLeftMotorTemps_imageView,
+                resources.obtainTypedArray(R.array.motor_temperature_states))
         })
         viewModel.rearRightMotorTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
-            updateUITempItems(it, rearRightMotorTemps_imageView)
+            updateUITempItems(it, rearRightMotorTemps_imageView,
+                resources.obtainTypedArray(R.array.motor_temperature_states))
         })
         viewModel.frontLeftMotorTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
-            updateUITempItems(it, frontLeftMotorTemps_imageView)
+            updateUITempItems(it, frontLeftMotorTemps_imageView,
+                resources.obtainTypedArray(R.array.motor_temperature_states))
         })
         viewModel.frontRightMotorTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
-            updateUITempItems(it, frontRightMotorTemps_imageView)
+            updateUITempItems(it, frontRightMotorTemps_imageView,
+                resources.obtainTypedArray(R.array.motor_temperature_states))
         })
         viewModel.rearHBridgeTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
-            updateUITempItems(it, rearHbridgeTemps_imageView)
+            updateUITempItems(it, rearHbridgeTemps_imageView,
+                resources.obtainTypedArray(R.array.h_bridge_temperature_states))
         })
         viewModel.frontHBridgeTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
-            updateUITempItems(it, frontHbridgeTemps_imageView)
+            updateUITempItems(it, frontHbridgeTemps_imageView,
+                resources.obtainTypedArray(R.array.h_bridge_temperature_states))
         })
         viewModel.raspberryPiTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
-            updateUITempItems(it, raspiTemp_imageView)
+            updateUITempItems(it, raspiTemp_imageView,
+                resources.obtainTypedArray(R.array.raspberry_pi_temperature_states))
         })
 
         //////
@@ -753,17 +761,16 @@ class RCControllerActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUITempItems(warningType: TemperatureWarningType, item: ImageView){
+    private fun updateUITempItems(warningType: TemperatureWarningType, item: ImageView, states: TypedArray) {
+        var i = 0
         when (warningType) {
-            TemperatureWarningType.NORMAL ->
-                item.setImageResourceWithTag(R.drawable.motor_temp_normal)
-            TemperatureWarningType.MEDIUM ->
-                item.setImageResourceWithTag(R.drawable.motor_temp_medium)
-            TemperatureWarningType.HIGH ->
-                item.setImageResourceWithTag(R.drawable.motor_temp_high)
-            TemperatureWarningType.NOTHING ->
-                item.setImageResourceWithTag(android.R.color.transparent)
+            //TemperatureWarningType.NOTHING -> i = 0
+            TemperatureWarningType.NORMAL -> i = 1
+            TemperatureWarningType.MEDIUM -> i = 2
+            TemperatureWarningType.HIGH -> i = 3
         }
+        item.setImageResourceWithTag(states.getResourceId(i, 0))
+        states.recycle()
     }
 
     /* Motion interactive actions must be depending on each other.
@@ -1056,50 +1063,6 @@ class RCControllerActivity : AppCompatActivity() {
                 carTemps_imageView.setImageResourceWithTag(R.drawable.car_temps_off)
             else
                 carTemps_imageView.setImageResourceWithTag(R.drawable.car_temps_on)
-
-            when (frontLeftMotor) {
-                SensorFeedbackServer.WARNING_TYPE_NORMAL ->
-                    frontLeftMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_normal)
-                SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
-                    frontLeftMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_medium)
-                SensorFeedbackServer.WARNING_TYPE_HIGH ->
-                    frontLeftMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_high)
-                SensorFeedbackServer.WARNING_TYPE_NOTHING ->
-                    frontLeftMotorTemps_imageView.setImageResourceWithTag(android.R.color.transparent)
-            }
-
-            when (frontRightMotor) {
-                SensorFeedbackServer.WARNING_TYPE_NORMAL ->
-                    frontRightMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_normal)
-                SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
-                    frontRightMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_medium)
-                SensorFeedbackServer.WARNING_TYPE_HIGH ->
-                    frontRightMotorTemps_imageView.setImageResourceWithTag(R.drawable.motor_temp_high)
-                SensorFeedbackServer.WARNING_TYPE_NOTHING ->
-                    frontRightMotorTemps_imageView.setImageResourceWithTag(android.R.color.transparent)
-            }
-
-            when (rearHBridge) {
-                SensorFeedbackServer.WARNING_TYPE_NORMAL ->
-                    rearHbridgeTemps_imageView.setImageResourceWithTag(R.drawable.h_bridge_temp_normal)
-                SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
-                    rearHbridgeTemps_imageView.setImageResourceWithTag(R.drawable.h_bridge_temp_medium)
-                SensorFeedbackServer.WARNING_TYPE_HIGH ->
-                    rearHbridgeTemps_imageView.setImageResourceWithTag(R.drawable.h_bridge_temp_high)
-                SensorFeedbackServer.WARNING_TYPE_NOTHING ->
-                    rearHbridgeTemps_imageView.setImageResourceWithTag(android.R.color.transparent)
-            }
-
-            when (frontHBridge) {
-                SensorFeedbackServer.WARNING_TYPE_NORMAL ->
-                    frontHbridgeTemps_imageView.setImageResourceWithTag(R.drawable.h_bridge_temp_normal)
-                SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
-                    frontHbridgeTemps_imageView.setImageResourceWithTag(R.drawable.h_bridge_temp_medium)
-                SensorFeedbackServer.WARNING_TYPE_HIGH ->
-                    frontHbridgeTemps_imageView.setImageResourceWithTag(R.drawable.h_bridge_temp_high)
-                SensorFeedbackServer.WARNING_TYPE_NOTHING ->
-                    frontHbridgeTemps_imageView.setImageResourceWithTag(android.R.color.transparent)
-            }
 
             when (raspberryPi) {
                 SensorFeedbackServer.WARNING_TYPE_NORMAL ->
