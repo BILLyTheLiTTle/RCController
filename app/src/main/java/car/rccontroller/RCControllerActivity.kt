@@ -113,6 +113,10 @@ class RCControllerActivity : AppCompatActivity() {
             updateUITempItems(it, raspiTemp_imageView,
                 resources.obtainTypedArray(R.array.raspberry_pi_temperature_states))
         })
+        viewModel.batteriesTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
+            updateUITempItems(it, batteryTemp_imageView,
+                resources.obtainTypedArray(R.array.batteries_temperature_states))
+        })
 
         //////
         //setup engine start-n-stop
@@ -186,6 +190,7 @@ class RCControllerActivity : AppCompatActivity() {
                 viewModel.frontHBridgeTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
                 viewModel.rearHBridgeTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
                 viewModel.raspberryPiTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
+                viewModel.batteriesTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
                 /*updateTempUIItems(
                     batteries = SensorFeedbackServer.WARNING_TYPE_NOTHING,
                     shiftRegisters = SensorFeedbackServer.WARNING_TYPE_NOTHING

@@ -143,14 +143,14 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                                 )
                             }
                             CarPartTemperature.BATTERIES.id -> {
-                                /*activity.updateTempUIItems(
-                                    batteries = params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WARNING_TYPE_UNCHANGED
-                                )*/
-                                formatResponse(
-                                    CarPartTemperature.BATTERIES.id,
+                                val warningType = TemperatureWarningType.valueOf(
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.id
+                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.name
+                                )
+                                model.batteriesTemperatureLiveData.postValue(warningType)
+
+                                formatResponse(
+                                    CarPartTemperature.BATTERIES.id, warningType.name
                                 )
                             }
                             CarPartTemperature.SHIFT_REGISTERS.id -> {

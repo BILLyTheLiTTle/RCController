@@ -22,4 +22,11 @@
         <item>@drawable/raspi_temp_high</item>
     </integer-array>
 
+    <integer-array name="batteries_temperature_states">
+        <item>@drawable/batteries_temp_off</item>
+        <item>@drawable/batteries_temp_normal</item>
+        <item>@drawable/batteries_temp_medium</item>
+        <item>@drawable/batteries_temp_high</item>
+    </integer-array>
+
 </resources>

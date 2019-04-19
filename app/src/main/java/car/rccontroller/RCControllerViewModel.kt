@@ -20,6 +20,7 @@ class RCControllerViewModel: ViewModel() {
     val rearHBridgeTemperatureLiveData = MutableLiveData<TemperatureWarningType>()
     val frontHBridgeTemperatureLiveData = MutableLiveData<TemperatureWarningType>()
     val raspberryPiTemperatureLiveData = MutableLiveData<TemperatureWarningType>()
+    val batteriesTemperatureLiveData = MutableLiveData<TemperatureWarningType>()
 
     /* The values are initialized at false or empty state because
     I want the grey icons at start because
@@ -42,5 +43,6 @@ class RCControllerViewModel: ViewModel() {
         rearHBridgeTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
         frontHBridgeTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
         raspberryPiTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
+        batteriesTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
     }
 }
