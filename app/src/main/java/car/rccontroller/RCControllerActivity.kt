@@ -148,6 +148,8 @@ class RCControllerActivity : AppCompatActivity() {
             throttleNbrake_mySeekBar.progress =
                     resources.getInteger(R.integer.default_throttle_n_brake)
 
+            nano.changeServerState(it)
+
             if (it) {
                 engineStartStop_imageView.setImageResourceWithTag(R.drawable.engine_started_stop_action)
 
@@ -165,19 +167,20 @@ class RCControllerActivity : AppCompatActivity() {
 
                 viewModel.emergencyLightsStatusLiveData.value = false
 
-                viewModel.rearLeftMotorTemperatureLiveData.value = TemperatureWarningType.NOTHING
-                viewModel.rearRightMotorTemperatureLiveData.value = TemperatureWarningType.NOTHING
-                viewModel.frontLeftMotorTemperatureLiveData.value = TemperatureWarningType.NOTHING
-                viewModel.frontRightMotorTemperatureLiveData.value = TemperatureWarningType.NOTHING
-                viewModel.frontHBridgeTemperatureLiveData.value = TemperatureWarningType.NOTHING
-                viewModel.rearHBridgeTemperatureLiveData.value = TemperatureWarningType.NOTHING
+                // Update those values with post in order to be executed after postValue of the server!
+                viewModel.rearLeftMotorTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
+                viewModel.rearRightMotorTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
+                viewModel.frontLeftMotorTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
+                viewModel.frontRightMotorTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
+                viewModel.frontHBridgeTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
+                viewModel.rearHBridgeTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
                 /*updateTempUIItems(
                     raspberryPi = SensorFeedbackServer.WARNING_TYPE_NOTHING,
                     batteries = SensorFeedbackServer.WARNING_TYPE_NOTHING,
                     shiftRegisters = SensorFeedbackServer.WARNING_TYPE_NOTHING
                 )*/
 
-                viewModel.speedLiveData.value = getString(R.string.tachometer_null_value)
+                viewModel.speedLiveData.postValue(getString(R.string.tachometer_null_value))
             }
 
             /*updateMotionUIItems()

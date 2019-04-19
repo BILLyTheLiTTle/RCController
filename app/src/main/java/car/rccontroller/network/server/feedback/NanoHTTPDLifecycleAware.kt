@@ -16,24 +16,36 @@ import fi.iki.elonen.NanoHTTPD
 
 class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): LifecycleObserver {
     private var server: SensorFeedbackServer? = null
+    private var isAlive: Boolean = false
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun startServer() {
+        if(isAlive) return
         server = if (RUN_ON_EMULATOR)
             SensorFeedbackServer(model)
         else
             SensorFeedbackServer(
-            model,
-            ip,
-            port
-        )
+                model,
+                ip,
+                port
+            )
         server?.start()
         ip = server?.ip ?: RCControllerApplication.instance!!.myIP
         port = server?.port ?: port
+        isAlive = true
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun stopServer() = server?.stop()
+    fun stopServer() {
+        if (!isAlive) return
+        server?.stop()
+        isAlive = false
+    }
+
+    fun changeServerState(keepAlive: Boolean) {
+        if(keepAlive && !isAlive) startServer()
+        else if(!keepAlive && isAlive) stopServer()
+    }
 
     // constructor default parameters are for emulator
     private class SensorFeedbackServer(
@@ -48,7 +60,6 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
         override fun serve(session: IHTTPSession): Response {
             val params = session.parameters
             val uri = session.uri
-
             // TODO instead of id (example: "unchanged") use the name (example: UNCHANGED) of the enums
             return newFixedLengthResponse(
                 when (uri) {
