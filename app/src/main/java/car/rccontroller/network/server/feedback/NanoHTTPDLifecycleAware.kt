@@ -99,25 +99,25 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                                 )
                             }
                             CarPartTemperature.H_BRIDGE_REAR.id -> {
-                                /*activity.updateTempUIItems(
-                                    rearHBridge = params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WARNING_TYPE_UNCHANGED
-                                )*/
-                                formatResponse(
-                                    CarPartTemperature.H_BRIDGE_REAR.id,
+                                val warningType = TemperatureWarningType.valueOf(
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.id
+                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.name
+                                )
+                                model.frontHBridgeTemperatureLiveData.postValue(warningType)
+
+                                formatResponse(
+                                    CarPartTemperature.H_BRIDGE_REAR.id, warningType.name
                                 )
                             }
                             CarPartTemperature.H_BRIDGE_FRONT.id -> {
-                                /*activity.updateTempUIItems(
-                                    frontHBridge = params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: WARNING_TYPE_UNCHANGED
-                                )*/
-                                formatResponse(
-                                    CarPartTemperature.H_BRIDGE_FRONT.id,
+                                val warningType = TemperatureWarningType.valueOf(
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.id
+                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.name
+                                )
+                                model.rearHBridgeTemperatureLiveData.postValue(warningType)
+
+                                formatResponse(
+                                    CarPartTemperature.H_BRIDGE_FRONT.id, warningType.name
                                 )
                             }
                             CarPartTemperature.RASPBERRY_PI.id -> {
