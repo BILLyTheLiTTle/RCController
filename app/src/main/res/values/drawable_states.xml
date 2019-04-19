@@ -29,4 +29,11 @@
         <item>@drawable/batteries_temp_high</item>
     </integer-array>
 
+    <integer-array name="shift_registers_temperature_states">
+        <item>@drawable/shift_register_temp_off</item>
+        <item>@drawable/shift_register_temp_normal</item>
+        <item>@drawable/shift_register_temp_medium</item>
+        <item>@drawable/shift_register_temp_high</item>
+    </integer-array>
+
 </resources>

@@ -117,6 +117,10 @@ class RCControllerActivity : AppCompatActivity() {
             updateUITempItems(it, batteryTemp_imageView,
                 resources.obtainTypedArray(R.array.batteries_temperature_states))
         })
+        viewModel.shiftRegistersTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
+            updateUITempItems(it, shiftRegisterTemp_imageView,
+                resources.obtainTypedArray(R.array.shift_registers_temperature_states))
+        })
 
         //////
         //setup engine start-n-stop
@@ -167,13 +171,16 @@ class RCControllerActivity : AppCompatActivity() {
 
             if (it) {
                 engineStartStop_imageView.setImageResourceWithTag(R.drawable.engine_started_stop_action)
+                carTemps_imageView.setImageResourceWithTag(R.drawable.car_temps_on)
 
                 // The values change at the same state as they are currently at the server.
                 viewModel.reverseStatusLiveData.value = getReverseIntention()
                 viewModel.emergencyLightsStatusLiveData.value = getEmergencyLightsState()
                 viewModel.speedLiveData.value = resources.getString(R.string.tachometer_value)
-            } else {
+            }
+            else {
                 engineStartStop_imageView.setImageResourceWithTag(R.drawable.engine_stopped_start_action)
+                carTemps_imageView.setImageResourceWithTag(R.drawable.car_temps_off)
 
                 viewModel.reverseStatusLiveData.value = it
 
@@ -191,10 +198,7 @@ class RCControllerActivity : AppCompatActivity() {
                 viewModel.rearHBridgeTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
                 viewModel.raspberryPiTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
                 viewModel.batteriesTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
-                /*updateTempUIItems(
-                    batteries = SensorFeedbackServer.WARNING_TYPE_NOTHING,
-                    shiftRegisters = SensorFeedbackServer.WARNING_TYPE_NOTHING
-                )*/
+                viewModel.shiftRegistersTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
 
                 viewModel.speedLiveData.postValue(getString(R.string.tachometer_null_value))
             }
@@ -1045,68 +1049,6 @@ class RCControllerActivity : AppCompatActivity() {
             }
         }
     }
-
-    /* This function is for setting and resetting purposes.
-     */
-    /*fun updateTempUIItems(
-        rearLeftMotor: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
-        rearRightMotor: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
-        frontLeftMotor: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
-        frontRightMotor: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
-        rearHBridge: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
-        frontHBridge: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
-        raspberryPi: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
-        batteries: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED,
-        shiftRegisters: String = SensorFeedbackServer.WARNING_TYPE_UNCHANGED
-    ) {
-        runOnUiThread {
-            if (rearLeftMotor == SensorFeedbackServer.WARNING_TYPE_NOTHING &&
-                rearRightMotor == SensorFeedbackServer.WARNING_TYPE_NOTHING &&
-                frontLeftMotor == SensorFeedbackServer.WARNING_TYPE_NOTHING &&
-                frontRightMotor == SensorFeedbackServer.WARNING_TYPE_NOTHING &&
-                rearHBridge == SensorFeedbackServer.WARNING_TYPE_NOTHING)
-                carTemps_imageView.setImageResourceWithTag(R.drawable.car_temps_off)
-            else
-                carTemps_imageView.setImageResourceWithTag(R.drawable.car_temps_on)
-
-            when (raspberryPi) {
-                SensorFeedbackServer.WARNING_TYPE_NORMAL ->
-                    raspiTemp_imageView.setImageResourceWithTag(R.drawable.raspi_temp_normal)
-                SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
-                    raspiTemp_imageView.setImageResourceWithTag(R.drawable.raspi_temp_medium)
-                SensorFeedbackServer.WARNING_TYPE_HIGH ->
-                    raspiTemp_imageView.setImageResourceWithTag(R.drawable.raspi_temp_high)
-                SensorFeedbackServer.WARNING_TYPE_NOTHING ->
-                    raspiTemp_imageView.setImageResourceWithTag(R.drawable.raspi_temp_off)
-            }
-
-            when (batteries) {
-                SensorFeedbackServer.WARNING_TYPE_NORMAL ->
-                    batteryTemp_imageView.setImageResourceWithTag(R.drawable.batteries_temp_normal)
-                SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
-                    batteryTemp_imageView.setImageResourceWithTag(R.drawable.batteries_temp_medium)
-                SensorFeedbackServer.WARNING_TYPE_HIGH ->
-                    batteryTemp_imageView.setImageResourceWithTag(R.drawable.batteries_temp_high)
-                SensorFeedbackServer.WARNING_TYPE_NOTHING ->
-                    batteryTemp_imageView.setImageResourceWithTag(R.drawable.batteries_temp_off)
-            }
-
-            when (shiftRegisters) {
-                SensorFeedbackServer.WARNING_TYPE_NORMAL ->
-                    shiftRegisterTemp_imageView.
-                        setImageResourceWithTag(R.drawable.shift_register_temp_normal)
-                SensorFeedbackServer.WARNING_TYPE_MEDIUM ->
-                    shiftRegisterTemp_imageView.
-                        setImageResourceWithTag(R.drawable.shift_register_temp_medium)
-                SensorFeedbackServer.WARNING_TYPE_HIGH ->
-                    shiftRegisterTemp_imageView.
-                        setImageResourceWithTag(R.drawable.shift_register_temp_high)
-                SensorFeedbackServer.WARNING_TYPE_NOTHING ->
-                    shiftRegisterTemp_imageView.
-                        setImageResourceWithTag(R.drawable.shift_register_temp_off)
-            }
-        }
-    }*/
 
     override fun onPause() {
         super.onPause()
