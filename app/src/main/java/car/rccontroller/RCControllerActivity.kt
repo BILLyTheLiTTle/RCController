@@ -2,7 +2,6 @@ package car.rccontroller
 
 import android.content.res.TypedArray
 import android.graphics.drawable.AnimationDrawable
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -22,9 +21,6 @@ import car.rccontroller.network.server.feedback.NanoHTTPDLifecycleAware
 import car.rccontroller.network.server.feedback.data.TemperatureWarningType
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
-
-
-val RUN_ON_EMULATOR = Build.FINGERPRINT.contains("generic")
 
 lateinit var retrofit: Retrofit
 val engineAPI: Engine by lazy { retrofit.create<Engine>(Engine::class.java) }
@@ -741,7 +737,7 @@ class RCControllerActivity : AppCompatActivity() {
             setMessage(getString(R.string.server_dialog_msg))
             setPositiveButton(getString(R.string.server_dialog_ok_button)){ _, _ ->
                  val raspiServerIP =
-                        if (RUN_ON_EMULATOR)
+                        if (NanoHTTPDLifecycleAware.RUN_ON_EMULATOR)
                             "10.0.2.2"
                         else
                             dialogView.findViewById<EditText>(R.id.serverIp_editText).text

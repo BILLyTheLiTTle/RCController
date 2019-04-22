@@ -1,18 +1,17 @@
 package car.rccontroller.network.server.feedback
 
+import android.os.Build
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import car.rccontroller.RCControllerApplication
 import car.rccontroller.RCControllerViewModel
-import car.rccontroller.RUN_ON_EMULATOR
 import car.rccontroller.network.*
 import car.rccontroller.network.server.feedback.data.CarModule
 import car.rccontroller.network.server.feedback.data.CarPartTemperature
 import car.rccontroller.network.server.feedback.data.ModuleState
 import car.rccontroller.network.server.feedback.data.TemperatureWarningType
 import fi.iki.elonen.NanoHTTPD
-
 
 class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): LifecycleObserver {
     private var server: SensorFeedbackServer? = null
@@ -22,7 +21,7 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
     fun startServer() {
         if(isAlive) return
         server = if (RUN_ON_EMULATOR)
-            SensorFeedbackServer(model)
+            SensorFeedbackServer(model, "localhost", 8090)
         else
             SensorFeedbackServer(
                 model,
@@ -47,11 +46,22 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
         else if(!keepAlive && isAlive) stopServer()
     }
 
-    // constructor default parameters are for emulator
+    /* I don't have a public constructor for the server because I don't
+    need to know more info about the server. The only thing I want to do is
+    to start and stop the server.
+    If for any reason I make this constructor public I have to decide at the
+    instantiation point if I want to run a server on an emulator or in a device
+    and this has nothing to do with the whole application's development process
+    and should not be left into the developer's decision.
+    I made this procedure automatic to help me at development in different computers
+    so this process must be as secret as possible to other classes,
+    apart from this, there are no advantages for other classes knowing that the app is
+    running on an emulator or in a real device.
+     */
     private class SensorFeedbackServer(
         private val model: RCControllerViewModel,
-        val ip: String = "localhost",
-        val port: Int = 8090
+        val ip: String,
+        val port: Int
     ) : NanoHTTPD(ip, port) {
 
         private var receivedSpeed: String? = "0"
@@ -254,6 +264,8 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
     }
 
     companion object {
+        val RUN_ON_EMULATOR: Boolean by lazy { Build.FINGERPRINT.contains("generic") }
+
         var ip = RCControllerApplication.instance?.myIP ?: EMPTY_STRING
             private set
         var port = 8080
