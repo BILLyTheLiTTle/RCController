@@ -39,14 +39,14 @@ class RequestsModelKtTest {
             .build()
         engineApi = retrofit.create<Engine>(Engine::class.java)
         electricsAPI = retrofit.create<Electrics>(Electrics::class.java)
-        car.rccontroller.network.cockpit.startEngine(null, serverIp, port, engineApi, electricsAPI)
+        car.rccontroller.network.cockpit.startEngine(null)
         throttleBrakeActionId = System.currentTimeMillis()
         steeringDirectionId = System.currentTimeMillis()
     }
 
     @After
     fun tearDown() {
-        stopEngine(engineApi)
+        stopEngine()
     }
 
     @Test

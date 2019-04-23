@@ -1,6 +1,7 @@
 package car.rccontroller.network.cockpit
 
 import car.rccontroller.RCControllerActivity
+import car.rccontroller.retrofit
 import junit.framework.Assert.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.CoreMatchers.*
@@ -24,10 +25,6 @@ class EngineKtTest {
     private val serverIp = "192.168.200.245"
     private val port = 8080
 
-    private lateinit var retrofit: Retrofit
-    private lateinit var engineAPI: Engine
-    private lateinit var electricsAPI: Electrics
-
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
@@ -35,16 +32,14 @@ class EngineKtTest {
             .baseUrl("http://$serverIp:$port/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
-        engineAPI = retrofit.create<Engine>(Engine::class.java)
-        electricsAPI = retrofit.create<Electrics>(Electrics::class.java)
-        car.rccontroller.network.cockpit.startEngine(null, serverIp, port, engineAPI, electricsAPI)
+        car.rccontroller.network.cockpit.startEngine(null)
         //throttleBrakeActionId = System.currentTimeMillis()
         //steeringDirectionId = System.currentTimeMillis()
     }
 
     @After
     fun tearDown() {
-        stopEngine(engineAPI)
+        stopEngine()
     }
 
     @Test
@@ -55,12 +50,12 @@ class EngineKtTest {
     // Engine
     @Test
     fun `validate that engine has started`() {
-        assertThat(isEngineStarted(engineAPI), `is`(true))
+        assertThat(isEngineStarted(), `is`(true))
     }
     @Test
     fun `validate that engine has stopped`() {
-        stopEngine(engineAPI)
-        assertThat(isEngineStarted(engineAPI), `is`(false))
+        stopEngine()
+        assertThat(isEngineStarted(), `is`(false))
     }
 
     /*@Test

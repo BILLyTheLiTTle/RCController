@@ -23,12 +23,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 lateinit var retrofit: Retrofit
-val engineAPI: Engine by lazy { retrofit.create<Engine>(Engine::class.java) }
-val throttleBrakeAPI: ThrottleBrake by lazy { retrofit.create<ThrottleBrake>(ThrottleBrake::class.java) }
-val steeringAPI: Steering by lazy { retrofit.create<Steering>(Steering::class.java) }
-val electricsAPI: Electrics by lazy { retrofit.create<Electrics>(Electrics::class.java) }
-val setupAPI: Setup by lazy { retrofit.create<Setup>(Setup::class.java) }
-
 /**
  * A full-screen activity in landscape mode.
  */
@@ -771,7 +765,7 @@ class RCControllerActivity : AppCompatActivity() {
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build()
 
-                val status = startEngine(applicationContext as RCControllerApplication, raspiServerIP, raspiServerPort)
+                val status = startEngine(applicationContext as RCControllerApplication)
                 if (status == OK_STRING) {
                     viewModel.engineStatusLiveData.value = true
                 } else {

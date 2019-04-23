@@ -2,7 +2,7 @@ package car.rccontroller.network.cockpit
 
 import car.rccontroller.network.EMPTY_STRING
 import car.rccontroller.network.runBlockingRequest
-import car.rccontroller.setupAPI
+import car.rccontroller.retrofit
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -32,6 +32,9 @@ interface Setup {
     @GET("/get_rear_differential_slippery_limiter")
     fun getRearDifferentialSlipperyLimiter(): Call<Int>
 
+    companion object {
+        val setupAPI: Setup by lazy { retrofit.create<Setup>(Setup::class.java) }
+    }
 }
 
 // Handling Assistance
@@ -40,12 +43,12 @@ const val ASSISTANCE_NONE = "assistance_none"
 const val ASSISTANCE_WARNING = "assistance_warning"
 const val ASSISTANCE_FULL = "assistance_full"
 
-fun setHandlingAssistanceState(state: String, retrofitAPI: Setup = setupAPI): String {
-    return runBlockingRequest { retrofitAPI.setHandlingAssistance(state) } ?: EMPTY_STRING
+fun setHandlingAssistanceState(state: String): String {
+    return runBlockingRequest { Setup.setupAPI.setHandlingAssistance(state) } ?: EMPTY_STRING
 }
 
-fun getHandlingAssistanceState(retrofitAPI: Setup = setupAPI): String {
-    return runBlockingRequest { retrofitAPI.getHandlingAssistanceState() } ?: EMPTY_STRING
+fun getHandlingAssistanceState(): String {
+    return runBlockingRequest { Setup.setupAPI.getHandlingAssistanceState() } ?: EMPTY_STRING
 }
 
 // Motor Speed Limiter
@@ -59,12 +62,12 @@ const val MOTOR_SPEED_LIMITER_FAST_SPEED_1 = 0.80
 const val MOTOR_SPEED_LIMITER_FAST_SPEED_2 = 0.90
 const val MOTOR_SPEED_LIMITER_FULL_SPEED = 1.00
 
-fun setMotorSpeedLimiter(value: Double, retrofitAPI: Setup = setupAPI): String {
-    return runBlockingRequest { retrofitAPI.setMotorSpeedLimiter(value) } ?: EMPTY_STRING
+fun setMotorSpeedLimiter(value: Double): String {
+    return runBlockingRequest { Setup.setupAPI.setMotorSpeedLimiter(value) } ?: EMPTY_STRING
 }
 
-fun getMotorSpeedLimiter(retrofitAPI: Setup = setupAPI): Double {
-    return runBlockingRequest { retrofitAPI.getMotorSpeedLimiter() } ?: MOTOR_SPEED_LIMITER_ERROR_SPEED
+fun getMotorSpeedLimiter(): Double {
+    return runBlockingRequest { Setup.setupAPI.getMotorSpeedLimiter() } ?: MOTOR_SPEED_LIMITER_ERROR_SPEED
 }
 
 // Differential Slippery Limiter
@@ -79,21 +82,21 @@ const val DIFFERENTIAL_SLIPPERY_LIMITER_AUTO = 10
 //---- Front ----
 var previousFrontDifferentialSlipperyLimiter: Int = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
 
-fun setFrontDifferentialSlipperyLimiter(value: Int, retrofitAPI: Setup = setupAPI): String {
-    return runBlockingRequest { retrofitAPI.setFrontDifferentialSlipperyLimiter(value) } ?: EMPTY_STRING
+fun setFrontDifferentialSlipperyLimiter(value: Int): String {
+    return runBlockingRequest { Setup.setupAPI.setFrontDifferentialSlipperyLimiter(value) } ?: EMPTY_STRING
 }
 
-fun getFrontDifferentialSlipperyLimiter(retrofitAPI: Setup = setupAPI): Int {
-    return runBlockingRequest { retrofitAPI.getFrontDifferentialSlipperyLimiter() } ?: DIFFERENTIAL_SLIPPERY_LIMITER_ERROR
+fun getFrontDifferentialSlipperyLimiter(): Int {
+    return runBlockingRequest { Setup.setupAPI.getFrontDifferentialSlipperyLimiter() } ?: DIFFERENTIAL_SLIPPERY_LIMITER_ERROR
 }
 
 //---- Rear ----
 var previousRearDifferentialSlipperyLimiter: Int = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
 
-fun setRearDifferentialSlipperyLimiter(value: Int, retrofitAPI: Setup = setupAPI): String {
-    return runBlockingRequest { retrofitAPI.setRearDifferentialSlipperyLimiter(value) } ?: EMPTY_STRING
+fun setRearDifferentialSlipperyLimiter(value: Int): String {
+    return runBlockingRequest { Setup.setupAPI.setRearDifferentialSlipperyLimiter(value) } ?: EMPTY_STRING
 }
 
-fun getRearDifferentialSlipperyLimiter(retrofitAPI: Setup = setupAPI): Int {
-    return runBlockingRequest { retrofitAPI.getRearDifferentialSlipperyLimiter() } ?: DIFFERENTIAL_SLIPPERY_LIMITER_ERROR
+fun getRearDifferentialSlipperyLimiter(): Int {
+    return runBlockingRequest { Setup.setupAPI.getRearDifferentialSlipperyLimiter() } ?: DIFFERENTIAL_SLIPPERY_LIMITER_ERROR
 }

@@ -18,10 +18,6 @@ import retrofit2.Call
 const val OK_STRING = "OK"
 const val EMPTY_STRING = "NULL"
 
-//var raspiServerIP: String? = null
-//var raspiServerPort: Int? = null
-
-
 /////////
 // General use
 /////////
@@ -32,8 +28,6 @@ fun <T> launchRequest(block:() -> Call<T>): Job =
 
 fun <T> runBlockingRequest(block:() -> Call<T>): T? =
     runBlocking(Dispatchers.IO) { block().execute().body() }
-
-//private fun areNetworkSettingsAvailable() = (raspiServerIP != null) && (raspiServerPort != null)
 
 private fun doRequest(url: String): String {
     val con: HttpURLConnection?

@@ -1,6 +1,5 @@
 package car.rccontroller.network.cockpit
 
-import car.rccontroller.electricsAPI
 import car.rccontroller.network.EMPTY_STRING
 import car.rccontroller.network.runBlockingRequest
 import car.rccontroller.retrofit
@@ -32,6 +31,10 @@ interface Electrics {
 
     @GET("/get_emergency_lights_state")
     fun getEmergencyLightsState(): Call<Boolean>
+
+    companion object {
+        val electricsAPI: Electrics by lazy { retrofit.create<Electrics>(Electrics::class.java) }
+    }
 }
 
 /////////
@@ -43,12 +46,12 @@ const val DRIVING_LIGHTS = "driving_lights"
 const val LONG_RANGE_LIGHTS = "long_range_lights"
 const val LONG_RANGE_SIGNAL_LIGHTS = "long_range_signal_lights"
 
-fun setMainLightsState(state: String, retrofitAPI: Electrics = electricsAPI): String {
-    return runBlockingRequest { retrofitAPI.setMainLightsState(state) } ?: EMPTY_STRING
+fun setMainLightsState(state: String): String {
+    return runBlockingRequest { Electrics.electricsAPI.setMainLightsState(state) } ?: EMPTY_STRING
 }
 
-fun getMainLightsState(retrofitAPI: Electrics = electricsAPI): String {
-    return runBlockingRequest { retrofitAPI.getMainLightsState() } ?: EMPTY_STRING
+fun getMainLightsState(): String {
+    return runBlockingRequest { Electrics.electricsAPI.getMainLightsState() } ?: EMPTY_STRING
 }
 
 /////////
@@ -58,12 +61,12 @@ const val DIRECTION_LIGHTS_RIGHT = "direction_lights_right"
 const val DIRECTION_LIGHTS_LEFT = "direction_lights_left"
 const val DIRECTION_LIGHTS_STRAIGHT = "direction_lights_straight"
 
-fun setDirectionLightsState(state: String, retrofitAPI: Electrics = electricsAPI): String {
-    return runBlockingRequest { retrofitAPI.setDirectionLights(state) } ?: EMPTY_STRING
+fun setDirectionLightsState(state: String): String {
+    return runBlockingRequest { Electrics.electricsAPI.setDirectionLights(state) } ?: EMPTY_STRING
 }
 
-fun getDirectionLightsState(retrofitAPI: Electrics = electricsAPI): String {
-    return runBlockingRequest { retrofitAPI.getDirectionLights() } ?: EMPTY_STRING
+fun getDirectionLightsState(): String {
+    return runBlockingRequest { Electrics.electricsAPI.getDirectionLights() } ?: EMPTY_STRING
 }
 
 /////////
@@ -71,12 +74,12 @@ fun getDirectionLightsState(retrofitAPI: Electrics = electricsAPI): String {
 /////////
 const val EMERGENCY_LIGHTS = "emergency_lights"
 
-fun setEmergencyLightsState(state: Boolean, retrofitAPI: Electrics = electricsAPI): String {
-    return runBlockingRequest { retrofitAPI.setEmergencyLightsState(state) } ?: EMPTY_STRING
+fun setEmergencyLightsState(state: Boolean): String {
+    return runBlockingRequest { Electrics.electricsAPI.setEmergencyLightsState(state) } ?: EMPTY_STRING
 }
 
-fun getEmergencyLightsState(retrofitAPI: Electrics = electricsAPI): Boolean {
-    return runBlockingRequest { retrofitAPI.getEmergencyLightsState() } == true
+fun getEmergencyLightsState(): Boolean {
+    return runBlockingRequest { Electrics.electricsAPI.getEmergencyLightsState() } == true
 }
 
 /////////
@@ -84,10 +87,10 @@ fun getEmergencyLightsState(retrofitAPI: Electrics = electricsAPI): Boolean {
 /////////
 const val REVERSE_LIGHTS = "reverse_lights"
 
-fun setReverseIntention(state: Boolean, retrofitAPI: Electrics = electricsAPI): String {
-    return runBlockingRequest { retrofitAPI.setReverseLightsState(state) } ?: EMPTY_STRING
+fun setReverseIntention(state: Boolean): String {
+    return runBlockingRequest { Electrics.electricsAPI.setReverseLightsState(state) } ?: EMPTY_STRING
 }
 
-fun getReverseIntention(retrofitAPI: Electrics = electricsAPI): Boolean {
-    return runBlockingRequest { retrofitAPI.getReverseLightsState() } == true
+fun getReverseIntention(): Boolean {
+    return runBlockingRequest { Electrics.electricsAPI.getReverseLightsState() } == true
 }

@@ -18,41 +18,34 @@ interface Engine {
 
     @GET("/stop_engine")
     fun stopEngine(): Call<String>
+
+    companion object {
+        val engineAPI: Engine by lazy { retrofit.create<Engine>(Engine::class.java) }
+    }
 }
 
-fun isEngineStarted(retrofitAPI: Engine = engineAPI): Boolean {
-    return runBlockingRequest { retrofitAPI.getEngineState() } == true
+fun isEngineStarted(): Boolean {
+    return runBlockingRequest { Engine.engineAPI.getEngineState() } == true
 }
 
-fun startEngine(context: RCControllerApplication?,
-                serverIp: String?, serverPort: Int?,
-                retrofitEngineAPI: Engine = engineAPI, retrofitElectricsAPI: Electrics = electricsAPI
-): String{
+fun startEngine(context: RCControllerApplication?): String{
     //reset and get ready for new requests
     if(context != null) {
         throttleBrakeActionId = context.resources.getInteger(R.integer.default_throttleBrakeActionId).toLong()
         steeringDirectionId = context.resources.getInteger(R.integer.default_steeringDirectionId).toLong()
     }
 
-    //raspiServerIP = serverIp
-    //raspiServerPort = serverPort
-
     //TODO add the nanohttp ip and port when needed as argument to the handshake
     return runBlockingRequest {
-        retrofitEngineAPI.startEngine(
+        Engine.engineAPI.startEngine(
             NanoHTTPDLifecycleAware.ip,
             NanoHTTPDLifecycleAware.port
         )
     } ?: EMPTY_STRING
 }
 
-fun stopEngine(retrofitAPI: Engine = engineAPI): String {
-    val msg = runBlockingRequest { retrofitAPI.stopEngine() } ?: EMPTY_STRING
-
-    /*if(msg == OK_STRING) {
-        raspiServerIP = null
-        raspiServerPort = null
-    }*/
+fun stopEngine(): String {
+    val msg = runBlockingRequest { Engine.engineAPI.stopEngine() } ?: EMPTY_STRING
 
     // TODO if I don't want to save manual setup settings
     previousFrontDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
