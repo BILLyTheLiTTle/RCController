@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.activity_rccontroller.*
 import car.rccontroller.network.*
 import car.rccontroller.network.cockpit.*
 import car.rccontroller.network.server.feedback.NanoHTTPDLifecycleAware
+import car.rccontroller.network.server.feedback.data.CarPart
 import car.rccontroller.network.server.feedback.data.TemperatureWarningType
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -204,8 +205,8 @@ class RCControllerActivity : AppCompatActivity() {
              */
             if(::retrofit.isInitialized) {
                 updateMotionUIItems()
-                /*updateMainLightsUIItems()
-                updateTurnLightsUIItems()
+                updateMainLightsUIItems()
+                /*updateTurnLightsUIItems()
                 // The following function is updating some other ImageViews and more
                 updateHandlingAssistanceUIItem()
                 updateMotorSpeedLimiterUIItem()*/
@@ -342,7 +343,7 @@ class RCControllerActivity : AppCompatActivity() {
                 override fun onDoubleTap(e: MotionEvent): Boolean {
                     // If, for any reason, engine is stopped I should not do anything
                     if(isEngineStarted()) {
-                        setMainLightsState(LONG_RANGE_SIGNAL_LIGHTS)
+                        setMainLightsState(CarPart.VisionLight.LONG_RANGE_SIGNAL_LIGHTS)
                     }
                     updateMainLightsUIItems()
                     return true
@@ -351,10 +352,10 @@ class RCControllerActivity : AppCompatActivity() {
                 override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                     if (isEngineStarted()){
                         when (getMainLightsState()) {
-                            LONG_RANGE_LIGHTS -> setMainLightsState(DRIVING_LIGHTS)
-                            DRIVING_LIGHTS -> setMainLightsState(POSITION_LIGHTS)
-                            POSITION_LIGHTS -> setMainLightsState(LIGHTS_OFF)
-                            LIGHTS_OFF ->
+                            CarPart.VisionLight.LONG_RANGE_LIGHTS -> setMainLightsState(CarPart.VisionLight.DRIVING_LIGHTS)
+                            CarPart.VisionLight.DRIVING_LIGHTS -> setMainLightsState(CarPart.VisionLight.POSITION_LIGHTS)
+                            CarPart.VisionLight.POSITION_LIGHTS -> setMainLightsState(CarPart.VisionLight.LIGHTS_OFF)
+                            CarPart.VisionLight.LIGHTS_OFF ->
                                 Toast.makeText(this@RCControllerActivity,
                                     getString(R.string.lights_off_warning),
                                     Toast.LENGTH_SHORT).show()
@@ -370,10 +371,10 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener {
                 if (isEngineStarted()){
                     when (getMainLightsState()) {
-                        LIGHTS_OFF -> setMainLightsState(POSITION_LIGHTS)
-                        POSITION_LIGHTS -> setMainLightsState(DRIVING_LIGHTS)
-                        DRIVING_LIGHTS -> setMainLightsState(LONG_RANGE_LIGHTS)
-                        LONG_RANGE_LIGHTS -> Toast.makeText(this@RCControllerActivity,
+                        CarPart.VisionLight.LIGHTS_OFF -> setMainLightsState(CarPart.VisionLight.POSITION_LIGHTS)
+                        CarPart.VisionLight.POSITION_LIGHTS -> setMainLightsState(CarPart.VisionLight.DRIVING_LIGHTS)
+                        CarPart.VisionLight.DRIVING_LIGHTS -> setMainLightsState(CarPart.VisionLight.LONG_RANGE_LIGHTS)
+                        CarPart.VisionLight.LONG_RANGE_LIGHTS -> Toast.makeText(this@RCControllerActivity,
                                 getString(R.string.long_range_lights_warning),
                                 Toast.LENGTH_SHORT).show()
                     }
@@ -395,7 +396,7 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
-                    setDirectionLightsState(DIRECTION_LIGHTS_LEFT)
+                    setDirectionLightsState(CarPart.DirectionLight.DIRECTION_LIGHTS_LEFT)
                 }
                 updateTurnLightsUIItems()
                 true
@@ -416,7 +417,7 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(isEngineStarted()) {
-                    setDirectionLightsState(DIRECTION_LIGHTS_RIGHT)
+                    setDirectionLightsState(CarPart.DirectionLight.DIRECTION_LIGHTS_RIGHT)
                 }
                 updateTurnLightsUIItems()
                 true
@@ -1009,10 +1010,10 @@ class RCControllerActivity : AppCompatActivity() {
      */
     private fun updateMainLightsUIItems(){
         when (getMainLightsState()) {
-            LONG_RANGE_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_long_range)
-            DRIVING_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_driving)
-            POSITION_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_position)
-            LIGHTS_OFF -> lights_imageView.setImageResourceWithTag(R.drawable.lights_off)
+            CarPart.VisionLight.LONG_RANGE_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_long_range)
+            CarPart.VisionLight.DRIVING_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_driving)
+            CarPart.VisionLight.POSITION_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_position)
+            CarPart.VisionLight.LIGHTS_OFF -> lights_imageView.setImageResourceWithTag(R.drawable.lights_off)
             else -> lights_imageView.setImageResourceWithTag(R.drawable.lights_off)
         }
     }
@@ -1024,27 +1025,21 @@ class RCControllerActivity : AppCompatActivity() {
      */
     private fun updateTurnLightsUIItems() {
         when (getDirectionLightsState()) {
-            DIRECTION_LIGHTS_STRAIGHT -> {
+            CarPart.DirectionLight.DIRECTION_LIGHTS_STRAIGHT -> {
                 leftDirectionLightsAnimation.stop()
                 leftDirectionLightsAnimation.selectDrawable(0)
                 rightDirectionLightsAnimation.stop()
                 rightDirectionLightsAnimation.selectDrawable(0)
             }
-            DIRECTION_LIGHTS_LEFT -> {
+            CarPart.DirectionLight.DIRECTION_LIGHTS_LEFT -> {
                 rightDirectionLightsAnimation.stop()
                 rightDirectionLightsAnimation.selectDrawable(0)
                 leftDirectionLightsAnimation.start()
             }
-            DIRECTION_LIGHTS_RIGHT -> {
+            CarPart.DirectionLight.DIRECTION_LIGHTS_RIGHT -> {
                 leftDirectionLightsAnimation.stop()
                 leftDirectionLightsAnimation.selectDrawable(0)
                 rightDirectionLightsAnimation.start()
-            }
-            else -> {
-                leftDirectionLightsAnimation.stop()
-                leftDirectionLightsAnimation.selectDrawable(1)
-                rightDirectionLightsAnimation.stop()
-                rightDirectionLightsAnimation.selectDrawable(1)
             }
         }
     }
