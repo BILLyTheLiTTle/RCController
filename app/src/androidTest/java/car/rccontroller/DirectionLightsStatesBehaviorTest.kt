@@ -12,6 +12,7 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
 import car.rccontroller.network.cockpit.*
+import car.rccontroller.network.server.feedback.data.CarPart
 import org.hamcrest.Matchers.*
 import org.junit.After
 import org.junit.Before
@@ -25,7 +26,7 @@ class DirectionLightsStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() 
 
     @Test
     fun turnOnLeftDirectionLight(){
-        if(getDirectionLightsState() == DIRECTION_LIGHTS_LEFT) {
+        if(getDirectionLightsState() == CarPart.DirectionLight.DIRECTION_LIGHTS_LEFT) {
             // turn them off
             onView(withId(R.id.leftTurn_imageView))
                 .perform(longClick())
@@ -43,7 +44,7 @@ class DirectionLightsStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() 
 
     @Test
     fun turnOffLeftDirectionLight() {
-        if(getDirectionLightsState() == DIRECTION_LIGHTS_STRAIGHT) {
+        if(getDirectionLightsState() == CarPart.DirectionLight.DIRECTION_LIGHTS_STRAIGHT) {
             // turn them on
             onView(withId(R.id.leftTurn_imageView))
                 .perform(longClick())
@@ -61,7 +62,7 @@ class DirectionLightsStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() 
 
     @Test
     fun turnOnRightDirectionLight(){
-        if(getDirectionLightsState() == DIRECTION_LIGHTS_RIGHT) {
+        if(getDirectionLightsState() == CarPart.DirectionLight.DIRECTION_LIGHTS_RIGHT) {
             // turn them off
             onView(withId(R.id.rightTurn_imageView))
                 .perform(longClick())
@@ -79,7 +80,7 @@ class DirectionLightsStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() 
 
     @Test
     fun turnOffRightDirectionLight() {
-        if(getDirectionLightsState() == DIRECTION_LIGHTS_STRAIGHT) {
+        if(getDirectionLightsState() == CarPart.DirectionLight.DIRECTION_LIGHTS_STRAIGHT) {
             // turn them on
             onView(withId(R.id.rightTurn_imageView))
                 .perform(longClick())
@@ -97,7 +98,7 @@ class DirectionLightsStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() 
 
     @Test
     fun turnOffLeftDirectionLightWhenSteering(){
-        if(getDirectionLightsState() == DIRECTION_LIGHTS_STRAIGHT) {
+        if(getDirectionLightsState() == CarPart.DirectionLight.DIRECTION_LIGHTS_STRAIGHT) {
             // turn them on
             onView(withId(R.id.leftTurn_imageView))
                 .perform(click())
@@ -114,7 +115,7 @@ class DirectionLightsStatesBehaviorTest: RCControllerActivityBehaviorTestImpl() 
 
     @Test
     fun turnOffRightDirectionLightWhenSteering(){
-        if(getDirectionLightsState() == DIRECTION_LIGHTS_STRAIGHT) {
+        if(getDirectionLightsState() == CarPart.DirectionLight.DIRECTION_LIGHTS_STRAIGHT) {
             // turn them on
             onView(withId(R.id.rightTurn_imageView))
                 .perform(click())

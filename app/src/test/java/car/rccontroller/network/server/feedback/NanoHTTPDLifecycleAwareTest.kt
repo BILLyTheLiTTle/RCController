@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 import car.rccontroller.network.runBlockingRequest
 import car.rccontroller.network.server.feedback.data.CarModule
-import car.rccontroller.network.server.feedback.data.CarPartTemperature
+import car.rccontroller.network.server.feedback.data.CarPart
 import car.rccontroller.network.server.feedback.data.ModuleState
 import car.rccontroller.network.server.feedback.data.TemperatureWarningType
 
@@ -28,7 +28,7 @@ class NanoHTTPDLifecycleAwareTest {
         assertThat(ret, `is`(NanoHTTPDLifecycleAware.formatResponse("ERROR SERVE", EMPTY_STRING)))
     }
     // temperature - motors
-    private fun doTempRequest(hardware: String = "", warning: String = "") =
+    private fun doTempRequest(hardware: String, warning: String) =
         runBlockingRequest(
             "http://" +
             "$ip:$port" +
@@ -39,335 +39,336 @@ class NanoHTTPDLifecycleAwareTest {
         )
     @Test
     fun `validate error temperatures`() {
-        val ret = doTempRequest()
+        val ret = doTempRequest("", "")
         assertThat(ret, `is`(NanoHTTPDLifecycleAware.formatResponse("ERROR TEMP",
             TemperatureWarningType.NOTHING.name)))
     }
     @Test
     fun `validate normal rear left motor temperature`() {
-        val ret = doTempRequest(CarPartTemperature.MOTOR_REAR_LEFT.id,
+        val ret = doTempRequest(
+            CarPart.Thermometer.MOTOR_REAR_LEFT.name,
             TemperatureWarningType.NORMAL.name
         )
         assertThat(ret,
                 `is`(
                     NanoHTTPDLifecycleAware.formatResponse(
-                        CarPartTemperature.MOTOR_REAR_LEFT.id,
+                        CarPart.Thermometer.MOTOR_REAR_LEFT.name,
                         TemperatureWarningType.NORMAL.name
                 )))
     }
     @Test
     fun `validate medium rear left motor temperature`() {
-        val ret = doTempRequest(CarPartTemperature.MOTOR_REAR_LEFT.id,
+        val ret = doTempRequest(CarPart.Thermometer.MOTOR_REAR_LEFT.name,
             TemperatureWarningType.MEDIUM.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.MOTOR_REAR_LEFT.id,
+                    CarPart.Thermometer.MOTOR_REAR_LEFT.name,
                     TemperatureWarningType.MEDIUM.name
                 )))
     }
     @Test
     fun `validate high rear left motor temperature`() {
-        val ret = doTempRequest(CarPartTemperature.MOTOR_REAR_LEFT.id,
+        val ret = doTempRequest(CarPart.Thermometer.MOTOR_REAR_LEFT.name,
             TemperatureWarningType.HIGH.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.MOTOR_REAR_LEFT.id,
+                    CarPart.Thermometer.MOTOR_REAR_LEFT.name,
                     TemperatureWarningType.HIGH.name
                 )))
     }
     @Test
     fun `validate normal rear right motor temperature`() {
-        val ret = doTempRequest(CarPartTemperature.MOTOR_REAR_RIGHT.id,
+        val ret = doTempRequest(CarPart.Thermometer.MOTOR_REAR_RIGHT.name,
             TemperatureWarningType.NORMAL.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.MOTOR_REAR_RIGHT.id,
+                    CarPart.Thermometer.MOTOR_REAR_RIGHT.name,
                     TemperatureWarningType.NORMAL.name
                 )))
     }
     @Test
     fun `validate medium rear right motor temperature`() {
-        val ret = doTempRequest(CarPartTemperature.MOTOR_REAR_RIGHT.id,
+        val ret = doTempRequest(CarPart.Thermometer.MOTOR_REAR_RIGHT.name,
             TemperatureWarningType.MEDIUM.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.MOTOR_REAR_RIGHT.id,
+                    CarPart.Thermometer.MOTOR_REAR_RIGHT.name,
                     TemperatureWarningType.MEDIUM.name
                 )))
     }
     @Test
     fun `validate high rear right motor temperature`() {
-        val ret = doTempRequest(CarPartTemperature.MOTOR_REAR_RIGHT.id,
+        val ret = doTempRequest(CarPart.Thermometer.MOTOR_REAR_RIGHT.name,
             TemperatureWarningType.HIGH.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.MOTOR_REAR_RIGHT.id,
+                    CarPart.Thermometer.MOTOR_REAR_RIGHT.name,
                     TemperatureWarningType.HIGH.name
                 )))
     }
     @Test
     fun `validate normal front left motor temperature`() {
-        val ret = doTempRequest(CarPartTemperature.MOTOR_FRONT_LEFT.id,
+        val ret = doTempRequest(CarPart.Thermometer.MOTOR_FRONT_LEFT.name,
             TemperatureWarningType.NORMAL.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.MOTOR_FRONT_LEFT.id,
+                    CarPart.Thermometer.MOTOR_FRONT_LEFT.name,
                     TemperatureWarningType.NORMAL.name
                 )))
     }
     @Test
     fun `validate medium front left motor temperature`() {
-        val ret = doTempRequest(CarPartTemperature.MOTOR_FRONT_LEFT.id,
+        val ret = doTempRequest(CarPart.Thermometer.MOTOR_FRONT_LEFT.name,
             TemperatureWarningType.MEDIUM.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.MOTOR_FRONT_LEFT.id,
+                    CarPart.Thermometer.MOTOR_FRONT_LEFT.name,
                     TemperatureWarningType.MEDIUM.name
                 )))
     }
     @Test
     fun `validate high front left motor temperature`() {
-        val ret = doTempRequest(CarPartTemperature.MOTOR_FRONT_LEFT.id,
+        val ret = doTempRequest(CarPart.Thermometer.MOTOR_FRONT_LEFT.name,
             TemperatureWarningType.HIGH.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.MOTOR_FRONT_LEFT.id,
+                    CarPart.Thermometer.MOTOR_FRONT_LEFT.name,
                     TemperatureWarningType.HIGH.name
                 )))
     }
     @Test
     fun `validate normal front right motor temperature`() {
-        val ret = doTempRequest(CarPartTemperature.MOTOR_FRONT_RIGHT.id,
+        val ret = doTempRequest(CarPart.Thermometer.MOTOR_FRONT_RIGHT.name,
             TemperatureWarningType.NORMAL.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.MOTOR_FRONT_RIGHT.id,
+                    CarPart.Thermometer.MOTOR_FRONT_RIGHT.name,
                     TemperatureWarningType.NORMAL.name
                 )))
     }
     @Test
     fun `validate medium front right motor temperature`() {
-        val ret = doTempRequest(CarPartTemperature.MOTOR_FRONT_RIGHT.id,
+        val ret = doTempRequest(CarPart.Thermometer.MOTOR_FRONT_RIGHT.name,
             TemperatureWarningType.MEDIUM.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.MOTOR_FRONT_RIGHT.id,
+                    CarPart.Thermometer.MOTOR_FRONT_RIGHT.name,
                     TemperatureWarningType.MEDIUM.name
                 )))
     }
     @Test
     fun `validate high front right motor temperature`() {
-        val ret = doTempRequest(CarPartTemperature.MOTOR_FRONT_RIGHT.id,
+        val ret = doTempRequest(CarPart.Thermometer.MOTOR_FRONT_RIGHT.name,
             TemperatureWarningType.HIGH.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.MOTOR_FRONT_RIGHT.id,
+                    CarPart.Thermometer.MOTOR_FRONT_RIGHT.name,
                     TemperatureWarningType.HIGH.name
                 )))
     }
     // temperature - h bridges
     @Test
     fun `validate normal rear h bridge temperature`() {
-        val ret = doTempRequest(CarPartTemperature.H_BRIDGE_REAR.id,
+        val ret = doTempRequest(CarPart.Thermometer.H_BRIDGE_REAR.name,
             TemperatureWarningType.NORMAL.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.H_BRIDGE_REAR.id,
+                    CarPart.Thermometer.H_BRIDGE_REAR.name,
                     TemperatureWarningType.NORMAL.name
                 )))
     }
     @Test
     fun `validate medium rear h bridge temperature`() {
-        val ret = doTempRequest(CarPartTemperature.H_BRIDGE_REAR.id,
+        val ret = doTempRequest(CarPart.Thermometer.H_BRIDGE_REAR.name,
             TemperatureWarningType.MEDIUM.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.H_BRIDGE_REAR.id,
+                    CarPart.Thermometer.H_BRIDGE_REAR.name,
                     TemperatureWarningType.MEDIUM.name
                 )))
     }
     @Test
     fun `validate high rear h bridge temperature`() {
-        val ret = doTempRequest(CarPartTemperature.H_BRIDGE_REAR.id,
+        val ret = doTempRequest(CarPart.Thermometer.H_BRIDGE_REAR.name,
             TemperatureWarningType.HIGH.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.H_BRIDGE_REAR.id,
+                    CarPart.Thermometer.H_BRIDGE_REAR.name,
                     TemperatureWarningType.HIGH.name
                 )))
     }
     @Test
     fun `validate normal front h bridge temperature`() {
-        val ret = doTempRequest(CarPartTemperature.H_BRIDGE_FRONT.id,
+        val ret = doTempRequest(CarPart.Thermometer.H_BRIDGE_FRONT.name,
             TemperatureWarningType.NORMAL.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.H_BRIDGE_FRONT.id,
+                    CarPart.Thermometer.H_BRIDGE_FRONT.name,
                     TemperatureWarningType.NORMAL.name
                 )))
     }
     @Test
     fun `validate medium front h bridge temperature`() {
-        val ret = doTempRequest(CarPartTemperature.H_BRIDGE_FRONT.id,
+        val ret = doTempRequest(CarPart.Thermometer.H_BRIDGE_FRONT.name,
             TemperatureWarningType.MEDIUM.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.H_BRIDGE_FRONT.id,
+                    CarPart.Thermometer.H_BRIDGE_FRONT.name,
                     TemperatureWarningType.MEDIUM.name
                 )))
     }
     @Test
     fun `validate high front h bridge temperature`() {
-        val ret = doTempRequest(CarPartTemperature.H_BRIDGE_FRONT.id,
+        val ret = doTempRequest(CarPart.Thermometer.H_BRIDGE_FRONT.name,
             TemperatureWarningType.HIGH.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.H_BRIDGE_FRONT.id,
+                    CarPart.Thermometer.H_BRIDGE_FRONT.name,
                     TemperatureWarningType.HIGH.name
                 )))
     }
     // temperature - raspberry
     @Test
     fun `validate normal raspberry temperature`() {
-        val ret = doTempRequest(CarPartTemperature.RASPBERRY_PI.id,
+        val ret = doTempRequest(CarPart.Thermometer.RASPBERRY_PI.name,
             TemperatureWarningType.NORMAL.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.RASPBERRY_PI.id,
+                    CarPart.Thermometer.RASPBERRY_PI.name,
                     TemperatureWarningType.NORMAL.name
                 )))
     }
     @Test
     fun `validate medium raspberry temperature`() {
-        val ret = doTempRequest(CarPartTemperature.RASPBERRY_PI.id,
+        val ret = doTempRequest(CarPart.Thermometer.RASPBERRY_PI.name,
             TemperatureWarningType.MEDIUM.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.RASPBERRY_PI.id,
+                    CarPart.Thermometer.RASPBERRY_PI.name,
                     TemperatureWarningType.MEDIUM.name
                 )))
     }
     @Test
     fun `validate high raspberry temperature`() {
-        val ret = doTempRequest(CarPartTemperature.RASPBERRY_PI.id,
+        val ret = doTempRequest(CarPart.Thermometer.RASPBERRY_PI.name,
             TemperatureWarningType.HIGH.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.RASPBERRY_PI.id,
+                    CarPart.Thermometer.RASPBERRY_PI.name,
                     TemperatureWarningType.HIGH.name
                 )))
     }
     // temperature - batteries
     @Test
     fun `validate normal batteries temperature`() {
-        val ret = doTempRequest(CarPartTemperature.BATTERIES.id,
+        val ret = doTempRequest(CarPart.Thermometer.BATTERIES.name,
             TemperatureWarningType.NORMAL.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.BATTERIES.id,
+                    CarPart.Thermometer.BATTERIES.name,
                     TemperatureWarningType.NORMAL.name
                 )))
     }
     @Test
     fun `validate medium batteries temperature`() {
-        val ret = doTempRequest(CarPartTemperature.BATTERIES.id,
+        val ret = doTempRequest(CarPart.Thermometer.BATTERIES.name,
             TemperatureWarningType.MEDIUM.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.BATTERIES.id,
+                    CarPart.Thermometer.BATTERIES.name,
                     TemperatureWarningType.MEDIUM.name
                 )))
     }
     @Test
     fun `validate high batteries temperature`() {
-        val ret = doTempRequest(CarPartTemperature.BATTERIES.id,
+        val ret = doTempRequest(CarPart.Thermometer.BATTERIES.name,
             TemperatureWarningType.HIGH.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.BATTERIES.id,
+                    CarPart.Thermometer.BATTERIES.name,
                     TemperatureWarningType.HIGH.name
                 )))
     }
     // temperature - shift registers
     @Test
     fun `validate normal shift registers temperature`() {
-        val ret = doTempRequest(CarPartTemperature.SHIFT_REGISTERS.id,
+        val ret = doTempRequest(CarPart.Thermometer.SHIFT_REGISTERS.name,
             TemperatureWarningType.NORMAL.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.SHIFT_REGISTERS.id,
+                    CarPart.Thermometer.SHIFT_REGISTERS.name,
                     TemperatureWarningType.NORMAL.name
                 )))
     }
     @Test
     fun `validate medium shift registers temperature`() {
-        val ret = doTempRequest(CarPartTemperature.SHIFT_REGISTERS.id,
+        val ret = doTempRequest(CarPart.Thermometer.SHIFT_REGISTERS.name,
             TemperatureWarningType.MEDIUM.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.SHIFT_REGISTERS.id,
+                    CarPart.Thermometer.SHIFT_REGISTERS.name,
                     TemperatureWarningType.MEDIUM.name
                 )))
     }
     @Test
     fun `validate high shift registers temperature`() {
-        val ret = doTempRequest(CarPartTemperature.SHIFT_REGISTERS.id,
+        val ret = doTempRequest(CarPart.Thermometer.SHIFT_REGISTERS.name,
             TemperatureWarningType.HIGH.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarPartTemperature.SHIFT_REGISTERS.id,
+                    CarPart.Thermometer.SHIFT_REGISTERS.name,
                     TemperatureWarningType.HIGH.name
                 )))
     }

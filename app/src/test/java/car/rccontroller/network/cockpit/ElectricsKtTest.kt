@@ -1,6 +1,7 @@
 package car.rccontroller.network.cockpit
 
 import car.rccontroller.RCControllerActivity
+import car.rccontroller.network.server.feedback.data.CarPart
 import car.rccontroller.retrofit
 import junit.framework.Assert.*
 import org.hamcrest.MatcherAssert.assertThat
@@ -50,43 +51,43 @@ class ElectricsKtTest {
     // Main Lights
     @Test
     fun `validate that main lights are off`(){
-        setMainLightsState(LIGHTS_OFF)
-        assertThat(getMainLightsState(), `is`(LIGHTS_OFF))
+        setMainLightsState(CarPart.MainLight.LIGHTS_OFF)
+        assertThat(getMainLightsState(), `is`(CarPart.MainLight.LIGHTS_OFF))
     }
     @Test
     fun `validate that position lights are on`(){
-        setMainLightsState(POSITION_LIGHTS)
-        assertThat(getMainLightsState(), `is`(POSITION_LIGHTS))
+        setMainLightsState(CarPart.MainLight.POSITION_LIGHTS)
+        assertThat(getMainLightsState(), `is`(CarPart.MainLight.POSITION_LIGHTS))
     }
     @Test
     fun `validate that driving lights are on`(){
-        setMainLightsState(POSITION_LIGHTS)
-        setMainLightsState(DRIVING_LIGHTS)
-        assertThat(getMainLightsState(), `is`(DRIVING_LIGHTS))
+        setMainLightsState(CarPart.MainLight.POSITION_LIGHTS)
+        setMainLightsState(CarPart.MainLight.DRIVING_LIGHTS)
+        assertThat(getMainLightsState(), `is`(CarPart.MainLight.DRIVING_LIGHTS))
     }
     @Test
     fun `validate that long range lights are on`(){
-        setMainLightsState(POSITION_LIGHTS)
-        setMainLightsState(DRIVING_LIGHTS)
-        setMainLightsState(LONG_RANGE_LIGHTS)
-        assertThat(getMainLightsState(), `is`(LONG_RANGE_LIGHTS))
+        setMainLightsState(CarPart.MainLight.POSITION_LIGHTS)
+        setMainLightsState(CarPart.MainLight.DRIVING_LIGHTS)
+        setMainLightsState(CarPart.MainLight.LONG_RANGE_LIGHTS)
+        assertThat(getMainLightsState(), `is`(CarPart.MainLight.LONG_RANGE_LIGHTS))
     }
 
     // Turn Lights
     @Test
     fun `validate that turn lights are off`(){
-        setDirectionLightsState(DIRECTION_LIGHTS_STRAIGHT)
-        assertThat(getDirectionLightsState(), `is`(DIRECTION_LIGHTS_STRAIGHT))
+        setDirectionLightsState(CarPart.DirectionLight.DIRECTION_LIGHTS_STRAIGHT)
+        assertThat(getDirectionLightsState(), `is`(CarPart.DirectionLight.DIRECTION_LIGHTS_STRAIGHT))
     }
     @Test
     fun `validate that left turn lights are on`(){
-        setDirectionLightsState(DIRECTION_LIGHTS_LEFT)
-        assertThat(getDirectionLightsState(), `is`(DIRECTION_LIGHTS_LEFT))
+        setDirectionLightsState(CarPart.DirectionLight.DIRECTION_LIGHTS_LEFT)
+        assertThat(getDirectionLightsState(), `is`(CarPart.DirectionLight.DIRECTION_LIGHTS_LEFT))
     }
     @Test
     fun `validate that right turn lights are on`(){
-        setDirectionLightsState(DIRECTION_LIGHTS_RIGHT)
-        assertThat(getDirectionLightsState(), `is`(DIRECTION_LIGHTS_RIGHT))
+        setDirectionLightsState(CarPart.DirectionLight.DIRECTION_LIGHTS_RIGHT)
+        assertThat(getDirectionLightsState(), `is`(CarPart.DirectionLight.DIRECTION_LIGHTS_RIGHT))
     }
 
     // Emergency Lights

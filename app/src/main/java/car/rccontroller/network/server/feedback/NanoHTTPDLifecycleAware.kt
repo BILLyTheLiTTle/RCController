@@ -175,7 +175,7 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                                 )
                             }
                             else ->
-                                formatResponse("ERROR TEMP", TemperatureWarningType.NOTHING.id)
+                                formatResponse("ERROR TEMP", TemperatureWarningType.NOTHING.name)
                         }
                     }
                     SPEED_URI -> {
