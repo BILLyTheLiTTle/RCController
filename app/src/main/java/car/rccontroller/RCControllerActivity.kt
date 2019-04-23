@@ -219,7 +219,7 @@ class RCControllerActivity : AppCompatActivity() {
         parkingBrake_imageView.apply {
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
-                if(isEngineStarted()) {
+                if(::retrofit.isInitialized && isEngineStarted()) {
                     val status = activateParkingBrake(!isParkingBrakeActive())
                     if (status == OK_STRING) {
                         updateMotionUIItems()
@@ -284,7 +284,7 @@ class RCControllerActivity : AppCompatActivity() {
         reverse_imageView. apply {
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
-                if(isEngineStarted()) {
+                if(::retrofit.isInitialized && isEngineStarted()) {
                     if (getMotionState() == ACTION_NEUTRAL) {
                         setReverseIntention(!getReverseIntention())
                     }
@@ -313,7 +313,7 @@ class RCControllerActivity : AppCompatActivity() {
         cruiseControl_imageView. apply {
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
-                if(isEngineStarted()) {
+                if(::retrofit.isInitialized && isEngineStarted()) {
                     if (viewModel.cruiseControlStatusLiveData.value == true) {
                         Toast.makeText(context, getString(R.string.cruise_control_info), Toast.LENGTH_SHORT).show()
                     }
@@ -342,7 +342,7 @@ class RCControllerActivity : AppCompatActivity() {
             object: GestureDetector.SimpleOnGestureListener(){
                 override fun onDoubleTap(e: MotionEvent): Boolean {
                     // If, for any reason, engine is stopped I should not do anything
-                    if(isEngineStarted()) {
+                    if(::retrofit.isInitialized && isEngineStarted()) {
                         setMainLightsState(CarPart.MainLight.LONG_RANGE_SIGNAL_LIGHTS)
                     }
                     viewModel.visionLightsLiveData.value = getMainLightsState()
@@ -350,7 +350,7 @@ class RCControllerActivity : AppCompatActivity() {
                 }
 
                 override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-                    if (isEngineStarted()){
+                    if (::retrofit.isInitialized && isEngineStarted()){
                         when (getMainLightsState()) {
                             CarPart.MainLight.LONG_RANGE_LIGHTS -> setMainLightsState(CarPart.MainLight.DRIVING_LIGHTS)
                             CarPart.MainLight.DRIVING_LIGHTS -> setMainLightsState(CarPart.MainLight.POSITION_LIGHTS)
@@ -369,7 +369,7 @@ class RCControllerActivity : AppCompatActivity() {
         lights_imageView. apply {
             setOnTouchListener{_, event -> gestureDetector.onTouchEvent(event);}
             setOnLongClickListener {
-                if (isEngineStarted()){
+                if (::retrofit.isInitialized && isEngineStarted()){
                     when (getMainLightsState()) {
                         CarPart.MainLight.LIGHTS_OFF -> setMainLightsState(CarPart.MainLight.POSITION_LIGHTS)
                         CarPart.MainLight.POSITION_LIGHTS -> setMainLightsState(CarPart.MainLight.DRIVING_LIGHTS)
@@ -403,7 +403,7 @@ class RCControllerActivity : AppCompatActivity() {
             setBackgroundDrawable(leftDirectionLightsAnimation)
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
-                if(isEngineStarted()) {
+                if(::retrofit.isInitialized && isEngineStarted()) {
                     setDirectionLightsState(CarPart.DirectionLight.DIRECTION_LIGHTS_LEFT)
                 }
                 updateTurnLightsUIItems()
@@ -424,7 +424,7 @@ class RCControllerActivity : AppCompatActivity() {
             setBackgroundDrawable(rightDirectionLightsAnimation)
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
-                if(isEngineStarted()) {
+                if(::retrofit.isInitialized && isEngineStarted()) {
                     setDirectionLightsState(CarPart.DirectionLight.DIRECTION_LIGHTS_RIGHT)
                 }
                 updateTurnLightsUIItems()
@@ -446,7 +446,7 @@ class RCControllerActivity : AppCompatActivity() {
             setBackgroundDrawable(emergencyLightsAnimation)
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
-                if (isEngineStarted()) {
+                if (::retrofit.isInitialized && isEngineStarted()) {
                     setEmergencyLightsState(!getEmergencyLightsState())
                 }
                 viewModel.emergencyLightsStatusLiveData.value = getEmergencyLightsState()
@@ -473,7 +473,7 @@ class RCControllerActivity : AppCompatActivity() {
         handling_assistance_imageView.apply {
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
-                if(isEngineStarted()) {
+                if(::retrofit.isInitialized && isEngineStarted()) {
                     when (getHandlingAssistanceState()) {
                         ASSISTANCE_NONE -> setHandlingAssistanceState(ASSISTANCE_WARNING)
                         ASSISTANCE_WARNING -> setHandlingAssistanceState(ASSISTANCE_FULL)
@@ -506,7 +506,7 @@ class RCControllerActivity : AppCompatActivity() {
         motor_speed_limiter_imageView.apply {
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
-                if(isEngineStarted()) {
+                if(::retrofit.isInitialized && isEngineStarted()) {
                     when (getMotorSpeedLimiter()) {
                         MOTOR_SPEED_LIMITER_NO_SPEED ->
                             setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_SLOW_SPEED_1)
@@ -533,7 +533,7 @@ class RCControllerActivity : AppCompatActivity() {
                 true
             }
             setOnClickListener {
-                if(isEngineStarted()) {
+                if(::retrofit.isInitialized && isEngineStarted()) {
                     when (getMotorSpeedLimiter()) {
                         MOTOR_SPEED_LIMITER_FULL_SPEED ->
                             setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_FAST_SPEED_2)
@@ -567,7 +567,7 @@ class RCControllerActivity : AppCompatActivity() {
         differential_slippery_limiter_front_imageView.apply {
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
-                if(isEngineStarted()) {
+                if(::retrofit.isInitialized && isEngineStarted()) {
                     if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
                         when (getFrontDifferentialSlipperyLimiter()) {
                             DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED ->
@@ -598,7 +598,7 @@ class RCControllerActivity : AppCompatActivity() {
                 true
             }
             setOnClickListener {
-                if(isEngineStarted()) {
+                if(::retrofit.isInitialized && isEngineStarted()) {
                     if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
                         when (getFrontDifferentialSlipperyLimiter()) {
                             DIFFERENTIAL_SLIPPERY_LIMITER_OPEN ->
@@ -636,7 +636,7 @@ class RCControllerActivity : AppCompatActivity() {
         differential_slippery_limiter_rear_imageView.apply {
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
-                if(isEngineStarted()) {
+                if(::retrofit.isInitialized && isEngineStarted()) {
                     if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
                         when (getRearDifferentialSlipperyLimiter()) {
                             DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED ->
@@ -667,7 +667,7 @@ class RCControllerActivity : AppCompatActivity() {
                 true
             }
             setOnClickListener {
-                if(isEngineStarted()) {
+                if(::retrofit.isInitialized && isEngineStarted()) {
                     if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
                         when (getRearDifferentialSlipperyLimiter()) {
                             DIFFERENTIAL_SLIPPERY_LIMITER_OPEN ->
@@ -1009,15 +1009,6 @@ class RCControllerActivity : AppCompatActivity() {
                 R.drawable.odm_on, R.drawable.odm_idle, R.drawable.odm_off)
         updateItems(cdmState, cdm_imageView,
                 R.drawable.cdm_on, R.drawable.cdm_idle, R.drawable.cdm_off)
-    }*/
-
-    /* Main lights interactive actions must be depending on each other.
-        Their states on the server should be changed by set methods.
-        This function here should get these states which must be as I want,
-        and if they don't check the set functions between client-server.
-     */
-    /*private fun updateMainLightsUIItems(){
-        viewModel.visionLightsLiveData.value = getMainLightsState()
     }*/
 
     /* Turn lights interactive items must be depending on each other.

@@ -14,7 +14,6 @@ import java.net.URL
 import kotlinx.coroutines.*
 import retrofit2.Call
 
-
 const val OK_STRING = "OK"
 const val EMPTY_STRING = "NULL"
 
