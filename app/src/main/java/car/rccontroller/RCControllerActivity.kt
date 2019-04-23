@@ -81,6 +81,7 @@ class RCControllerActivity : AppCompatActivity() {
             vehicle_speed_textView.text = resources.getString(R.string.tachometer_info,
                 it, resources.getString(R.string.tachometer_unit))
         })
+        // temperature UI items
         viewModel.rearLeftMotorTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
             updateUITempItems(it, rearLeftMotorTemps_imageView,
                 resources.obtainTypedArray(R.array.motor_temperature_states))
@@ -178,10 +179,11 @@ class RCControllerActivity : AppCompatActivity() {
                 engineStartStop_imageView.setImageResourceWithTag(R.drawable.engine_stopped_start_action)
                 carTemps_imageView.setImageResourceWithTag(R.drawable.car_temps_off)
 
-                viewModel.reverseStatusLiveData.value = it
+
+                viewModel.reverseStatusLiveData.value = false
 
                 //reset the cruise control flag
-                viewModel.cruiseControlStatusLiveData.value = it
+                viewModel.cruiseControlStatusLiveData.value = false
 
                 viewModel.emergencyLightsStatusLiveData.value = false
 
@@ -198,15 +200,23 @@ class RCControllerActivity : AppCompatActivity() {
 
                 viewModel.speedLiveData.postValue(getString(R.string.tachometer_null_value))
             }
-
-            /*updateMotionUIItems()
-            updateMainLightsUIItems()
-            updateTurnLightsUIItems()
-            // The following function is updating some other ImageViews and more
-            updateHandlingAssistanceUIItem()
-            updateMotorSpeedLimiterUIItem()*/
-            })
-
+            /* At first start of the application all UI items would be deactivated
+            so there is reason to handle them.
+            You want to control them when:
+                1. you stop/re-stop the engine
+                2. you restart the engine.
+            So, '::retrofit.isInitialized' is a guarantee that these updates to UI items
+            happen only at any of the above scenarios.
+             */
+            if(::retrofit.isInitialized) {
+                updateMotionUIItems()
+                /*updateMainLightsUIItems()
+                updateTurnLightsUIItems()
+                // The following function is updating some other ImageViews and more
+                updateHandlingAssistanceUIItem()
+                updateMotorSpeedLimiterUIItem()*/
+            }
+        })
 
         //////
         // setup parking brake
@@ -230,6 +240,12 @@ class RCControllerActivity : AppCompatActivity() {
                 //true
             }
         }
+        viewModel.parkingBrakeLiveData.observe(this, Observer<Boolean>{
+            if (it)
+                parkingBrake_imageView.setImageResourceWithTag(R.drawable.parking_brake_on)
+            else
+                parkingBrake_imageView.setImageResourceWithTag(R.drawable.parking_brake_off)
+        })
 
         //////
         // setup handbrake
@@ -260,6 +276,12 @@ class RCControllerActivity : AppCompatActivity() {
                 //true
             }
         }
+        viewModel.handbrakeLiveData.observe(this, Observer<Boolean>{
+            if (it)
+                handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_on)
+            else
+                handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_off)
+        })
 
         //////
         // setup reverse
@@ -283,7 +305,6 @@ class RCControllerActivity : AppCompatActivity() {
                 //true
             }
         }
-
         viewModel.reverseStatusLiveData.observe(this, Observer<Boolean> {
             if (it)
                 reverse_imageView.setImageResourceWithTag(R.drawable.reverse_on)
@@ -784,20 +805,8 @@ class RCControllerActivity : AppCompatActivity() {
         and if they don't check the set functions between client-server.
      */
     private fun updateMotionUIItems(){
-        if(isParkingBrakeActive())
-            parkingBrake_imageView.setImageResourceWithTag(R.drawable.parking_brake_on)
-        else
-            parkingBrake_imageView.setImageResourceWithTag(R.drawable.parking_brake_off)
-
-        if(isHandbrakeActive())
-            handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_on)
-        else
-            handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_off)
-
-        /*if (cruiseControlActive)
-            cruiseControl_imageView.setImageResourceWithTag(R.drawable.cruise_control_on)
-        else
-            cruiseControl_imageView.setImageResourceWithTag(R.drawable.cruise_control_off)*/
+        viewModel.parkingBrakeLiveData.value = isParkingBrakeActive()
+        viewModel.handbrakeLiveData.value = isHandbrakeActive()
     }
 
     /* Rear differential slippery limiter interactive actions must be depending on each other.
