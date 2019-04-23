@@ -12,7 +12,7 @@ enum class CarPart(val id: String) {
     BATTERIES("batteries"),
     SHIFT_REGISTERS("shift_registers");
 
-    enum class VisionLight(val id: String) {
+    enum class MainLight(val id: String) {
         LIGHTS_OFF("lights_off"),
         POSITION_LIGHTS("lights_position"),
         DRIVING_LIGHTS("lights_driving"),

@@ -41,14 +41,14 @@ interface Electrics {
 /////////
 // Main Lights
 /////////
-fun setMainLightsState(state: CarPart.VisionLight): CarPart.VisionLight {
-    return CarPart.VisionLight.valueOf(
+fun setMainLightsState(state: CarPart.MainLight): CarPart.MainLight {
+    return CarPart.MainLight.valueOf(
         runBlockingRequest { Electrics.electricsAPI.setMainLightsState(state.name) } ?: EMPTY_STRING
     )
 }
 
-fun getMainLightsState(): CarPart.VisionLight {
-    return CarPart.VisionLight.valueOf(
+fun getMainLightsState(): CarPart.MainLight {
+    return CarPart.MainLight.valueOf(
         runBlockingRequest { Electrics.electricsAPI.getMainLightsState() } ?: EMPTY_STRING
     )
 }

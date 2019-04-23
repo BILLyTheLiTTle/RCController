@@ -205,7 +205,7 @@ class RCControllerActivity : AppCompatActivity() {
              */
             if(::retrofit.isInitialized) {
                 updateMotionUIItems()
-                updateMainLightsUIItems()
+                viewModel.visionLightsLiveData.value = getMainLightsState()
                 /*updateTurnLightsUIItems()
                 // The following function is updating some other ImageViews and more
                 updateHandlingAssistanceUIItem()
@@ -343,25 +343,25 @@ class RCControllerActivity : AppCompatActivity() {
                 override fun onDoubleTap(e: MotionEvent): Boolean {
                     // If, for any reason, engine is stopped I should not do anything
                     if(isEngineStarted()) {
-                        setMainLightsState(CarPart.VisionLight.LONG_RANGE_SIGNAL_LIGHTS)
+                        setMainLightsState(CarPart.MainLight.LONG_RANGE_SIGNAL_LIGHTS)
                     }
-                    updateMainLightsUIItems()
+                    viewModel.visionLightsLiveData.value = getMainLightsState()
                     return true
                 }
 
                 override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                     if (isEngineStarted()){
                         when (getMainLightsState()) {
-                            CarPart.VisionLight.LONG_RANGE_LIGHTS -> setMainLightsState(CarPart.VisionLight.DRIVING_LIGHTS)
-                            CarPart.VisionLight.DRIVING_LIGHTS -> setMainLightsState(CarPart.VisionLight.POSITION_LIGHTS)
-                            CarPart.VisionLight.POSITION_LIGHTS -> setMainLightsState(CarPart.VisionLight.LIGHTS_OFF)
-                            CarPart.VisionLight.LIGHTS_OFF ->
+                            CarPart.MainLight.LONG_RANGE_LIGHTS -> setMainLightsState(CarPart.MainLight.DRIVING_LIGHTS)
+                            CarPart.MainLight.DRIVING_LIGHTS -> setMainLightsState(CarPart.MainLight.POSITION_LIGHTS)
+                            CarPart.MainLight.POSITION_LIGHTS -> setMainLightsState(CarPart.MainLight.LIGHTS_OFF)
+                            CarPart.MainLight.LIGHTS_OFF ->
                                 Toast.makeText(this@RCControllerActivity,
                                     getString(R.string.lights_off_warning),
                                     Toast.LENGTH_SHORT).show()
                         }
                         // update the icon using server info for verification
-                        updateMainLightsUIItems()
+                        viewModel.visionLightsLiveData.value = getMainLightsState()
                     }
                     return true
                 }
@@ -371,19 +371,27 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener {
                 if (isEngineStarted()){
                     when (getMainLightsState()) {
-                        CarPart.VisionLight.LIGHTS_OFF -> setMainLightsState(CarPart.VisionLight.POSITION_LIGHTS)
-                        CarPart.VisionLight.POSITION_LIGHTS -> setMainLightsState(CarPart.VisionLight.DRIVING_LIGHTS)
-                        CarPart.VisionLight.DRIVING_LIGHTS -> setMainLightsState(CarPart.VisionLight.LONG_RANGE_LIGHTS)
-                        CarPart.VisionLight.LONG_RANGE_LIGHTS -> Toast.makeText(this@RCControllerActivity,
+                        CarPart.MainLight.LIGHTS_OFF -> setMainLightsState(CarPart.MainLight.POSITION_LIGHTS)
+                        CarPart.MainLight.POSITION_LIGHTS -> setMainLightsState(CarPart.MainLight.DRIVING_LIGHTS)
+                        CarPart.MainLight.DRIVING_LIGHTS -> setMainLightsState(CarPart.MainLight.LONG_RANGE_LIGHTS)
+                        CarPart.MainLight.LONG_RANGE_LIGHTS -> Toast.makeText(this@RCControllerActivity,
                                 getString(R.string.long_range_lights_warning),
                                 Toast.LENGTH_SHORT).show()
                     }
                     // update the icon using server info for verification
-                    updateMainLightsUIItems()
+                    viewModel.visionLightsLiveData.value = getMainLightsState()
                 }
                 true
             }
         }
+        viewModel.visionLightsLiveData.observe(this, Observer<CarPart.MainLight> {
+            when (it) {
+                CarPart.MainLight.LONG_RANGE_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_long_range)
+                CarPart.MainLight.DRIVING_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_driving)
+                CarPart.MainLight.POSITION_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_position)
+                CarPart.MainLight.LIGHTS_OFF -> lights_imageView.setImageResourceWithTag(R.drawable.lights_off)
+            }
+        })
 
         //////
         // setup left turn lights
@@ -1008,15 +1016,9 @@ class RCControllerActivity : AppCompatActivity() {
         This function here should get these states which must be as I want,
         and if they don't check the set functions between client-server.
      */
-    private fun updateMainLightsUIItems(){
-        when (getMainLightsState()) {
-            CarPart.VisionLight.LONG_RANGE_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_long_range)
-            CarPart.VisionLight.DRIVING_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_driving)
-            CarPart.VisionLight.POSITION_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_position)
-            CarPart.VisionLight.LIGHTS_OFF -> lights_imageView.setImageResourceWithTag(R.drawable.lights_off)
-            else -> lights_imageView.setImageResourceWithTag(R.drawable.lights_off)
-        }
-    }
+    /*private fun updateMainLightsUIItems(){
+        viewModel.visionLightsLiveData.value = getMainLightsState()
+    }*/
 
     /* Turn lights interactive items must be depending on each other.
         Their states on the server should be changed by set methods.

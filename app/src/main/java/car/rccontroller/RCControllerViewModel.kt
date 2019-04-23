@@ -2,6 +2,7 @@ package car.rccontroller
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import car.rccontroller.network.server.feedback.data.CarPart
 import car.rccontroller.network.server.feedback.data.TemperatureWarningType
 
 class RCControllerViewModel: ViewModel() {
@@ -24,6 +25,7 @@ class RCControllerViewModel: ViewModel() {
     val shiftRegistersTemperatureLiveData = MutableLiveData<TemperatureWarningType>()
     val parkingBrakeLiveData = MutableLiveData<Boolean>()
     val handbrakeLiveData = MutableLiveData<Boolean>()
+    val visionLightsLiveData = MutableLiveData<CarPart.MainLight>()
 
     /* The values are initialized at false or empty state because
     I want the grey icons at start because
@@ -48,6 +50,8 @@ class RCControllerViewModel: ViewModel() {
         raspberryPiTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
         batteriesTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
         shiftRegistersTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
+
+        visionLightsLiveData.value = CarPart.MainLight.LIGHTS_OFF
 
 
         parkingBrakeLiveData.value = false
