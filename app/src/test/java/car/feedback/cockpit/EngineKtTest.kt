@@ -1,4 +1,4 @@
-package car.rccontroller.network.cockpit
+package car.feedback.cockpit
 
 import car.rccontroller.RCControllerActivity
 import car.rccontroller.retrofit
@@ -32,7 +32,7 @@ class EngineKtTest {
             .baseUrl("http://$serverIp:$port/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
-        car.rccontroller.network.cockpit.startEngine(null)
+        car.feedback.cockpit.startEngine(null)
         //throttleBrakeActionId = System.currentTimeMillis()
         //steeringDirectionId = System.currentTimeMillis()
     }
@@ -60,7 +60,7 @@ class EngineKtTest {
 
     /*@Test
     fun `validate that local server has started`() {
-        car.rccontroller.network.startEngine(null, "192.168.200.245", 8080)
+        car.feedback.startEngine(null, "192.168.200.245", 8080)
         assertThat(if (::sensorFeedbackServer.isInitialized) sensorFeedbackServer.isAlive else false, `is`(true))
     }
     @Test

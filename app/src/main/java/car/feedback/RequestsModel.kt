@@ -1,7 +1,7 @@
-package car.rccontroller.network
+package car.feedback
 
 /*
-This file is designed to store and manage network-related data,
+This file is designed to store and manage feedback-related data,
 somehow like the ViewModel class is designed to store and manage UI-related data
  */
 

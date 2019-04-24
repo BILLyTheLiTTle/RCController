@@ -1,8 +1,8 @@
-package car.rccontroller.network.cockpit
+package car.feedback.cockpit
 
-import car.rccontroller.network.EMPTY_STRING
-import car.rccontroller.network.runBlockingRequest
-import car.rccontroller.network.server.feedback.data.CarPart
+import car.feedback.EMPTY_STRING
+import car.feedback.runBlockingRequest
+import car.feedback.CarPart
 import car.rccontroller.retrofit
 import retrofit2.Call
 import retrofit2.http.GET
@@ -41,14 +41,14 @@ interface Electrics {
 /////////
 // Main Lights
 /////////
-fun setMainLightsState(state: CarPart.MainLight): CarPart.MainLight {
-    return CarPart.MainLight.valueOf(
+fun setMainLightsState(state: MainLight): MainLight {
+    return MainLight.valueOf(
         runBlockingRequest { Electrics.electricsAPI.setMainLightsState(state.name) } ?: EMPTY_STRING
     )
 }
 
-fun getMainLightsState(): CarPart.MainLight {
-    return CarPart.MainLight.valueOf(
+fun getMainLightsState(): MainLight {
+    return MainLight.valueOf(
         runBlockingRequest { Electrics.electricsAPI.getMainLightsState() } ?: EMPTY_STRING
     )
 }
@@ -56,14 +56,14 @@ fun getMainLightsState(): CarPart.MainLight {
 /////////
 // Turn Lights (Left/Right/Straight)
 /////////
-fun setDirectionLightsState(state: CarPart.DirectionLight): CarPart.DirectionLight {
-    return CarPart.DirectionLight.valueOf(
+fun setDirectionLightsState(state: DirectionLight): DirectionLight {
+    return DirectionLight.valueOf(
         runBlockingRequest { Electrics.electricsAPI.setDirectionLights(state.name) } ?: EMPTY_STRING
     )
 }
 
-fun getDirectionLightsState(): CarPart.DirectionLight {
-    return CarPart.DirectionLight.valueOf(
+fun getDirectionLightsState(): DirectionLight {
+    return DirectionLight.valueOf(
         runBlockingRequest { Electrics.electricsAPI.getDirectionLights() } ?: EMPTY_STRING
     )
 }
@@ -88,4 +88,24 @@ fun setReverseIntention(state: Boolean): String {
 
 fun getReverseIntention(): Boolean {
     return runBlockingRequest { Electrics.electricsAPI.getReverseLightsState() } == true
+}
+
+enum class MainLight(val id: String) {
+    LIGHTS_OFF("${CarPart.LIGHTS.id}_off"),
+    POSITION_LIGHTS("${CarPart.LIGHTS.id}_position"),
+    DRIVING_LIGHTS("${CarPart.LIGHTS.id}_driving"),
+    LONG_RANGE_LIGHTS("${CarPart.LIGHTS.id}_long_range"),
+    LONG_RANGE_SIGNAL_LIGHTS("${CarPart.LIGHTS.id}_long_range_signal")
+}
+
+enum class DirectionLight(val id:String){
+    DIRECTION_LIGHTS_RIGHT("${CarPart.DIRECTION_LIGHTS.id}_right"),
+    DIRECTION_LIGHTS_LEFT("${CarPart.DIRECTION_LIGHTS.id}_left"),
+    DIRECTION_LIGHTS_STRAIGHT("${CarPart.DIRECTION_LIGHTS.id}_straight");
+}
+
+enum class OtherLight(val id:String){
+    BRAKING_LIGHTS("${CarPart.LIGHTS.id}_braking"),
+    REVERSE_LIGHTS("${CarPart.LIGHTS.id}_reverse"),
+    EMERGENCY_LIGHTS("${CarPart.LIGHTS.id}_emergency")
 }

@@ -1,6 +1,6 @@
-package car.rccontroller.network.cockpit
+package car.feedback.cockpit
 
-import car.rccontroller.network.*
+import car.feedback.*
 import car.rccontroller.retrofit
 import kotlinx.coroutines.Job
 import retrofit2.Call

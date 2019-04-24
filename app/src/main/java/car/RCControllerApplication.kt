@@ -1,10 +1,10 @@
-package car.rccontroller
+package car
 
 import android.app.Application
 import android.content.Context
 import android.net.wifi.WifiManager
 import android.text.format.Formatter
-import car.rccontroller.network.EMPTY_STRING
+import car.feedback.EMPTY_STRING
 
 class RCControllerApplication : Application() {
     val myIP:String

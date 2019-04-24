@@ -3,7 +3,6 @@ package car.rccontroller
 import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.*
-import androidx.test.espresso.matcher.RootMatchers.*
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.MediumTest
 import androidx.test.runner.AndroidJUnit4
@@ -13,11 +12,10 @@ import org.hamcrest.Matchers.*
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
 import androidx.test.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
-import junit.framework.Assert
 import org.junit.Before
 import org.junit.BeforeClass
 import androidx.test.uiautomator.UiSelector
-import car.rccontroller.network.cockpit.isEngineStarted
+import car.feedback.cockpit.isEngineStarted
 import org.junit.After
 
 

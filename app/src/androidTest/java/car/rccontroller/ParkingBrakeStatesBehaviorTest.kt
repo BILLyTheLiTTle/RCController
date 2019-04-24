@@ -16,8 +16,8 @@ import org.junit.After
 import org.junit.Before
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
-import car.rccontroller.network.cockpit.isEngineStarted
-import car.rccontroller.network.cockpit.isParkingBrakeActive
+import car.feedback.cockpit.isEngineStarted
+import car.feedback.cockpit.isParkingBrakeActive
 import org.junit.BeforeClass
 
 

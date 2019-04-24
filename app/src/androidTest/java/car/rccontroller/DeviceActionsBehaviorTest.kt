@@ -13,7 +13,7 @@ import org.hamcrest.Matchers.*
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
 import androidx.test.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
-import car.rccontroller.network.cockpit.*
+import car.feedback.cockpit.*
 import junit.framework.Assert
 import org.junit.Before
 import org.junit.BeforeClass

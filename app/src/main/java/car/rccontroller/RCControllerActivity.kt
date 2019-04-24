@@ -14,12 +14,13 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import car.R
+import car.RCControllerApplication
 import kotlinx.android.synthetic.main.activity_rccontroller.*
-import car.rccontroller.network.*
-import car.rccontroller.network.cockpit.*
-import car.rccontroller.network.server.feedback.NanoHTTPDLifecycleAware
-import car.rccontroller.network.server.feedback.data.CarPart
-import car.rccontroller.network.server.feedback.data.TemperatureWarningType
+import car.feedback.*
+import car.feedback.cockpit.*
+import car.feedback.server.NanoHTTPDLifecycleAware
+import car.feedback.server.TemperatureWarningType
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
@@ -249,7 +250,7 @@ class RCControllerActivity : AppCompatActivity() {
             setOnTouchListener {_, event: MotionEvent ->
                 if (event.action == android.view.MotionEvent.ACTION_DOWN) {
                     /* Use the serverIp variable to check if the engine is running.
-                       I use the serverIp because I did not want to use a blocking network request. */
+                       I use the serverIp because I did not want to use a blocking feedback request. */
                     if(viewModel.engineStatusLiveData.value == true) {
                         handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_on)
                         activateHandbrake( true)
@@ -343,7 +344,7 @@ class RCControllerActivity : AppCompatActivity() {
                 override fun onDoubleTap(e: MotionEvent): Boolean {
                     // If, for any reason, engine is stopped I should not do anything
                     if(::retrofit.isInitialized && isEngineStarted()) {
-                        setMainLightsState(CarPart.MainLight.LONG_RANGE_SIGNAL_LIGHTS)
+                        setMainLightsState(MainLight.LONG_RANGE_SIGNAL_LIGHTS)
                     }
                     viewModel.visionLightsLiveData.value = getMainLightsState()
                     return true
@@ -352,10 +353,10 @@ class RCControllerActivity : AppCompatActivity() {
                 override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                     if (::retrofit.isInitialized && isEngineStarted()){
                         when (getMainLightsState()) {
-                            CarPart.MainLight.LONG_RANGE_LIGHTS -> setMainLightsState(CarPart.MainLight.DRIVING_LIGHTS)
-                            CarPart.MainLight.DRIVING_LIGHTS -> setMainLightsState(CarPart.MainLight.POSITION_LIGHTS)
-                            CarPart.MainLight.POSITION_LIGHTS -> setMainLightsState(CarPart.MainLight.LIGHTS_OFF)
-                            CarPart.MainLight.LIGHTS_OFF ->
+                            MainLight.LONG_RANGE_LIGHTS -> setMainLightsState(MainLight.DRIVING_LIGHTS)
+                            MainLight.DRIVING_LIGHTS -> setMainLightsState(MainLight.POSITION_LIGHTS)
+                            MainLight.POSITION_LIGHTS -> setMainLightsState(MainLight.LIGHTS_OFF)
+                            MainLight.LIGHTS_OFF ->
                                 Toast.makeText(this@RCControllerActivity,
                                     getString(R.string.lights_off_warning),
                                     Toast.LENGTH_SHORT).show()
@@ -371,10 +372,10 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener {
                 if (::retrofit.isInitialized && isEngineStarted()){
                     when (getMainLightsState()) {
-                        CarPart.MainLight.LIGHTS_OFF -> setMainLightsState(CarPart.MainLight.POSITION_LIGHTS)
-                        CarPart.MainLight.POSITION_LIGHTS -> setMainLightsState(CarPart.MainLight.DRIVING_LIGHTS)
-                        CarPart.MainLight.DRIVING_LIGHTS -> setMainLightsState(CarPart.MainLight.LONG_RANGE_LIGHTS)
-                        CarPart.MainLight.LONG_RANGE_LIGHTS -> Toast.makeText(this@RCControllerActivity,
+                        MainLight.LIGHTS_OFF -> setMainLightsState(MainLight.POSITION_LIGHTS)
+                        MainLight.POSITION_LIGHTS -> setMainLightsState(MainLight.DRIVING_LIGHTS)
+                        MainLight.DRIVING_LIGHTS -> setMainLightsState(MainLight.LONG_RANGE_LIGHTS)
+                        MainLight.LONG_RANGE_LIGHTS -> Toast.makeText(this@RCControllerActivity,
                                 getString(R.string.long_range_lights_warning),
                                 Toast.LENGTH_SHORT).show()
                     }
@@ -384,12 +385,12 @@ class RCControllerActivity : AppCompatActivity() {
                 true
             }
         }
-        viewModel.visionLightsLiveData.observe(this, Observer<CarPart.MainLight> {
+        viewModel.visionLightsLiveData.observe(this, Observer<MainLight> {
             when (it) {
-                CarPart.MainLight.LONG_RANGE_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_long_range)
-                CarPart.MainLight.DRIVING_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_driving)
-                CarPart.MainLight.POSITION_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_position)
-                CarPart.MainLight.LIGHTS_OFF -> lights_imageView.setImageResourceWithTag(R.drawable.lights_off)
+                MainLight.LONG_RANGE_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_long_range)
+                MainLight.DRIVING_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_driving)
+                MainLight.POSITION_LIGHTS -> lights_imageView.setImageResourceWithTag(R.drawable.lights_position)
+                MainLight.LIGHTS_OFF -> lights_imageView.setImageResourceWithTag(R.drawable.lights_off)
             }
         })
 
@@ -404,7 +405,7 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(::retrofit.isInitialized && isEngineStarted()) {
-                    setDirectionLightsState(CarPart.DirectionLight.DIRECTION_LIGHTS_LEFT)
+                    setDirectionLightsState(DirectionLight.DIRECTION_LIGHTS_LEFT)
                 }
                 updateTurnLightsUIItems()
                 true
@@ -425,7 +426,7 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(::retrofit.isInitialized && isEngineStarted()) {
-                    setDirectionLightsState(CarPart.DirectionLight.DIRECTION_LIGHTS_RIGHT)
+                    setDirectionLightsState(DirectionLight.DIRECTION_LIGHTS_RIGHT)
                 }
                 updateTurnLightsUIItems()
                 true
@@ -1018,18 +1019,18 @@ class RCControllerActivity : AppCompatActivity() {
      */
     private fun updateTurnLightsUIItems() {
         when (getDirectionLightsState()) {
-            CarPart.DirectionLight.DIRECTION_LIGHTS_STRAIGHT -> {
+            DirectionLight.DIRECTION_LIGHTS_STRAIGHT -> {
                 leftDirectionLightsAnimation.stop()
                 leftDirectionLightsAnimation.selectDrawable(0)
                 rightDirectionLightsAnimation.stop()
                 rightDirectionLightsAnimation.selectDrawable(0)
             }
-            CarPart.DirectionLight.DIRECTION_LIGHTS_LEFT -> {
+            DirectionLight.DIRECTION_LIGHTS_LEFT -> {
                 rightDirectionLightsAnimation.stop()
                 rightDirectionLightsAnimation.selectDrawable(0)
                 leftDirectionLightsAnimation.start()
             }
-            CarPart.DirectionLight.DIRECTION_LIGHTS_RIGHT -> {
+            DirectionLight.DIRECTION_LIGHTS_RIGHT -> {
                 leftDirectionLightsAnimation.stop()
                 leftDirectionLightsAnimation.selectDrawable(0)
                 rightDirectionLightsAnimation.start()

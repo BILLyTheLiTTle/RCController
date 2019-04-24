@@ -1,8 +1,10 @@
-package car.rccontroller.network.cockpit
+package car.feedback.cockpit
 
+import car.R
+import car.RCControllerApplication
 import car.rccontroller.*
-import car.rccontroller.network.*
-import car.rccontroller.network.server.feedback.NanoHTTPDLifecycleAware
+import car.feedback.*
+import car.feedback.server.NanoHTTPDLifecycleAware
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

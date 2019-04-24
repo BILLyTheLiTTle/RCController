@@ -1,4 +1,4 @@
-package car.rccontroller.network.cockpit
+package car.feedback.cockpit
 
 import car.rccontroller.RCControllerActivity
 import car.rccontroller.retrofit
@@ -31,7 +31,7 @@ class SetupKtTest {
             .baseUrl("http://$serverIp:$port/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
-        car.rccontroller.network.cockpit.startEngine( null)
+        car.feedback.cockpit.startEngine( null)
         throttleBrakeActionId = System.currentTimeMillis()
         //steeringDirectionId = System.currentTimeMillis()
     }

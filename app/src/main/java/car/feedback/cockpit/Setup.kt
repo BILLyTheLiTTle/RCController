@@ -1,7 +1,7 @@
-package car.rccontroller.network.cockpit
+package car.feedback.cockpit
 
-import car.rccontroller.network.EMPTY_STRING
-import car.rccontroller.network.runBlockingRequest
+import car.feedback.EMPTY_STRING
+import car.feedback.runBlockingRequest
 import car.rccontroller.retrofit
 import retrofit2.Call
 import retrofit2.http.GET
