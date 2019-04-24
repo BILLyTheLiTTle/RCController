@@ -196,8 +196,8 @@ class RCControllerActivity : AppCompatActivity() {
 
                 viewModel.speedLiveData.postValue(getString(R.string.tachometer_null_value))
             }
-            /* At first start of the application all UI items would be deactivated
-            so there is reason to handle them.
+            /* At start of the application all UI items would be deactivated
+            so there is no reason to handle them.
             You want to control them when:
                 1. you stop/re-stop the engine
                 2. you restart the engine.
