@@ -36,4 +36,40 @@
         <item>@drawable/shift_register_temp_high</item>
     </integer-array>
 
+    <integer-array name="traction_control_module_states">
+        <item>@drawable/tcm_off</item>
+        <item>@drawable/tcm_on</item>
+        <item>@drawable/tcm_idle</item>
+    </integer-array>
+
+    <integer-array name="antilock_braking_module_states">
+        <item>@drawable/abm_off</item>
+        <item>@drawable/abm_on</item>
+        <item>@drawable/abm_idle</item>
+    </integer-array>
+
+    <integer-array name="electronic_stability_module_states">
+        <item>@drawable/esm_off</item>
+        <item>@drawable/esm_on</item>
+        <item>@drawable/esm_idle</item>
+    </integer-array>
+
+    <integer-array name="understeer_detection_module_states">
+        <item>@drawable/udm_off</item>
+        <item>@drawable/udm_on</item>
+        <item>@drawable/udm_idle</item>
+    </integer-array>
+
+    <integer-array name="oversteer_detection_module_states">
+        <item>@drawable/odm_off</item>
+        <item>@drawable/odm_on</item>
+        <item>@drawable/odm_idle</item>
+    </integer-array>
+
+    <integer-array name="collision_detection_module_states">
+        <item>@drawable/cdm_off</item>
+        <item>@drawable/cdm_on</item>
+        <item>@drawable/cdm_idle</item>
+    </integer-array>
+
 </resources>

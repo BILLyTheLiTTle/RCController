@@ -431,157 +431,157 @@ class NanoHTTPDLifecycleAwareTest {
     @Test
     fun `validate traction control module is on`() {
         val ret = doEcuRequest(
-            CarModule.TRACTION_CONTROL.id,
-            ModuleState.ON.id
+            CarModule.TRACTION_CONTROL.name,
+            ModuleState.ON.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarModule.TRACTION_CONTROL.id,
-                    ModuleState.ON.id
+                    CarModule.TRACTION_CONTROL.name,
+                    ModuleState.ON.name
                 )))
     }
     @Test
     fun `validate traction control module is idle`() {
         val ret = doEcuRequest(
-            CarModule.TRACTION_CONTROL.id,
-            ModuleState.IDLE.id
+            CarModule.TRACTION_CONTROL.name,
+            ModuleState.IDLE.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarModule.TRACTION_CONTROL.id,
-                    ModuleState.IDLE.id
+                    CarModule.TRACTION_CONTROL.name,
+                    ModuleState.IDLE.name
                 )))
     }
     @Test
     fun `validate antilock braking module is on`() {
         val ret = doEcuRequest(
-            CarModule.ANTILOCK_BRAKING.id,
-            ModuleState.ON.id
+            CarModule.ANTILOCK_BRAKING.name,
+            ModuleState.ON.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarModule.ANTILOCK_BRAKING.id,
-                    ModuleState.ON.id
+                    CarModule.ANTILOCK_BRAKING.name,
+                    ModuleState.ON.name
                 )))
     }
     @Test
     fun `validate antilock braking module is idle`() {
         val ret = doEcuRequest(
-            CarModule.ANTILOCK_BRAKING.id,
-            ModuleState.IDLE.id
+            CarModule.ANTILOCK_BRAKING.name,
+            ModuleState.IDLE.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarModule.ANTILOCK_BRAKING.id,
-                    ModuleState.IDLE.id
+                    CarModule.ANTILOCK_BRAKING.name,
+                    ModuleState.IDLE.name
                 )))
     }
     @Test
     fun `validate electronic stability module is on`() {
         val ret = doEcuRequest(
-            CarModule.ELECTRONIC_STABILITY.id,
-            ModuleState.ON.id
+            CarModule.ELECTRONIC_STABILITY.name,
+            ModuleState.ON.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarModule.ELECTRONIC_STABILITY.id,
-                    ModuleState.ON.id
+                    CarModule.ELECTRONIC_STABILITY.name,
+                    ModuleState.ON.name
                 )))
     }
     @Test
     fun `validate electronic stability module is idle`() {
         val ret = doEcuRequest(
-            CarModule.ELECTRONIC_STABILITY.id,
-            ModuleState.IDLE.id
+            CarModule.ELECTRONIC_STABILITY.name,
+            ModuleState.IDLE.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarModule.ELECTRONIC_STABILITY.id,
-                    ModuleState.IDLE.id
+                    CarModule.ELECTRONIC_STABILITY.name,
+                    ModuleState.IDLE.name
                 )))
     }
     @Test
     fun `validate understeer detection module is on`() {
         val ret = doEcuRequest(
-            CarModule.UNDERSTEER_DETECTION.id,
-            ModuleState.ON.id
+            CarModule.UNDERSTEER_DETECTION.name,
+            ModuleState.ON.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarModule.UNDERSTEER_DETECTION.id,
-                    ModuleState.ON.id
+                    CarModule.UNDERSTEER_DETECTION.name,
+                    ModuleState.ON.name
                 )))
     }
     @Test
     fun `validate understeer detection module is idle`() {
         val ret = doEcuRequest(
-            CarModule.UNDERSTEER_DETECTION.id,
-            ModuleState.IDLE.id
+            CarModule.UNDERSTEER_DETECTION.name,
+            ModuleState.IDLE.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarModule.UNDERSTEER_DETECTION.id,
-                    ModuleState.IDLE.id
+                    CarModule.UNDERSTEER_DETECTION.name,
+                    ModuleState.IDLE.name
                 )))
     }
     @Test
     fun `validate oversteer detection module is on`() {
         val ret = doEcuRequest(
-            CarModule.OVERSTEER_DETECTION.id,
-            ModuleState.ON.id
+            CarModule.OVERSTEER_DETECTION.name,
+            ModuleState.ON.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarModule.OVERSTEER_DETECTION.id,
-                    ModuleState.ON.id
+                    CarModule.OVERSTEER_DETECTION.name,
+                    ModuleState.ON.name
                 )))
     }
     @Test
     fun `validate oversteer detection module is idle`() {
         val ret = doEcuRequest(
-            CarModule.OVERSTEER_DETECTION.id,
-            ModuleState.IDLE.id
+            CarModule.OVERSTEER_DETECTION.name,
+            ModuleState.IDLE.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarModule.OVERSTEER_DETECTION.id,
-                    ModuleState.IDLE.id
+                    CarModule.OVERSTEER_DETECTION.name,
+                    ModuleState.IDLE.name
                 )))
     }
     @Test
     fun `validate collision detection module is on`() {
         val ret = doEcuRequest(
-            CarModule.COLLISION_DETECTION.id,
-            ModuleState.ON.id
+            CarModule.COLLISION_DETECTION.name,
+            ModuleState.ON.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarModule.COLLISION_DETECTION.id,
-                    ModuleState.ON.id
+                    CarModule.COLLISION_DETECTION.name,
+                    ModuleState.ON.name
                 )))
     }
     @Test
     fun `validate collision detection module is idle`() {
         val ret = doEcuRequest(
-            CarModule.COLLISION_DETECTION.id,
-            ModuleState.IDLE.id
+            CarModule.COLLISION_DETECTION.name,
+            ModuleState.IDLE.name
         )
         assertThat(ret,
             `is`(
                 NanoHTTPDLifecycleAware.formatResponse(
-                    CarModule.COLLISION_DETECTION.id,
-                    ModuleState.IDLE.id
+                    CarModule.COLLISION_DETECTION.name,
+                    ModuleState.IDLE.name
                 )))
     }
 }

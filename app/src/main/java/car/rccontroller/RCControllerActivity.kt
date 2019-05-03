@@ -19,6 +19,7 @@ import car.RCControllerApplication
 import kotlinx.android.synthetic.main.activity_rccontroller.*
 import car.feedback.*
 import car.feedback.cockpit.*
+import car.feedback.server.ModuleState
 import car.feedback.server.NanoHTTPDLifecycleAware
 import car.feedback.server.TemperatureWarningType
 import retrofit2.Retrofit
@@ -114,6 +115,31 @@ class RCControllerActivity : AppCompatActivity() {
             updateUITempItems(it, shiftRegisterTemp_imageView,
                 resources.obtainTypedArray(R.array.shift_registers_temperature_states))
         })
+        // Advanced sensor UI items
+        viewModel.tractionControlModuleLiveData.observe(this, Observer<ModuleState>{
+            updateUIAdvancedSensorItems(it, tcm_imageView,
+                resources.obtainTypedArray(R.array.traction_control_module_states))
+        })
+        viewModel.antilockBrakingModuleLiveData.observe(this, Observer<ModuleState>{
+            updateUIAdvancedSensorItems(it, abm_imageView,
+                resources.obtainTypedArray(R.array.antilock_braking_module_states))
+        })
+        viewModel.electronicStabilityModuleLiveData.observe(this, Observer<ModuleState>{
+            updateUIAdvancedSensorItems(it, esm_imageView,
+                resources.obtainTypedArray(R.array.electronic_stability_module_states))
+        })
+        viewModel.understeerDetectionModuleLiveData.observe(this, Observer<ModuleState>{
+            updateUIAdvancedSensorItems(it, udm_imageView,
+                resources.obtainTypedArray(R.array.understeer_detection_module_states))
+        })
+        viewModel.oversteerDetectionModuleLiveData.observe(this, Observer<ModuleState>{
+            updateUIAdvancedSensorItems(it, odm_imageView,
+                resources.obtainTypedArray(R.array.oversteer_detection_module_states))
+        })
+        viewModel.collisionDetectionModuleLiveData.observe(this, Observer<ModuleState>{
+            updateUIAdvancedSensorItems(it, cdm_imageView,
+                resources.obtainTypedArray(R.array.collision_detection_module_states))
+        })
 
         //////
         //setup engine start-n-stop
@@ -195,6 +221,13 @@ class RCControllerActivity : AppCompatActivity() {
                 viewModel.shiftRegistersTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
 
                 viewModel.speedLiveData.postValue(getString(R.string.tachometer_null_value))
+
+                viewModel.tractionControlModuleLiveData.postValue(ModuleState.OFF)
+                viewModel.antilockBrakingModuleLiveData.postValue(ModuleState.OFF)
+                viewModel.electronicStabilityModuleLiveData.postValue(ModuleState.OFF)
+                viewModel.understeerDetectionModuleLiveData.postValue(ModuleState.OFF)
+                viewModel.oversteerDetectionModuleLiveData.postValue(ModuleState.OFF)
+                viewModel.collisionDetectionModuleLiveData.postValue(ModuleState.OFF)
             }
             /* At start of the application all UI items would be deactivated
             so there is no reason to handle them.
@@ -209,8 +242,8 @@ class RCControllerActivity : AppCompatActivity() {
                 viewModel.visionLightsLiveData.value = getMainLightsState()
                 viewModel.directionLightsLiveData.value = getDirectionLightsState()
                 // The following function is updating some other ImageViews and more
-                /*updateHandlingAssistanceUIItem()
-                updateMotorSpeedLimiterUIItem()*/
+                updateHandlingAssistanceUIItem()
+                /*updateMotorSpeedLimiterUIItem()*/
             }
         })
 
@@ -823,6 +856,20 @@ class RCControllerActivity : AppCompatActivity() {
         states.recycle()
     }
 
+    /* Advanced sensor non-interactive images are updated by server actions
+        which are sent to the client when the Raspi has to.
+     */
+    private fun updateUIAdvancedSensorItems(state: ModuleState, item: ImageView, states: TypedArray) {
+        var i = 0
+        when (state) {
+            //ModuleState.NOTHING, ModuleState.OFF -> i = 0
+            ModuleState.ON -> i = 1
+            ModuleState.IDLE -> i = 2
+        }
+        item.setImageResourceWithTag(states.getResourceId(i, 0))
+        states.recycle()
+    }
+
     /* Motion interactive actions must be depending on each other.
         Their states on the server should be changed by set methods.
         This function here should get these states which must be as I want,
@@ -925,20 +972,14 @@ class RCControllerActivity : AppCompatActivity() {
         functionality values.
      */
     private fun updateHandlingAssistanceUIItem(){
-        when (getHandlingAssistanceState()) {
+        val handlingAssistance = getHandlingAssistanceState()
+        when (handlingAssistance) {
             ASSISTANCE_FULL -> {
                 setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_AUTO)
                 setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_AUTO)
 
                 handling_assistance_imageView.
                     setImageResourceWithTag(R.drawable.handling_assistance_full)
-
-                /*updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_IDLE_STATE,
-                abmState = SensorFeedbackServer.MODULE_IDLE_STATE,
-                esmState = SensorFeedbackServer.MODULE_IDLE_STATE,
-                udmState = SensorFeedbackServer.MODULE_IDLE_STATE,
-                odmState = SensorFeedbackServer.MODULE_IDLE_STATE,
-                cdmState = SensorFeedbackServer.MODULE_IDLE_STATE)*/
             }
             ASSISTANCE_WARNING -> {
                 setFrontDifferentialSlipperyLimiter(previousFrontDifferentialSlipperyLimiter)
@@ -946,13 +987,6 @@ class RCControllerActivity : AppCompatActivity() {
 
                 handling_assistance_imageView.
                     setImageResourceWithTag(R.drawable.handling_assistance_warning)
-
-                /*updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_IDLE_STATE,
-                        abmState = SensorFeedbackServer.MODULE_IDLE_STATE,
-                        esmState = SensorFeedbackServer.MODULE_IDLE_STATE,
-                        udmState = SensorFeedbackServer.MODULE_IDLE_STATE,
-                        odmState = SensorFeedbackServer.MODULE_IDLE_STATE,
-                        cdmState = SensorFeedbackServer.MODULE_IDLE_STATE)*/
             }
             ASSISTANCE_NONE -> {
                 setFrontDifferentialSlipperyLimiter(previousFrontDifferentialSlipperyLimiter)
@@ -960,77 +994,32 @@ class RCControllerActivity : AppCompatActivity() {
 
                 handling_assistance_imageView.
                     setImageResourceWithTag(R.drawable.handling_assistance_manual)
-
-                /*updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_OFF_STATE,
-                        abmState = SensorFeedbackServer.MODULE_OFF_STATE,
-                        esmState = SensorFeedbackServer.MODULE_OFF_STATE,
-                        udmState = SensorFeedbackServer.MODULE_OFF_STATE,
-                        odmState = SensorFeedbackServer.MODULE_OFF_STATE,
-                        cdmState = SensorFeedbackServer.MODULE_OFF_STATE)*/
             }
-            else -> {
-                handling_assistance_imageView.
-                    setImageResourceWithTag(R.drawable.handling_assistance_off)
-
-                /*updateAdvancedSensorUIItems(tcmState = SensorFeedbackServer.MODULE_OFF_STATE,
-                        abmState = SensorFeedbackServer.MODULE_OFF_STATE,
-                        esmState = SensorFeedbackServer.MODULE_OFF_STATE,
-                        udmState = SensorFeedbackServer.MODULE_OFF_STATE,
-                        odmState = SensorFeedbackServer.MODULE_OFF_STATE,
-                        cdmState = SensorFeedbackServer.MODULE_OFF_STATE)*/
-            }
+            else -> handling_assistance_imageView.setImageResourceWithTag(R.drawable.handling_assistance_off)
         }
+
+        if((handlingAssistance == ASSISTANCE_FULL) || (handlingAssistance == ASSISTANCE_WARNING)){
+            viewModel.tractionControlModuleLiveData.postValue(ModuleState.IDLE)
+            viewModel.antilockBrakingModuleLiveData.postValue(ModuleState.IDLE)
+            viewModel.electronicStabilityModuleLiveData.postValue(ModuleState.IDLE)
+            viewModel.understeerDetectionModuleLiveData.postValue(ModuleState.IDLE)
+            viewModel.oversteerDetectionModuleLiveData.postValue(ModuleState.IDLE)
+            viewModel.collisionDetectionModuleLiveData.postValue(ModuleState.IDLE)
+        }
+        else {
+            viewModel.tractionControlModuleLiveData.postValue(ModuleState.OFF)
+            viewModel.antilockBrakingModuleLiveData.postValue(ModuleState.OFF)
+            viewModel.electronicStabilityModuleLiveData.postValue(ModuleState.OFF)
+            viewModel.understeerDetectionModuleLiveData.postValue(ModuleState.OFF)
+            viewModel.oversteerDetectionModuleLiveData.postValue(ModuleState.OFF)
+            viewModel.collisionDetectionModuleLiveData.postValue(ModuleState.OFF)
+        }
+
         updateFrontDifferentialSlipperyLimiterUIItem()
         updateRearDifferentialSlipperyLimiterUIItem()
     }
 
-    /* Advanced sensor non-interactive images are updated by server actions
-        which are sent to the client when the Raspi have to.
 
-        Also, here we update the ImageViews of the items, of the advanced sensors
-        according to the initial (off, idle) state only.
-     */
-    /*fun updateAdvancedSensorUIItems(
-            tcmState: String = SensorFeedbackServer.MODULE_UNCHANGED_STATE,
-            abmState: String = SensorFeedbackServer.MODULE_UNCHANGED_STATE,
-            esmState: String = SensorFeedbackServer.MODULE_UNCHANGED_STATE,
-            udmState: String = SensorFeedbackServer.MODULE_UNCHANGED_STATE,
-            odmState: String = SensorFeedbackServer.MODULE_UNCHANGED_STATE,
-            cdmState: String = SensorFeedbackServer.MODULE_UNCHANGED_STATE){
-
-        fun updateItems(
-                moduleState: String,
-                moduleUI: ImageView,
-                moduleOnDrawable: Int,
-                moduleIdleDrawable: Int,
-                moduleOffDrawable: Int) {
-            runOnUiThread {
-                when (moduleState) {
-                    SensorFeedbackServer.MODULE_ON_STATE ->
-                        moduleUI.setImageResourceWithTag(moduleOnDrawable)
-                    SensorFeedbackServer.MODULE_IDLE_STATE ->
-                        moduleUI.setImageResourceWithTag(moduleIdleDrawable)
-                    SensorFeedbackServer.MODULE_OFF_STATE ->
-                        moduleUI.setImageResourceWithTag(moduleOffDrawable)
-                    SensorFeedbackServer.MODULE_NOTHING_STATE ->
-                        moduleUI.visibility = View.INVISIBLE
-                }
-            }
-        }
-
-        updateItems(tcmState, tcm_imageView,
-                R.drawable.tcm_on, R.drawable.tcm_idle, R.drawable.tcm_off)
-        updateItems(abmState, abm_imageView,
-                R.drawable.abm_on, R.drawable.abm_idle, R.drawable.abm_off)
-        updateItems(esmState, esm_imageView,
-                R.drawable.esm_on, R.drawable.esm_idle, R.drawable.esm_off)
-        updateItems(udmState, udm_imageView,
-                R.drawable.udm_on, R.drawable.udm_idle, R.drawable.udm_off)
-        updateItems(odmState, odm_imageView,
-                R.drawable.odm_on, R.drawable.odm_idle, R.drawable.odm_off)
-        updateItems(cdmState, cdm_imageView,
-                R.drawable.cdm_on, R.drawable.cdm_idle, R.drawable.cdm_off)
-    }*/
 
     override fun onPause() {
         super.onPause()

@@ -203,70 +203,76 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                     }
                     ECU_URI -> {
                         when (params[ECU_PARAM_KEY_ITEM]?.get(0)) {
-                            CarModule.TRACTION_CONTROL.id -> {
-                                /*activity.updateAdvancedSensorUIItems(
-                                    tcmState = params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: MODULE_UNCHANGED_STATE
-                                )*/
-                                formatResponse(
-                                    CarModule.TRACTION_CONTROL.id,
+                            CarModule.TRACTION_CONTROL.name -> {
+                                val state = ModuleState.valueOf(
                                     params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: ModuleState.UNCHANGED.id
+                                        ?.get(0) ?: ModuleState.UNCHANGED.name
+                                )
+                                model.tractionControlModuleLiveData.postValue(state)
+
+                                formatResponse(
+                                    CarModule.TRACTION_CONTROL.name,
+                                    state.name
                                 )
                             }
-                            CarModule.ANTILOCK_BRAKING.id -> {
-                                /*activity.updateAdvancedSensorUIItems(
-                                    abmState = params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: MODULE_UNCHANGED_STATE
-                                )*/
-                                formatResponse(
-                                    CarModule.ANTILOCK_BRAKING.id,
+                            CarModule.ANTILOCK_BRAKING.name -> {
+                                val state = ModuleState.valueOf(
                                     params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: ModuleState.UNCHANGED.id
+                                        ?.get(0) ?: ModuleState.UNCHANGED.name
+                                )
+                                model.antilockBrakingModuleLiveData.postValue(state)
+
+                                formatResponse(
+                                    CarModule.ANTILOCK_BRAKING.name,
+                                    state.name
                                 )
                             }
-                            CarModule.ELECTRONIC_STABILITY.id -> {
-                                /*activity.updateAdvancedSensorUIItems(
-                                    esmState = params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: MODULE_UNCHANGED_STATE
-                                )*/
-                                formatResponse(
-                                    CarModule.ELECTRONIC_STABILITY.id,
+                            CarModule.ELECTRONIC_STABILITY.name -> {
+                                val state = ModuleState.valueOf(
                                     params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: ModuleState.UNCHANGED.id
+                                        ?.get(0) ?: ModuleState.UNCHANGED.name
+                                )
+                                model.electronicStabilityModuleLiveData.postValue(state)
+
+                                formatResponse(
+                                    CarModule.ELECTRONIC_STABILITY.name,
+                                    state.name
                                 )
                             }
-                            CarModule.UNDERSTEER_DETECTION.id -> {
-                                /*activity.updateAdvancedSensorUIItems(
-                                    udmState = params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: MODULE_UNCHANGED_STATE
-                                )*/
-                                formatResponse(
-                                    CarModule.UNDERSTEER_DETECTION.id,
+                            CarModule.UNDERSTEER_DETECTION.name -> {
+                                val state = ModuleState.valueOf(
                                     params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: ModuleState.UNCHANGED.id
+                                        ?.get(0) ?: ModuleState.UNCHANGED.name
+                                )
+                                model.understeerDetectionModuleLiveData.postValue(state)
+
+                                formatResponse(
+                                    CarModule.UNDERSTEER_DETECTION.name,
+                                    state.name
                                 )
                             }
-                            CarModule.OVERSTEER_DETECTION.id -> {
-                                /*activity.updateAdvancedSensorUIItems(
-                                    odmState = params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: MODULE_UNCHANGED_STATE
-                                )*/
-                                formatResponse(
-                                    CarModule.OVERSTEER_DETECTION.id,
+                            CarModule.OVERSTEER_DETECTION.name -> {
+                                val state = ModuleState.valueOf(
                                     params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: ModuleState.UNCHANGED.id
+                                        ?.get(0) ?: ModuleState.UNCHANGED.name
+                                )
+                                model.oversteerDetectionModuleLiveData.postValue(state)
+
+                                formatResponse(
+                                    CarModule.OVERSTEER_DETECTION.name,
+                                    state.name
                                 )
                             }
-                            CarModule.COLLISION_DETECTION.id -> {
-                                /*activity.updateAdvancedSensorUIItems(
-                                    cdmState = params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: MODULE_UNCHANGED_STATE
-                                )*/
-                                formatResponse(
-                                    CarModule.COLLISION_DETECTION.id,
+                            CarModule.COLLISION_DETECTION.name -> {
+                                val state = ModuleState.valueOf(
                                     params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: ModuleState.UNCHANGED.id
+                                        ?.get(0) ?: ModuleState.UNCHANGED.name
+                                )
+                                model.collisionDetectionModuleLiveData.postValue(state)
+
+                                formatResponse(
+                                    CarModule.COLLISION_DETECTION.name,
+                                    state.name
                                 )
                             }
                             else ->
