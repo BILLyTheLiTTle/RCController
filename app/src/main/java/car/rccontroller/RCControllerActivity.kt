@@ -207,9 +207,9 @@ class RCControllerActivity : AppCompatActivity() {
             if(::retrofit.isInitialized) {
                 updateMotionUIItems()
                 viewModel.visionLightsLiveData.value = getMainLightsState()
-                /*updateTurnLightsUIItems()
+                viewModel.directionLightsLiveData.value = getDirectionLightsState()
                 // The following function is updating some other ImageViews and more
-                updateHandlingAssistanceUIItem()
+                /*updateHandlingAssistanceUIItem()
                 updateMotorSpeedLimiterUIItem()*/
             }
         })
@@ -407,7 +407,7 @@ class RCControllerActivity : AppCompatActivity() {
                 if(::retrofit.isInitialized && isEngineStarted()) {
                     setDirectionLightsState(DirectionLight.DIRECTION_LIGHTS_LEFT)
                 }
-                updateTurnLightsUIItems()
+                viewModel.directionLightsLiveData.value = getDirectionLightsState()
                 true
             }
             setOnClickListener {
@@ -428,7 +428,7 @@ class RCControllerActivity : AppCompatActivity() {
                 if(::retrofit.isInitialized && isEngineStarted()) {
                     setDirectionLightsState(DirectionLight.DIRECTION_LIGHTS_RIGHT)
                 }
-                updateTurnLightsUIItems()
+                viewModel.directionLightsLiveData.value = getDirectionLightsState()
                 true
             }
             setOnClickListener {
@@ -436,6 +436,26 @@ class RCControllerActivity : AppCompatActivity() {
                 //true
             }
         }
+        viewModel.directionLightsLiveData.observe(this, Observer<DirectionLight> {
+            when (it) {
+                DirectionLight.DIRECTION_LIGHTS_STRAIGHT -> {
+                    leftDirectionLightsAnimation.stop()
+                    leftDirectionLightsAnimation.selectDrawable(0)
+                    rightDirectionLightsAnimation.stop()
+                    rightDirectionLightsAnimation.selectDrawable(0)
+                }
+                DirectionLight.DIRECTION_LIGHTS_LEFT -> {
+                    rightDirectionLightsAnimation.stop()
+                    rightDirectionLightsAnimation.selectDrawable(0)
+                    leftDirectionLightsAnimation.start()
+                }
+                DirectionLight.DIRECTION_LIGHTS_RIGHT -> {
+                    leftDirectionLightsAnimation.stop()
+                    leftDirectionLightsAnimation.selectDrawable(0)
+                    rightDirectionLightsAnimation.start()
+                }
+            }
+        })
 
         //////
         // setup emergency lights
@@ -716,7 +736,7 @@ class RCControllerActivity : AppCompatActivity() {
                     40 -> setSteering(ACTION_TURN_LEFT, progress-20) //20% left
                     50 -> {
                         setSteering(ACTION_STRAIGHT)
-                        updateTurnLightsUIItems()
+                        viewModel.directionLightsLiveData.value = getDirectionLightsState()
                     } //0% means straight
                     60 -> setSteering(ACTION_TURN_RIGHT, progress-40) //20% right
                     70 -> setSteering(ACTION_TURN_RIGHT, progress-30) //40% right
@@ -1011,32 +1031,6 @@ class RCControllerActivity : AppCompatActivity() {
         updateItems(cdmState, cdm_imageView,
                 R.drawable.cdm_on, R.drawable.cdm_idle, R.drawable.cdm_off)
     }*/
-
-    /* Turn lights interactive items must be depending on each other.
-        Their states on the server should be changed by set methods.
-        This function here should get these states which must be as I want,
-        and if they don't check the set functions between client-server.
-     */
-    private fun updateTurnLightsUIItems() {
-        when (getDirectionLightsState()) {
-            DirectionLight.DIRECTION_LIGHTS_STRAIGHT -> {
-                leftDirectionLightsAnimation.stop()
-                leftDirectionLightsAnimation.selectDrawable(0)
-                rightDirectionLightsAnimation.stop()
-                rightDirectionLightsAnimation.selectDrawable(0)
-            }
-            DirectionLight.DIRECTION_LIGHTS_LEFT -> {
-                rightDirectionLightsAnimation.stop()
-                rightDirectionLightsAnimation.selectDrawable(0)
-                leftDirectionLightsAnimation.start()
-            }
-            DirectionLight.DIRECTION_LIGHTS_RIGHT -> {
-                leftDirectionLightsAnimation.stop()
-                leftDirectionLightsAnimation.selectDrawable(0)
-                rightDirectionLightsAnimation.start()
-            }
-        }
-    }
 
     override fun onPause() {
         super.onPause()
