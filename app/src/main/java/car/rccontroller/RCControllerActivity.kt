@@ -295,14 +295,14 @@ class RCControllerActivity : AppCompatActivity() {
         //////
         handbrake_imageView.apply {
             setOnTouchListener {_, event: MotionEvent ->
-                if (event.action == android.view.MotionEvent.ACTION_DOWN) {
+                if (event.action == MotionEvent.ACTION_DOWN) {
                     /* Use the serverIp variable to check if the engine is running.
                        I use the serverIp because I did not want to use a blocking feedback request. */
                     if(viewModel.engineStatusLiveData.value == true) {
                         handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_on)
                         activateHandbrake( true)
                     }
-                } else if (event.action == android.view.MotionEvent.ACTION_UP) {
+                } else if (event.action == MotionEvent.ACTION_UP) {
                     if(viewModel.engineStatusLiveData.value == true) {
                         handbrake_imageView.setImageResourceWithTag(R.drawable.handbrake_off)
                         activateHandbrake(false)
@@ -863,12 +863,12 @@ class RCControllerActivity : AppCompatActivity() {
     }
 
     private fun updateUITempItems(warningType: TemperatureWarningType, item: ImageView, states: TypedArray) {
-        var i = 0
-        when (warningType) {
-            //TemperatureWarningType.NOTHING -> i = 0
-            TemperatureWarningType.NORMAL -> i = 1
-            TemperatureWarningType.MEDIUM -> i = 2
-            TemperatureWarningType.HIGH -> i = 3
+        val i = when (warningType) {
+            TemperatureWarningType.NOTHING -> 0
+            TemperatureWarningType.NORMAL -> 1
+            TemperatureWarningType.MEDIUM -> 2
+            TemperatureWarningType.HIGH -> 3
+            else -> 0
         }
         item.setImageResourceWithTag(states.getResourceId(i, 0))
         states.recycle()
@@ -878,11 +878,11 @@ class RCControllerActivity : AppCompatActivity() {
         which are sent to the client when the Raspi has to.
      */
     private fun updateUIAdvancedSensorItems(state: ModuleState, item: ImageView, states: TypedArray) {
-        var i = 0
-        when (state) {
-            //ModuleState.NOTHING, ModuleState.OFF -> i = 0
-            ModuleState.ON -> i = 1
-            ModuleState.IDLE -> i = 2
+        val i = when (state) {
+            ModuleState.NOTHING, ModuleState.OFF -> 0
+            ModuleState.ON -> 1
+            ModuleState.IDLE -> 2
+            else -> 0
         }
         item.setImageResourceWithTag(states.getResourceId(i, 0))
         states.recycle()
