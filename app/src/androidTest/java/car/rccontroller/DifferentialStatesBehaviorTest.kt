@@ -7,6 +7,7 @@ import androidx.test.espresso.matcher.RootMatchers.*
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.MediumTest
 import androidx.test.runner.AndroidJUnit4
+import car.R
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
 import car.feedback.cockpit.*
 import org.hamcrest.Matchers.*

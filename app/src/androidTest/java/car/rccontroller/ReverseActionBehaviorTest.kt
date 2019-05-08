@@ -15,6 +15,7 @@ import androidx.test.uiautomator.UiDevice
 import org.junit.Before
 import org.junit.BeforeClass
 import androidx.test.uiautomator.UiSelector
+import car.R
 import car.feedback.cockpit.isEngineStarted
 import org.junit.After
 

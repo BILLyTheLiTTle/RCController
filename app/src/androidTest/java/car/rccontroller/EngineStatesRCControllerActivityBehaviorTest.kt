@@ -13,6 +13,7 @@ import org.junit.runner.RunWith
 import org.hamcrest.Matchers.*
 import android.net.wifi.WifiManager
 import androidx.test.InstrumentationRegistry
+import car.R
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
 import car.feedback.cockpit.isEngineStarted
 import org.junit.After

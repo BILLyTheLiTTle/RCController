@@ -10,6 +10,7 @@ import androidx.test.filters.MediumTest
 import androidx.test.runner.AndroidJUnit4
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
+import car.R
 import car.rccontroller.api.RCControllerActivityBehaviorTestImpl
 import car.feedback.cockpit.*
 import org.hamcrest.Matchers.*

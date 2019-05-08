@@ -20,6 +20,7 @@ import org.junit.BeforeClass
 import androidx.test.uiautomator.UiSelector
 import org.junit.After
 import android.view.KeyEvent
+import car.R
 
 
 @RunWith(AndroidJUnit4::class)
