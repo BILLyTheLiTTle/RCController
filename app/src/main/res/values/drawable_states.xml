@@ -72,4 +72,26 @@
         <item>@drawable/cdm_idle</item>
     </integer-array>
 
+    <integer-array name="front_differential_slippery_limiter_states">
+        <item>@drawable/differential_front_off</item>
+        <item>@drawable/differential_front_manual_0_open</item>
+        <item>@drawable/differential_front_manual_1_medi</item>
+        <item>@drawable/differential_front_manual_2_medi</item>
+        <item>@drawable/differential_front_manual_3_medi</item>
+        <item>@drawable/differential_front_manual_4_locked</item>
+        <item>@drawable/differential_front_auto</item>
+        <item>@drawable/differential_front_error</item>
+    </integer-array>
+
+    <integer-array name="rear_differential_slippery_limiter_states">
+        <item>@drawable/differential_rear_off</item>
+        <item>@drawable/differential_rear_manual_0_open</item>
+        <item>@drawable/differential_rear_manual_1_medi</item>
+        <item>@drawable/differential_rear_manual_2_medi</item>
+        <item>@drawable/differential_rear_manual_3_medi</item>
+        <item>@drawable/differential_rear_manual_4_locked</item>
+        <item>@drawable/differential_rear_auto</item>
+        <item>@drawable/differential_rear_error</item>
+    </integer-array>
+
 </resources>

@@ -140,6 +140,15 @@ class RCControllerActivity : AppCompatActivity() {
             updateUIAdvancedSensorItems(it, cdm_imageView,
                 resources.obtainTypedArray(R.array.collision_detection_module_states))
         })
+        // Differential UI items
+        viewModel.frontDifferentialSlipperyLimiterLiveData.observe(this, Observer<Int>{
+            updateDifferentialSlipperyUIItems(it, differential_slippery_limiter_front_imageView,
+                resources.obtainTypedArray(R.array.front_differential_slippery_limiter_states))
+        })
+        viewModel.rearDifferentialSlipperyLimiterLiveData.observe(this, Observer<Int>{
+            updateDifferentialSlipperyUIItems(it, differential_slippery_limiter_rear_imageView,
+                resources.obtainTypedArray(R.array.rear_differential_slippery_limiter_states))
+        })
 
         //////
         //setup engine start-n-stop
@@ -624,15 +633,15 @@ class RCControllerActivity : AppCompatActivity() {
                 if(::retrofit.isInitialized && isEngineStarted()) {
                     if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
                         when (getFrontDifferentialSlipperyLimiter()) {
-                            DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED ->
-                                setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2)
-                            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2 ->
-                                setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1)
-                            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1 ->
-                                setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0)
-                            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 ->
-                                setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_OPEN)
-                            DIFFERENTIAL_SLIPPERY_LIMITER_OPEN -> Toast.makeText(
+                            DifferentialSlipperyLimiterState.LOCKED.value ->
+                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_2.value)
+                            DifferentialSlipperyLimiterState.MEDI_2.value ->
+                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_1.value)
+                            DifferentialSlipperyLimiterState.MEDI_1.value ->
+                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_0.value)
+                            DifferentialSlipperyLimiterState.MEDI_0.value ->
+                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.OPEN.value)
+                            DifferentialSlipperyLimiterState.OPEN.value -> Toast.makeText(
                                 context,
                                 getString(R.string.differential_slippery_limiter_open_warning),
                                 Toast.LENGTH_SHORT
@@ -647,7 +656,8 @@ class RCControllerActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                    updateFrontDifferentialSlipperyLimiterUIItem()
+                    viewModel.frontDifferentialSlipperyLimiterLiveData.value =
+                        previousFrontDifferentialSlipperyLimiter
                 }
                 true
             }
@@ -655,15 +665,15 @@ class RCControllerActivity : AppCompatActivity() {
                 if(::retrofit.isInitialized && isEngineStarted()) {
                     if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
                         when (getFrontDifferentialSlipperyLimiter()) {
-                            DIFFERENTIAL_SLIPPERY_LIMITER_OPEN ->
-                                setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0)
-                            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 ->
-                                setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1)
-                            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1 ->
-                                setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2)
-                            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2 ->
-                                setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED)
-                            DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED -> Toast.makeText(
+                            DifferentialSlipperyLimiterState.OPEN.value ->
+                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_0.value)
+                            DifferentialSlipperyLimiterState.MEDI_0.value ->
+                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_1.value)
+                            DifferentialSlipperyLimiterState.MEDI_1.value ->
+                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_2.value)
+                            DifferentialSlipperyLimiterState.MEDI_2.value ->
+                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.LOCKED.value)
+                            DifferentialSlipperyLimiterState.LOCKED.value -> Toast.makeText(
                                 context,
                                 getString(R.string.differential_slippery_limiter_locked_warning),
                                 Toast.LENGTH_SHORT
@@ -678,7 +688,8 @@ class RCControllerActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                    updateFrontDifferentialSlipperyLimiterUIItem()
+                    viewModel.frontDifferentialSlipperyLimiterLiveData.value =
+                        previousFrontDifferentialSlipperyLimiter
                 }
                 //true
             }
@@ -693,15 +704,15 @@ class RCControllerActivity : AppCompatActivity() {
                 if(::retrofit.isInitialized && isEngineStarted()) {
                     if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
                         when (getRearDifferentialSlipperyLimiter()) {
-                            DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED ->
-                                setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2)
-                            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2 ->
-                                setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1)
-                            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1 ->
-                                setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0)
-                            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 ->
-                                setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_OPEN)
-                            DIFFERENTIAL_SLIPPERY_LIMITER_OPEN -> Toast.makeText(
+                            DifferentialSlipperyLimiterState.LOCKED.value ->
+                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_2.value)
+                            DifferentialSlipperyLimiterState.MEDI_2.value ->
+                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_1.value)
+                            DifferentialSlipperyLimiterState.MEDI_1.value ->
+                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_0.value)
+                            DifferentialSlipperyLimiterState.MEDI_0.value ->
+                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.OPEN.value)
+                            DifferentialSlipperyLimiterState.OPEN.value -> Toast.makeText(
                                 context,
                                 getString(R.string.differential_slippery_limiter_open_warning),
                                 Toast.LENGTH_SHORT
@@ -716,7 +727,8 @@ class RCControllerActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                    updateRearDifferentialSlipperyLimiterUIItem()
+                    viewModel.rearDifferentialSlipperyLimiterLiveData.value =
+                        previousRearDifferentialSlipperyLimiter
                 }
                 true
             }
@@ -724,15 +736,15 @@ class RCControllerActivity : AppCompatActivity() {
                 if(::retrofit.isInitialized && isEngineStarted()) {
                     if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
                         when (getRearDifferentialSlipperyLimiter()) {
-                            DIFFERENTIAL_SLIPPERY_LIMITER_OPEN ->
-                                setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0)
-                            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 ->
-                                setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1)
-                            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1 ->
-                                setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2)
-                            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2 ->
-                                setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED)
-                            DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED -> Toast.makeText(
+                            DifferentialSlipperyLimiterState.OPEN.value ->
+                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_0.value)
+                            DifferentialSlipperyLimiterState.MEDI_0.value ->
+                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_1.value)
+                            DifferentialSlipperyLimiterState.MEDI_1.value ->
+                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_2.value)
+                            DifferentialSlipperyLimiterState.MEDI_2.value ->
+                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.LOCKED.value)
+                            DifferentialSlipperyLimiterState.LOCKED.value -> Toast.makeText(
                                 context,
                                 getString(R.string.differential_slippery_limiter_locked_warning),
                                 Toast.LENGTH_SHORT
@@ -747,7 +759,8 @@ class RCControllerActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                    updateRearDifferentialSlipperyLimiterUIItem()
+                    viewModel.rearDifferentialSlipperyLimiterLiveData.value =
+                        previousRearDifferentialSlipperyLimiter
                 }
                 //true
             }
@@ -880,12 +893,27 @@ class RCControllerActivity : AppCompatActivity() {
         viewModel.handbrakeLiveData.value = isHandbrakeActive()
     }
 
-    /* Rear differential slippery limiter interactive actions must be depending on each other.
+    /* Differential slippery limiter interactive actions must be depending on each other.
         Their states on the server should be changed by set methods.
         This function here should get these states which must be as I want,
         and if they don't check the set functions between client-server.
      */
-    private fun updateRearDifferentialSlipperyLimiterUIItem(){
+    private fun updateDifferentialSlipperyUIItems(state: Int, item: ImageView, states: TypedArray) {
+        val i = when (state) {
+            DifferentialSlipperyLimiterState.OPEN.value -> 1
+            DifferentialSlipperyLimiterState.MEDI_0.value -> 2
+            DifferentialSlipperyLimiterState.MEDI_1.value -> 3
+            DifferentialSlipperyLimiterState.MEDI_2.value -> 4
+            DifferentialSlipperyLimiterState.LOCKED.value -> 5
+            DifferentialSlipperyLimiterState.AUTO.value -> 6
+            DifferentialSlipperyLimiterState.ERROR.value -> 7
+            else -> 0 // and OFF state
+        }
+        item.setImageResourceWithTag(states.getResourceId(i, 0))
+        states.recycle()
+    }
+
+    /*private fun updateRearDifferentialSlipperyLimiterUIItem(){
         when (getRearDifferentialSlipperyLimiter()) {
             DIFFERENTIAL_SLIPPERY_LIMITER_OPEN -> differential_slippery_limiter_rear_imageView.
                 setImageResourceWithTag(R.drawable.differential_rear_manual_0_open)
@@ -930,7 +958,7 @@ class RCControllerActivity : AppCompatActivity() {
             else -> differential_slippery_limiter_front_imageView.
                 setImageResourceWithTag(R.drawable.differential_front_off)
         }
-    }
+    }*/
 
     /* Motor speed limiter interactive actions must be depending on each other.
         Their states on the server should be changed by set methods.
@@ -975,8 +1003,8 @@ class RCControllerActivity : AppCompatActivity() {
         val handlingAssistance = getHandlingAssistanceState()
         when (handlingAssistance) {
             ASSISTANCE_FULL -> {
-                setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_AUTO)
-                setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_AUTO)
+                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.AUTO.value)
+                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.AUTO.value)
 
                 handling_assistance_imageView.
                     setImageResourceWithTag(R.drawable.handling_assistance_full)
@@ -999,24 +1027,25 @@ class RCControllerActivity : AppCompatActivity() {
         }
 
         if((handlingAssistance == ASSISTANCE_FULL) || (handlingAssistance == ASSISTANCE_WARNING)){
-            viewModel.tractionControlModuleLiveData.postValue(ModuleState.IDLE)
-            viewModel.antilockBrakingModuleLiveData.postValue(ModuleState.IDLE)
-            viewModel.electronicStabilityModuleLiveData.postValue(ModuleState.IDLE)
-            viewModel.understeerDetectionModuleLiveData.postValue(ModuleState.IDLE)
-            viewModel.oversteerDetectionModuleLiveData.postValue(ModuleState.IDLE)
-            viewModel.collisionDetectionModuleLiveData.postValue(ModuleState.IDLE)
+            viewModel.tractionControlModuleLiveData.value = ModuleState.IDLE
+            viewModel.antilockBrakingModuleLiveData.value = ModuleState.IDLE
+            viewModel.electronicStabilityModuleLiveData.value = ModuleState.IDLE
+            viewModel.understeerDetectionModuleLiveData.value = ModuleState.IDLE
+            viewModel.oversteerDetectionModuleLiveData.value = ModuleState.IDLE
+            viewModel.collisionDetectionModuleLiveData.value = ModuleState.IDLE
         }
         else {
-            viewModel.tractionControlModuleLiveData.postValue(ModuleState.OFF)
-            viewModel.antilockBrakingModuleLiveData.postValue(ModuleState.OFF)
-            viewModel.electronicStabilityModuleLiveData.postValue(ModuleState.OFF)
-            viewModel.understeerDetectionModuleLiveData.postValue(ModuleState.OFF)
-            viewModel.oversteerDetectionModuleLiveData.postValue(ModuleState.OFF)
-            viewModel.collisionDetectionModuleLiveData.postValue(ModuleState.OFF)
+            viewModel.tractionControlModuleLiveData.value = ModuleState.OFF
+            viewModel.antilockBrakingModuleLiveData.value = ModuleState.OFF
+            viewModel.electronicStabilityModuleLiveData.value = ModuleState.OFF
+            viewModel.understeerDetectionModuleLiveData.value = ModuleState.OFF
+            viewModel.oversteerDetectionModuleLiveData.value = ModuleState.OFF
+            viewModel.collisionDetectionModuleLiveData.value = ModuleState.OFF
         }
-
-        updateFrontDifferentialSlipperyLimiterUIItem()
-        updateRearDifferentialSlipperyLimiterUIItem()
+        viewModel.frontDifferentialSlipperyLimiterLiveData.value =
+            getFrontDifferentialSlipperyLimiter()
+        viewModel.rearDifferentialSlipperyLimiterLiveData.value =
+            getRearDifferentialSlipperyLimiter()
     }
 
 

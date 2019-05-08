@@ -2,8 +2,7 @@ package car.rccontroller
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import car.feedback.cockpit.DirectionLight
-import car.feedback.cockpit.MainLight
+import car.feedback.cockpit.*
 import car.feedback.server.ModuleState
 import car.feedback.server.TemperatureWarningType
 
@@ -35,6 +34,8 @@ class RCControllerViewModel: ViewModel() {
     val understeerDetectionModuleLiveData = MutableLiveData<ModuleState>()
     val oversteerDetectionModuleLiveData = MutableLiveData<ModuleState>()
     val collisionDetectionModuleLiveData = MutableLiveData<ModuleState>()
+    val rearDifferentialSlipperyLimiterLiveData = MutableLiveData<Int>()
+    val frontDifferentialSlipperyLimiterLiveData = MutableLiveData<Int>()
 
     /* The values are initialized at false or empty state because
     I want the grey icons at start because
@@ -72,5 +73,8 @@ class RCControllerViewModel: ViewModel() {
         understeerDetectionModuleLiveData.value = ModuleState.UNCHANGED
         oversteerDetectionModuleLiveData.value = ModuleState.UNCHANGED
         collisionDetectionModuleLiveData.value = ModuleState.UNCHANGED
+
+        //rearDifferentialSlipperyLimiterLiveData.value = previousRearDifferentialSlipperyLimiter
+        //frontDifferentialSlipperyLimiterLiveData.value = previousFrontDifferentialSlipperyLimiter
     }
 }

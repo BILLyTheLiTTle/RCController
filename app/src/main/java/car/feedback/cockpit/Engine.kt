@@ -50,8 +50,8 @@ fun stopEngine(): String {
     val msg = runBlockingRequest { Engine.engineAPI.stopEngine() } ?: EMPTY_STRING
 
     // TODO if I don't want to save manual setup settings
-    previousFrontDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
-    previousRearDifferentialSlipperyLimiter = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
+    previousFrontDifferentialSlipperyLimiter = DifferentialSlipperyLimiterState.LOCKED.value
+    previousRearDifferentialSlipperyLimiter = DifferentialSlipperyLimiterState.LOCKED.value
 
     return msg
 }

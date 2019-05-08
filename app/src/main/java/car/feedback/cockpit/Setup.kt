@@ -38,7 +38,7 @@ interface Setup {
 }
 
 // Handling Assistance
-const val ASSISTANCE_NULL = EMPTY_STRING
+const val ASSISTANCE_NULL = EMPTY_STRING // for local use only
 const val ASSISTANCE_NONE = "assistance_none"
 const val ASSISTANCE_WARNING = "assistance_warning"
 const val ASSISTANCE_FULL = "assistance_full"
@@ -70,33 +70,36 @@ fun getMotorSpeedLimiter(): Double {
     return runBlockingRequest { Setup.setupAPI.getMotorSpeedLimiter() } ?: MOTOR_SPEED_LIMITER_ERROR_SPEED
 }
 
-// Differential Slippery Limiter
-const val DIFFERENTIAL_SLIPPERY_LIMITER_ERROR = -1
-const val DIFFERENTIAL_SLIPPERY_LIMITER_OPEN = 0
-const val DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 = 1
-const val DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1 = 2
-const val DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2 = 3
-const val DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED = 4
-const val DIFFERENTIAL_SLIPPERY_LIMITER_AUTO = 10
-
 //---- Front ----
-var previousFrontDifferentialSlipperyLimiter: Int = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
+var previousFrontDifferentialSlipperyLimiter: Int = DifferentialSlipperyLimiterState.LOCKED.value
 
 fun setFrontDifferentialSlipperyLimiter(value: Int): String {
     return runBlockingRequest { Setup.setupAPI.setFrontDifferentialSlipperyLimiter(value) } ?: EMPTY_STRING
 }
 
 fun getFrontDifferentialSlipperyLimiter(): Int {
-    return runBlockingRequest { Setup.setupAPI.getFrontDifferentialSlipperyLimiter() } ?: DIFFERENTIAL_SLIPPERY_LIMITER_ERROR
+    return runBlockingRequest { Setup.setupAPI.getFrontDifferentialSlipperyLimiter() } ?: DifferentialSlipperyLimiterState.ERROR.value
 }
 
 //---- Rear ----
-var previousRearDifferentialSlipperyLimiter: Int = DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED
+var previousRearDifferentialSlipperyLimiter: Int = DifferentialSlipperyLimiterState.LOCKED.value
 
 fun setRearDifferentialSlipperyLimiter(value: Int): String {
     return runBlockingRequest { Setup.setupAPI.setRearDifferentialSlipperyLimiter(value) } ?: EMPTY_STRING
 }
 
 fun getRearDifferentialSlipperyLimiter(): Int {
-    return runBlockingRequest { Setup.setupAPI.getRearDifferentialSlipperyLimiter() } ?: DIFFERENTIAL_SLIPPERY_LIMITER_ERROR
+    return runBlockingRequest { Setup.setupAPI.getRearDifferentialSlipperyLimiter() } ?: DifferentialSlipperyLimiterState.ERROR.value
+}
+
+enum class DifferentialSlipperyLimiterState(val id:String, val value: Int){
+    //OFF("differential_slippery_limiter_off", -1),
+    OPEN("differential_slippery_limiter_open", 0),
+    MEDI_0("differential_slippery_limiter_medi_0", 1),
+    MEDI_1("differential_slippery_limiter_medi_1", 2),
+    MEDI_2("differential_slippery_limiter_medi_2", 3),
+    LOCKED("differential_slippery_limiter_locked", 4),
+    AUTO("differential_slippery_limiter_auto", 10),
+    ERROR("differential_slippery_limiter_error", -1),
+
 }
