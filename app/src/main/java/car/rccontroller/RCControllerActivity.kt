@@ -209,6 +209,14 @@ class RCControllerActivity : AppCompatActivity() {
                 viewModel.reverseStatusLiveData.value = getReverseIntention()
                 viewModel.emergencyLightsStatusLiveData.value = getEmergencyLightsState()
                 viewModel.speedLiveData.value = resources.getString(R.string.tachometer_value)
+
+                updateMotionUIItems(true)
+
+                viewModel.visionLightsLiveData.value = getMainLightsState()
+                viewModel.directionLightsLiveData.value = getDirectionLightsState()
+
+                viewModel.handlingAssistanceLiveData.value = getHandlingAssistanceState()
+                /*updateMotorSpeedLimiterUIItem()*/
             }
             else {
                 engineStartStop_imageView.setImageResourceWithTag(R.drawable.engine_stopped_start_action)
@@ -235,28 +243,21 @@ class RCControllerActivity : AppCompatActivity() {
 
                 viewModel.speedLiveData.postValue(getString(R.string.tachometer_null_value))
 
+                updateMotionUIItems(false)
+
+                viewModel.visionLightsLiveData.value = MainLight.LIGHTS_OFF
+                viewModel.directionLightsLiveData.value = DirectionLight.DIRECTION_LIGHTS_STRAIGHT
+
+                viewModel.handlingAssistanceLiveData.value = HandlingAssistance.NULL.id
+
+                /*updateMotorSpeedLimiterUIItem()*/
+
                 viewModel.tractionControlModuleLiveData.postValue(ModuleState.OFF)
                 viewModel.antilockBrakingModuleLiveData.postValue(ModuleState.OFF)
                 viewModel.electronicStabilityModuleLiveData.postValue(ModuleState.OFF)
                 viewModel.understeerDetectionModuleLiveData.postValue(ModuleState.OFF)
                 viewModel.oversteerDetectionModuleLiveData.postValue(ModuleState.OFF)
                 viewModel.collisionDetectionModuleLiveData.postValue(ModuleState.OFF)
-            }
-            /* At start of the application all UI items would be deactivated
-            so there is no reason to handle them.
-            You want to control them when:
-                1. you stop/re-stop the engine
-                2. you restart the engine.
-            So, '::retrofit.isInitialized' is a guarantee that these updates to UI items
-            happen only at any of the above scenarios.
-             */
-            if(::retrofit.isInitialized) {
-                updateMotionUIItems()
-                viewModel.visionLightsLiveData.value = getMainLightsState()
-                viewModel.directionLightsLiveData.value = getDirectionLightsState()
-                // The following function is updating some other ImageViews and more
-                viewModel.handlingAssistanceLiveData.value = getHandlingAssistanceState()
-                                /*updateMotorSpeedLimiterUIItem()*/
             }
         })
 
@@ -269,7 +270,7 @@ class RCControllerActivity : AppCompatActivity() {
                 if(::retrofit.isInitialized && isEngineStarted()) {
                     val status = activateParkingBrake(!isParkingBrakeActive())
                     if (status == OK_STRING) {
-                        updateMotionUIItems()
+                        updateMotionUIItems(true)
                     } else {
                         Toast.makeText(context, "${resources.getString(R.string.error)}: $status",
                                 Toast.LENGTH_LONG).show()
@@ -314,7 +315,7 @@ class RCControllerActivity : AppCompatActivity() {
             //The blocking actions should not interfere with driving,
             // that's why they are on different listener
             setOnClickListener {
-                updateMotionUIItems()
+                updateMotionUIItems(true)
                 //true
             }
         }
@@ -814,7 +815,7 @@ class RCControllerActivity : AppCompatActivity() {
                 */
                 setBrakingStill()
 
-                updateMotionUIItems()
+                updateMotionUIItems(true)
             }
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean){
                 throttle(progress)
@@ -892,9 +893,9 @@ class RCControllerActivity : AppCompatActivity() {
         This function here should get these states which must be as I want,
         and if they don't check the set functions between client-server.
      */
-    private fun updateMotionUIItems(){
-        viewModel.parkingBrakeLiveData.value = isParkingBrakeActive()
-        viewModel.handbrakeLiveData.value = isHandbrakeActive()
+    private fun updateMotionUIItems(fromServer: Boolean){
+        viewModel.parkingBrakeLiveData.value = if (fromServer) isParkingBrakeActive() else false
+        viewModel.handbrakeLiveData.value = if (fromServer) isHandbrakeActive() else false
     }
 
     /* Differential slippery limiter interactive actions must be depending on each other.
@@ -1020,7 +1021,8 @@ class RCControllerActivity : AppCompatActivity() {
                 setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.AUTO.value)
                 3
             }
-            else -> 0 // and OFF state
+            HandlingAssistance.NULL.id ->0
+            else -> 0
         }
         item.setImageResourceWithTag(states.getResourceId(i, 0))
         states.recycle()
@@ -1041,10 +1043,13 @@ class RCControllerActivity : AppCompatActivity() {
             viewModel.oversteerDetectionModuleLiveData.postValue(ModuleState.OFF)
             viewModel.collisionDetectionModuleLiveData.postValue(ModuleState.OFF)
         }
+
         viewModel.frontDifferentialSlipperyLimiterLiveData.value =
-            getFrontDifferentialSlipperyLimiter()
+            if (state == HandlingAssistance.NULL.id) DifferentialSlipperyLimiterState.NULL.value
+            else getFrontDifferentialSlipperyLimiter()
         viewModel.rearDifferentialSlipperyLimiterLiveData.value =
-            getRearDifferentialSlipperyLimiter()
+            if (state == HandlingAssistance.NULL.id) DifferentialSlipperyLimiterState.NULL.value
+            else getRearDifferentialSlipperyLimiter()
     }
 
 

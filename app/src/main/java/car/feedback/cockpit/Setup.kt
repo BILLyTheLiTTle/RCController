@@ -87,6 +87,7 @@ fun getRearDifferentialSlipperyLimiter(): Int {
 }
 
 enum class DifferentialSlipperyLimiterState(val id:String, val value: Int){
+    NULL("assistance_null", -2), // for local use only
     OPEN("differential_slippery_limiter_open", 0),
     MEDI_0("differential_slippery_limiter_medi_0", 1),
     MEDI_1("differential_slippery_limiter_medi_1", 2),
@@ -97,6 +98,7 @@ enum class DifferentialSlipperyLimiterState(val id:String, val value: Int){
 }
 
 enum class HandlingAssistance(val id: String) {
+    NULL("assistance_null"), // for local use only
     MANUAL("assistance_manual"),
     WARNING("assistance_warning"),
     FULL("assistance_full")
