@@ -28,6 +28,7 @@ class RCControllerViewModel: ViewModel() {
     val handbrakeLiveData = MutableLiveData<Boolean>()
     val visionLightsLiveData = MutableLiveData<MainLight>()
     val directionLightsLiveData = MutableLiveData<DirectionLight>()
+    val handlingAssistanceLiveData = MutableLiveData<String>()
     val tractionControlModuleLiveData = MutableLiveData<ModuleState>()
     val antilockBrakingModuleLiveData = MutableLiveData<ModuleState>()
     val electronicStabilityModuleLiveData = MutableLiveData<ModuleState>()
@@ -66,6 +67,8 @@ class RCControllerViewModel: ViewModel() {
 
         parkingBrakeLiveData.value = false
         handbrakeLiveData.value = false
+
+        //handlingAssistanceLiveData.value = Assistance.NONE.id
 
         tractionControlModuleLiveData.value = ModuleState.UNCHANGED
         antilockBrakingModuleLiveData.value = ModuleState.UNCHANGED

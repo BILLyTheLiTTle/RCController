@@ -37,12 +37,6 @@ interface Setup {
     }
 }
 
-// Handling Assistance
-const val ASSISTANCE_NULL = EMPTY_STRING // for local use only
-const val ASSISTANCE_NONE = "assistance_none"
-const val ASSISTANCE_WARNING = "assistance_warning"
-const val ASSISTANCE_FULL = "assistance_full"
-
 fun setHandlingAssistanceState(state: String): String {
     return runBlockingRequest { Setup.setupAPI.setHandlingAssistance(state) } ?: EMPTY_STRING
 }
@@ -93,7 +87,6 @@ fun getRearDifferentialSlipperyLimiter(): Int {
 }
 
 enum class DifferentialSlipperyLimiterState(val id:String, val value: Int){
-    //OFF("differential_slippery_limiter_off", -1),
     OPEN("differential_slippery_limiter_open", 0),
     MEDI_0("differential_slippery_limiter_medi_0", 1),
     MEDI_1("differential_slippery_limiter_medi_1", 2),
@@ -101,5 +94,10 @@ enum class DifferentialSlipperyLimiterState(val id:String, val value: Int){
     LOCKED("differential_slippery_limiter_locked", 4),
     AUTO("differential_slippery_limiter_auto", 10),
     ERROR("differential_slippery_limiter_error", -1),
+}
 
+enum class HandlingAssistance(val id: String) {
+    MANUAL("assistance_manual"),
+    WARNING("assistance_warning"),
+    FULL("assistance_full")
 }

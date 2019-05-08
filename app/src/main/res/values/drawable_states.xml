@@ -36,6 +36,13 @@
         <item>@drawable/shift_register_temp_high</item>
     </integer-array>
 
+    <integer-array name="handling_assistance_states">
+        <item>@drawable/handling_assistance_off</item>
+        <item>@drawable/handling_assistance_manual</item>
+        <item>@drawable/handling_assistance_warning</item>
+        <item>@drawable/handling_assistance_full</item>
+    </integer-array>
+
     <integer-array name="traction_control_module_states">
         <item>@drawable/tcm_off</item>
         <item>@drawable/tcm_on</item>

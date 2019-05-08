@@ -140,7 +140,11 @@ class RCControllerActivity : AppCompatActivity() {
             updateUIAdvancedSensorItems(it, cdm_imageView,
                 resources.obtainTypedArray(R.array.collision_detection_module_states))
         })
-        // Differential UI items
+        // Setup UI items
+        viewModel.handlingAssistanceLiveData.observe(this, Observer<String>{
+            updateHandlingAssistanceUIItem(it, handling_assistance_imageView,
+                resources.obtainTypedArray(R.array.handling_assistance_states))
+        })
         viewModel.frontDifferentialSlipperyLimiterLiveData.observe(this, Observer<Int>{
             updateDifferentialSlipperyUIItems(it, differential_slippery_limiter_front_imageView,
                 resources.obtainTypedArray(R.array.front_differential_slippery_limiter_states))
@@ -251,8 +255,8 @@ class RCControllerActivity : AppCompatActivity() {
                 viewModel.visionLightsLiveData.value = getMainLightsState()
                 viewModel.directionLightsLiveData.value = getDirectionLightsState()
                 // The following function is updating some other ImageViews and more
-                updateHandlingAssistanceUIItem()
-                /*updateMotorSpeedLimiterUIItem()*/
+                viewModel.handlingAssistanceLiveData.value = getHandlingAssistanceState()
+                                /*updateMotorSpeedLimiterUIItem()*/
             }
         })
 
@@ -538,27 +542,27 @@ class RCControllerActivity : AppCompatActivity() {
                 // If, for any reason, engine is stopped I should not do anything
                 if(::retrofit.isInitialized && isEngineStarted()) {
                     when (getHandlingAssistanceState()) {
-                        ASSISTANCE_NONE -> setHandlingAssistanceState(ASSISTANCE_WARNING)
-                        ASSISTANCE_WARNING -> setHandlingAssistanceState(ASSISTANCE_FULL)
-                        ASSISTANCE_FULL ->
+                        HandlingAssistance.MANUAL.id -> setHandlingAssistanceState(HandlingAssistance.WARNING.id)
+                        HandlingAssistance.WARNING.id -> setHandlingAssistanceState(HandlingAssistance.FULL.id)
+                        HandlingAssistance.FULL.id ->
                             Toast.makeText(context,
                                     getString(R.string.handling_assistance_full_warning),
                                     Toast.LENGTH_SHORT).show()
                     }
-                    updateHandlingAssistanceUIItem()
+                    viewModel.handlingAssistanceLiveData.value = getHandlingAssistanceState()
                 }
                 true
             }
             setOnClickListener {
                 when (getHandlingAssistanceState()) {
-                    ASSISTANCE_FULL -> setHandlingAssistanceState(ASSISTANCE_WARNING)
-                    ASSISTANCE_WARNING -> setHandlingAssistanceState(ASSISTANCE_NONE)
-                    ASSISTANCE_NONE ->
+                    HandlingAssistance.FULL.id -> setHandlingAssistanceState(HandlingAssistance.WARNING.id)
+                    HandlingAssistance.WARNING.id -> setHandlingAssistanceState(HandlingAssistance.MANUAL.id)
+                    HandlingAssistance.MANUAL.id ->
                         Toast.makeText(context,
                                 getString(R.string.handling_assistance_none_warning),
                                 Toast.LENGTH_SHORT).show()
                 }
-                updateHandlingAssistanceUIItem()
+                viewModel.handlingAssistanceLiveData.value = getHandlingAssistanceState()
                 //true
             }
         }
@@ -631,7 +635,7 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(::retrofit.isInitialized && isEngineStarted()) {
-                    if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
+                    if (getHandlingAssistanceState() != HandlingAssistance.FULL.id) {
                         when (getFrontDifferentialSlipperyLimiter()) {
                             DifferentialSlipperyLimiterState.LOCKED.value ->
                                 setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_2.value)
@@ -663,7 +667,7 @@ class RCControllerActivity : AppCompatActivity() {
             }
             setOnClickListener {
                 if(::retrofit.isInitialized && isEngineStarted()) {
-                    if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
+                    if (getHandlingAssistanceState() != HandlingAssistance.FULL.id) {
                         when (getFrontDifferentialSlipperyLimiter()) {
                             DifferentialSlipperyLimiterState.OPEN.value ->
                                 setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_0.value)
@@ -702,7 +706,7 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(::retrofit.isInitialized && isEngineStarted()) {
-                    if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
+                    if (getHandlingAssistanceState() != HandlingAssistance.FULL.id) {
                         when (getRearDifferentialSlipperyLimiter()) {
                             DifferentialSlipperyLimiterState.LOCKED.value ->
                                 setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_2.value)
@@ -734,7 +738,7 @@ class RCControllerActivity : AppCompatActivity() {
             }
             setOnClickListener {
                 if(::retrofit.isInitialized && isEngineStarted()) {
-                    if (getHandlingAssistanceState() != ASSISTANCE_FULL) {
+                    if (getHandlingAssistanceState() != HandlingAssistance.FULL.id) {
                         when (getRearDifferentialSlipperyLimiter()) {
                             DifferentialSlipperyLimiterState.OPEN.value ->
                                 setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_0.value)
@@ -999,48 +1003,43 @@ class RCControllerActivity : AppCompatActivity() {
         to handling assistance (ex. differential, suspension) and some of their
         functionality values.
      */
-    private fun updateHandlingAssistanceUIItem(){
-        val handlingAssistance = getHandlingAssistanceState()
-        when (handlingAssistance) {
-            ASSISTANCE_FULL -> {
+    private fun updateHandlingAssistanceUIItem(state: String, item: ImageView, states: TypedArray){
+        val i = when (state) {
+            HandlingAssistance.MANUAL.id -> {
+                setFrontDifferentialSlipperyLimiter(previousFrontDifferentialSlipperyLimiter)
+                setRearDifferentialSlipperyLimiter(previousRearDifferentialSlipperyLimiter)
+                1
+            }
+            HandlingAssistance.WARNING.id -> {
+                setFrontDifferentialSlipperyLimiter(previousFrontDifferentialSlipperyLimiter)
+                setRearDifferentialSlipperyLimiter(previousRearDifferentialSlipperyLimiter)
+                2
+            }
+            HandlingAssistance.FULL.id -> {
                 setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.AUTO.value)
                 setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.AUTO.value)
-
-                handling_assistance_imageView.
-                    setImageResourceWithTag(R.drawable.handling_assistance_full)
+                3
             }
-            ASSISTANCE_WARNING -> {
-                setFrontDifferentialSlipperyLimiter(previousFrontDifferentialSlipperyLimiter)
-                setRearDifferentialSlipperyLimiter(previousRearDifferentialSlipperyLimiter)
-
-                handling_assistance_imageView.
-                    setImageResourceWithTag(R.drawable.handling_assistance_warning)
-            }
-            ASSISTANCE_NONE -> {
-                setFrontDifferentialSlipperyLimiter(previousFrontDifferentialSlipperyLimiter)
-                setRearDifferentialSlipperyLimiter(previousRearDifferentialSlipperyLimiter)
-
-                handling_assistance_imageView.
-                    setImageResourceWithTag(R.drawable.handling_assistance_manual)
-            }
-            else -> handling_assistance_imageView.setImageResourceWithTag(R.drawable.handling_assistance_off)
+            else -> 0 // and OFF state
         }
+        item.setImageResourceWithTag(states.getResourceId(i, 0))
+        states.recycle()
 
-        if((handlingAssistance == ASSISTANCE_FULL) || (handlingAssistance == ASSISTANCE_WARNING)){
-            viewModel.tractionControlModuleLiveData.value = ModuleState.IDLE
-            viewModel.antilockBrakingModuleLiveData.value = ModuleState.IDLE
-            viewModel.electronicStabilityModuleLiveData.value = ModuleState.IDLE
-            viewModel.understeerDetectionModuleLiveData.value = ModuleState.IDLE
-            viewModel.oversteerDetectionModuleLiveData.value = ModuleState.IDLE
-            viewModel.collisionDetectionModuleLiveData.value = ModuleState.IDLE
+        if((state == HandlingAssistance.FULL.id) || (state == HandlingAssistance.WARNING.id)){
+            viewModel.tractionControlModuleLiveData.postValue(ModuleState.IDLE)
+            viewModel.antilockBrakingModuleLiveData.postValue(ModuleState.IDLE)
+            viewModel.electronicStabilityModuleLiveData.postValue(ModuleState.IDLE)
+            viewModel.understeerDetectionModuleLiveData.postValue(ModuleState.IDLE)
+            viewModel.oversteerDetectionModuleLiveData.postValue(ModuleState.IDLE)
+            viewModel.collisionDetectionModuleLiveData.postValue(ModuleState.IDLE)
         }
         else {
-            viewModel.tractionControlModuleLiveData.value = ModuleState.OFF
-            viewModel.antilockBrakingModuleLiveData.value = ModuleState.OFF
-            viewModel.electronicStabilityModuleLiveData.value = ModuleState.OFF
-            viewModel.understeerDetectionModuleLiveData.value = ModuleState.OFF
-            viewModel.oversteerDetectionModuleLiveData.value = ModuleState.OFF
-            viewModel.collisionDetectionModuleLiveData.value = ModuleState.OFF
+            viewModel.tractionControlModuleLiveData.postValue(ModuleState.OFF)
+            viewModel.antilockBrakingModuleLiveData.postValue(ModuleState.OFF)
+            viewModel.electronicStabilityModuleLiveData.postValue(ModuleState.OFF)
+            viewModel.understeerDetectionModuleLiveData.postValue(ModuleState.OFF)
+            viewModel.oversteerDetectionModuleLiveData.postValue(ModuleState.OFF)
+            viewModel.collisionDetectionModuleLiveData.postValue(ModuleState.OFF)
         }
         viewModel.frontDifferentialSlipperyLimiterLiveData.value =
             getFrontDifferentialSlipperyLimiter()
