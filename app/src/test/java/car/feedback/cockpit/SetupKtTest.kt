@@ -31,7 +31,7 @@ class SetupKtTest {
             .baseUrl("http://$serverIp:$port/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
-        car.feedback.cockpit.startEngine( null)
+        startEngine( null)
         throttleBrakeActionId = System.currentTimeMillis()
         //steeringDirectionId = System.currentTimeMillis()
     }
@@ -49,18 +49,18 @@ class SetupKtTest {
     // Handling Assistance
     @Test
     fun `validate that handling assistance is deactivated`(){
-        setHandlingAssistanceState(ASSISTANCE_NONE)
-        assertThat(getHandlingAssistanceState(), `is`(ASSISTANCE_NONE))
+        setHandlingAssistanceState(HandlingAssistance.MANUAL.id)
+        assertThat(getHandlingAssistanceState(), `is`(HandlingAssistance.MANUAL.id))
     }
     @Test
     fun `validate that handling assistance is set to warning`(){
-        setHandlingAssistanceState(ASSISTANCE_WARNING)
-        assertThat(getHandlingAssistanceState(), `is`(ASSISTANCE_WARNING))
+        setHandlingAssistanceState(HandlingAssistance.WARNING.id)
+        assertThat(getHandlingAssistanceState(), `is`(HandlingAssistance.WARNING.id))
     }
     @Test
     fun `validate that handling assistance is set to full`(){
-        setHandlingAssistanceState(ASSISTANCE_FULL)
-        assertThat(getHandlingAssistanceState(), `is`(ASSISTANCE_FULL))
+        setHandlingAssistanceState(HandlingAssistance.FULL.id)
+        assertThat(getHandlingAssistanceState(), `is`(HandlingAssistance.FULL.id))
     }
 
     // Speed limiter
@@ -109,81 +109,81 @@ class SetupKtTest {
     @Test
     fun `validate that the front differential is in error state`(){
         // TODO should be tested with mocking
-        setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_OPEN)
-        assertThat(getFrontDifferentialSlipperyLimiter(), `is`(DIFFERENTIAL_SLIPPERY_LIMITER_OPEN))
+        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.OPEN.value)
+        assertThat(getFrontDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.OPEN.value))
     }
     @Test
     fun `validate that the front differential is in open state`(){
-        setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_OPEN)
-        assertThat(getFrontDifferentialSlipperyLimiter(), `is`(DIFFERENTIAL_SLIPPERY_LIMITER_OPEN))
+        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.OPEN.value)
+        assertThat(getFrontDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.OPEN.value))
     }
     @Test
     fun `validate that the front differential is in medi 0 state`(){
-        setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0)
+        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_0.value)
         assertThat(getFrontDifferentialSlipperyLimiter(), `is`(
-            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0))
+            DifferentialSlipperyLimiterState.MEDI_0.value))
     }
     @Test
     fun `validate that the front differential is in medi 1 state`(){
-        setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1)
+        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_1.value)
         assertThat(getFrontDifferentialSlipperyLimiter(), `is`(
-            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1))
+            DifferentialSlipperyLimiterState.MEDI_1.value))
     }
     @Test
     fun `validate that the front differential is in medi 2 state`(){
-        setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2)
+        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_2.value)
         assertThat(getFrontDifferentialSlipperyLimiter(), `is`(
-            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2))
+            DifferentialSlipperyLimiterState.MEDI_2.value))
     }
     @Test
     fun `validate that the front differential is in locked state`(){
-        setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED)
+        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.LOCKED.value)
         assertThat(getFrontDifferentialSlipperyLimiter(), `is`(
-            DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED))
+            DifferentialSlipperyLimiterState.LOCKED.value))
     }
     @Test
     fun `validate that the front differential is in auto state`(){
-        setFrontDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_AUTO)
-        assertThat(getFrontDifferentialSlipperyLimiter(), `is`(DIFFERENTIAL_SLIPPERY_LIMITER_AUTO))
+        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.AUTO.value)
+        assertThat(getFrontDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.AUTO.value))
     }
     @Test
     fun `validate that the front differential default state is locked`(){
-        assertThat(getFrontDifferentialSlipperyLimiter(), `is`(DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED))
+        assertThat(getFrontDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.LOCKED.value))
     }
 
     // Rear Differential
     @Test
     fun `validate that the rear differential is in open state`(){
-        setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_OPEN)
-        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DIFFERENTIAL_SLIPPERY_LIMITER_OPEN))
+        setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.OPEN.value)
+        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.OPEN.value))
     }
     @Test
     fun `validate that the rear differential is in medi 0 state`(){
-        setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0)
-        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0))
+        setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_0.value)
+        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.MEDI_0.value))
     }
     @Test
     fun `validate that the rear differential is in medi 1 state`(){
-        setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1)
-        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1))
+        setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_1.value)
+        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.MEDI_1.value))
     }
     @Test
     fun `validate that the rear differential is in medi 2 state`(){
-        setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2)
-        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2))
+        setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_2.value)
+        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.MEDI_2.value))
     }
     @Test
     fun `validate that the rear differential is in locked state`(){
-        setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED)
-        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED))
+        setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.LOCKED.value)
+        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.LOCKED.value))
     }
     @Test
     fun `validate that the rear differential is in auto state`(){
-        setRearDifferentialSlipperyLimiter(DIFFERENTIAL_SLIPPERY_LIMITER_AUTO)
-        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DIFFERENTIAL_SLIPPERY_LIMITER_AUTO))
+        setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.AUTO.value)
+        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.AUTO.value))
     }
     @Test
     fun `validate that the rear differential default state is locked`(){
-        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED))
+        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.LOCKED.value))
     }
 }
