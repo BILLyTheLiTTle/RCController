@@ -153,6 +153,10 @@ class RCControllerActivity : AppCompatActivity() {
             updateDifferentialSlipperyUIItems(it, differential_slippery_limiter_rear_imageView,
                 resources.obtainTypedArray(R.array.rear_differential_slippery_limiter_states))
         })
+        viewModel.motorSpeedLimiterLiveData.observe(this, Observer<Double>{
+            updateMotorSpeedLimiterUIItem(it, motor_speed_limiter_imageView,
+                resources.obtainTypedArray(R.array.motor_speed_limiter_states))
+        })
 
         //////
         //setup engine start-n-stop
@@ -216,7 +220,7 @@ class RCControllerActivity : AppCompatActivity() {
                 viewModel.directionLightsLiveData.value = getDirectionLightsState()
 
                 viewModel.handlingAssistanceLiveData.value = getHandlingAssistanceState()
-                /*updateMotorSpeedLimiterUIItem()*/
+                viewModel.motorSpeedLimiterLiveData.value = getMotorSpeedLimiter()
             }
             else {
                 engineStartStop_imageView.setImageResourceWithTag(R.drawable.engine_stopped_start_action)
@@ -250,7 +254,7 @@ class RCControllerActivity : AppCompatActivity() {
 
                 viewModel.handlingAssistanceLiveData.value = HandlingAssistance.NULL.id
 
-                /*updateMotorSpeedLimiterUIItem()*/
+                viewModel.motorSpeedLimiterLiveData.value = MotorSpeedLimiter.NULL.value
 
                 viewModel.tractionControlModuleLiveData.postValue(ModuleState.OFF)
                 viewModel.antilockBrakingModuleLiveData.postValue(ModuleState.OFF)
@@ -576,54 +580,54 @@ class RCControllerActivity : AppCompatActivity() {
                 // If, for any reason, engine is stopped I should not do anything
                 if(::retrofit.isInitialized && isEngineStarted()) {
                     when (getMotorSpeedLimiter()) {
-                        MOTOR_SPEED_LIMITER_NO_SPEED ->
-                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_SLOW_SPEED_1)
-                        MOTOR_SPEED_LIMITER_SLOW_SPEED_1 ->
-                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_SLOW_SPEED_2)
-                        MOTOR_SPEED_LIMITER_SLOW_SPEED_2 ->
-                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1)
-                        MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1 ->
-                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2)
-                        MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2 ->
-                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_FAST_SPEED_1)
-                        MOTOR_SPEED_LIMITER_FAST_SPEED_1 ->
-                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_FAST_SPEED_2)
-                        MOTOR_SPEED_LIMITER_FAST_SPEED_2 ->
-                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_FULL_SPEED)
-                        MOTOR_SPEED_LIMITER_FULL_SPEED -> Toast.
+                        MotorSpeedLimiter.NO_SPEED.value ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.SLOW_SPEED_1.value)
+                        MotorSpeedLimiter.SLOW_SPEED_1.value ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.SLOW_SPEED_2.value)
+                        MotorSpeedLimiter.SLOW_SPEED_2.value ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.MEDIUM_SPEED_1.value)
+                        MotorSpeedLimiter.MEDIUM_SPEED_1.value ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.MEDIUM_SPEED_2.value)
+                        MotorSpeedLimiter.MEDIUM_SPEED_2.value ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.FAST_SPEED_1.value)
+                        MotorSpeedLimiter.FAST_SPEED_1.value ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.FAST_SPEED_2.value)
+                        MotorSpeedLimiter.FAST_SPEED_2.value ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.FULL_SPEED.value)
+                        MotorSpeedLimiter.FULL_SPEED.value -> Toast.
                             makeText(context,
                             getString(R.string.motor_speed_limiter_full_warning),
                             Toast.LENGTH_SHORT
                             ).show()
                     }
-                    updateMotorSpeedLimiterUIItem()
+                    viewModel.motorSpeedLimiterLiveData.value = getMotorSpeedLimiter()
                 }
                 true
             }
             setOnClickListener {
                 if(::retrofit.isInitialized && isEngineStarted()) {
                     when (getMotorSpeedLimiter()) {
-                        MOTOR_SPEED_LIMITER_FULL_SPEED ->
-                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_FAST_SPEED_2)
-                        MOTOR_SPEED_LIMITER_FAST_SPEED_2 ->
-                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_FAST_SPEED_1)
-                        MOTOR_SPEED_LIMITER_FAST_SPEED_1 ->
-                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2)
-                        MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2 ->
-                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1)
-                        MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1 ->
-                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_SLOW_SPEED_2)
-                        MOTOR_SPEED_LIMITER_SLOW_SPEED_2 ->
-                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_SLOW_SPEED_1)
-                        MOTOR_SPEED_LIMITER_SLOW_SPEED_1 ->
-                            setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_NO_SPEED)
-                        MOTOR_SPEED_LIMITER_NO_SPEED -> Toast.
+                        MotorSpeedLimiter.FULL_SPEED.value ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.FAST_SPEED_2.value)
+                        MotorSpeedLimiter.FAST_SPEED_2.value ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.FAST_SPEED_1.value)
+                        MotorSpeedLimiter.FAST_SPEED_1.value ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.MEDIUM_SPEED_2.value)
+                        MotorSpeedLimiter.MEDIUM_SPEED_2.value ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.MEDIUM_SPEED_1.value)
+                        MotorSpeedLimiter.MEDIUM_SPEED_1.value ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.SLOW_SPEED_2.value)
+                        MotorSpeedLimiter.SLOW_SPEED_2.value ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.SLOW_SPEED_1.value)
+                        MotorSpeedLimiter.SLOW_SPEED_1.value ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.NO_SPEED.value)
+                        MotorSpeedLimiter.NO_SPEED.value -> Toast.
                             makeText(context,
                                 getString(R.string.motor_speed_limiter_none_warning),
                                 Toast.LENGTH_SHORT
                             ).show()
                     }
-                    updateMotorSpeedLimiterUIItem()
+                    viewModel.motorSpeedLimiterLiveData.value = getMotorSpeedLimiter()
                 }
                 //true
             }
@@ -918,81 +922,27 @@ class RCControllerActivity : AppCompatActivity() {
         states.recycle()
     }
 
-    /*private fun updateRearDifferentialSlipperyLimiterUIItem(){
-        when (getRearDifferentialSlipperyLimiter()) {
-            DIFFERENTIAL_SLIPPERY_LIMITER_OPEN -> differential_slippery_limiter_rear_imageView.
-                setImageResourceWithTag(R.drawable.differential_rear_manual_0_open)
-            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 -> differential_slippery_limiter_rear_imageView.
-                setImageResourceWithTag(R.drawable.differential_rear_manual_1_medi)
-            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1 -> differential_slippery_limiter_rear_imageView.
-                setImageResourceWithTag(R.drawable.differential_rear_manual_2_medi)
-            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2 -> differential_slippery_limiter_rear_imageView.
-                setImageResourceWithTag(R.drawable.differential_rear_manual_3_medi)
-            DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED -> differential_slippery_limiter_rear_imageView.
-                setImageResourceWithTag(R.drawable.differential_rear_manual_4_locked)
-            DIFFERENTIAL_SLIPPERY_LIMITER_AUTO -> differential_slippery_limiter_rear_imageView.
-                setImageResourceWithTag(R.drawable.differential_rear_auto)
-            DIFFERENTIAL_SLIPPERY_LIMITER_ERROR -> differential_slippery_limiter_rear_imageView.
-                setImageResourceWithTag(R.drawable.differential_rear_error)
-            else -> differential_slippery_limiter_rear_imageView.
-                setImageResourceWithTag(R.drawable.differential_rear_off)
-        }
-    }
-
-    /* Front differential slippery limiter interactive actions must be depending on each other.
-        Their states on the server should be changed by set methods.
-        This function here should get these states which must be as I want,
-        and if they don't check the set functions between client-server.
-     */
-    private fun updateFrontDifferentialSlipperyLimiterUIItem(){
-        when (getFrontDifferentialSlipperyLimiter()) {
-            DIFFERENTIAL_SLIPPERY_LIMITER_OPEN -> differential_slippery_limiter_front_imageView.
-                setImageResourceWithTag(R.drawable.differential_front_manual_0_open)
-            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_0 -> differential_slippery_limiter_front_imageView.
-                setImageResourceWithTag(R.drawable.differential_front_manual_1_medi)
-            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_1 -> differential_slippery_limiter_front_imageView.
-                setImageResourceWithTag(R.drawable.differential_front_manual_2_medi)
-            DIFFERENTIAL_SLIPPERY_LIMITER_MEDI_2 -> differential_slippery_limiter_front_imageView.
-                setImageResourceWithTag(R.drawable.differential_front_manual_3_medi)
-            DIFFERENTIAL_SLIPPERY_LIMITER_LOCKED -> differential_slippery_limiter_front_imageView.
-                setImageResourceWithTag(R.drawable.differential_front_manual_4_locked)
-            DIFFERENTIAL_SLIPPERY_LIMITER_AUTO -> differential_slippery_limiter_front_imageView.
-                setImageResourceWithTag(R.drawable.differential_front_auto)
-            DIFFERENTIAL_SLIPPERY_LIMITER_ERROR -> differential_slippery_limiter_front_imageView.
-                setImageResourceWithTag(R.drawable.differential_front_error)
-            else -> differential_slippery_limiter_front_imageView.
-                setImageResourceWithTag(R.drawable.differential_front_off)
-        }
-    }*/
-
     /* Motor speed limiter interactive actions must be depending on each other.
         Their states on the server should be changed by set methods.
         This function here should get these states which must be as I want,
         and if they don't check the set functions between client-server.
      */
-    private fun updateMotorSpeedLimiterUIItem(){
-        when (getMotorSpeedLimiter()) {
-            MOTOR_SPEED_LIMITER_FULL_SPEED -> motor_speed_limiter_imageView.
-                setImageResourceWithTag(R.drawable.speed_limiter_manual_100)
-            MOTOR_SPEED_LIMITER_FAST_SPEED_2 -> motor_speed_limiter_imageView.
-                setImageResourceWithTag(R.drawable.speed_limiter_manual_090)
-            MOTOR_SPEED_LIMITER_FAST_SPEED_1 -> motor_speed_limiter_imageView.
-                setImageResourceWithTag(R.drawable.speed_limiter_manual_080)
-            MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2 -> motor_speed_limiter_imageView.
-                setImageResourceWithTag(R.drawable.speed_limiter_manual_070)
-            MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1 -> motor_speed_limiter_imageView.
-                setImageResourceWithTag(R.drawable.speed_limiter_manual_060)
-            MOTOR_SPEED_LIMITER_SLOW_SPEED_2 -> motor_speed_limiter_imageView.
-                setImageResourceWithTag(R.drawable.speed_limiter_manual_040)
-            MOTOR_SPEED_LIMITER_SLOW_SPEED_1 -> motor_speed_limiter_imageView.
-                setImageResourceWithTag(R.drawable.speed_limiter_manual_020)
-            MOTOR_SPEED_LIMITER_NO_SPEED -> motor_speed_limiter_imageView.
-                setImageResourceWithTag(R.drawable.speed_limiter_manual_000)
-            MOTOR_SPEED_LIMITER_ERROR_SPEED -> motor_speed_limiter_imageView.
-                setImageResourceWithTag(R.drawable.speed_limiter_error)
-            else -> motor_speed_limiter_imageView.
-                setImageResourceWithTag(R.drawable.speed_limiter_off)
+    private fun updateMotorSpeedLimiterUIItem(state: Double, item: ImageView, states: TypedArray) {
+        val i = when (state) {
+            MotorSpeedLimiter.NO_SPEED.value -> 1
+            MotorSpeedLimiter.SLOW_SPEED_1.value -> 2
+            MotorSpeedLimiter.SLOW_SPEED_2.value -> 3
+            MotorSpeedLimiter.MEDIUM_SPEED_1.value -> 4
+            MotorSpeedLimiter.MEDIUM_SPEED_2.value -> 5
+            MotorSpeedLimiter.FAST_SPEED_1.value -> 6
+            MotorSpeedLimiter.FAST_SPEED_2.value -> 7
+            MotorSpeedLimiter.FULL_SPEED.value -> 8
+            //MotorSpeedLimiter.AUTO.value -> 9 // Not implemented yet
+            MotorSpeedLimiter.ERROR_SPEED.value -> 10
+            else -> 0 // and OFF state
         }
+        item.setImageResourceWithTag(states.getResourceId(i, 0))
+        states.recycle()
     }
 
     /* Handling assistance interactive actions must be depending on each other.

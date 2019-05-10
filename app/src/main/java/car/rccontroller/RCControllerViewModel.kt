@@ -37,6 +37,7 @@ class RCControllerViewModel: ViewModel() {
     val collisionDetectionModuleLiveData = MutableLiveData<ModuleState>()
     val rearDifferentialSlipperyLimiterLiveData = MutableLiveData<Int>()
     val frontDifferentialSlipperyLimiterLiveData = MutableLiveData<Int>()
+    val motorSpeedLimiterLiveData = MutableLiveData<Double>()
 
     /* The values are initialized at false or empty state because
     I want the grey icons at start because
@@ -68,16 +69,11 @@ class RCControllerViewModel: ViewModel() {
         parkingBrakeLiveData.value = false
         handbrakeLiveData.value = false
 
-        //handlingAssistanceLiveData.value = Assistance.NONE.id
-
         tractionControlModuleLiveData.value = ModuleState.UNCHANGED
         antilockBrakingModuleLiveData.value = ModuleState.UNCHANGED
         electronicStabilityModuleLiveData.value = ModuleState.UNCHANGED
         understeerDetectionModuleLiveData.value = ModuleState.UNCHANGED
         oversteerDetectionModuleLiveData.value = ModuleState.UNCHANGED
         collisionDetectionModuleLiveData.value = ModuleState.UNCHANGED
-
-        //rearDifferentialSlipperyLimiterLiveData.value = previousRearDifferentialSlipperyLimiter
-        //frontDifferentialSlipperyLimiterLiveData.value = previousFrontDifferentialSlipperyLimiter
     }
 }

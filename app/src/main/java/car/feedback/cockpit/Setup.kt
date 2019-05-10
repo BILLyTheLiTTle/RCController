@@ -45,23 +45,12 @@ fun getHandlingAssistanceState(): String {
     return runBlockingRequest { Setup.setupAPI.getHandlingAssistanceState() } ?: EMPTY_STRING
 }
 
-// Motor Speed Limiter
-const val MOTOR_SPEED_LIMITER_ERROR_SPEED = -1.00
-const val MOTOR_SPEED_LIMITER_NO_SPEED = 0.00
-const val MOTOR_SPEED_LIMITER_SLOW_SPEED_1 = 0.20
-const val MOTOR_SPEED_LIMITER_SLOW_SPEED_2 = 0.40
-const val MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1 = 0.60
-const val MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2 = 0.70
-const val MOTOR_SPEED_LIMITER_FAST_SPEED_1 = 0.80
-const val MOTOR_SPEED_LIMITER_FAST_SPEED_2 = 0.90
-const val MOTOR_SPEED_LIMITER_FULL_SPEED = 1.00
-
 fun setMotorSpeedLimiter(value: Double): String {
     return runBlockingRequest { Setup.setupAPI.setMotorSpeedLimiter(value) } ?: EMPTY_STRING
 }
 
 fun getMotorSpeedLimiter(): Double {
-    return runBlockingRequest { Setup.setupAPI.getMotorSpeedLimiter() } ?: MOTOR_SPEED_LIMITER_ERROR_SPEED
+    return runBlockingRequest { Setup.setupAPI.getMotorSpeedLimiter() } ?: MotorSpeedLimiter.ERROR_SPEED.value
 }
 
 //---- Front ----
@@ -102,4 +91,17 @@ enum class HandlingAssistance(val id: String) {
     MANUAL("assistance_manual"),
     WARNING("assistance_warning"),
     FULL("assistance_full")
+}
+
+enum class MotorSpeedLimiter(val id:String, val value: Double) {
+    NULL("motor_speed_limiter_null", -2.00), // for local use only
+    ERROR_SPEED("motor_speed_limiter_error_speed",-1.00),
+    NO_SPEED("motor_speed_limiter_no_speed", 0.00),
+    SLOW_SPEED_1("motor_speed_limiter_slow_speed_1", 0.20),
+    SLOW_SPEED_2("motor_speed_limiter_slow_speed_2", 0.40),
+    MEDIUM_SPEED_1("motor_speed_limiter_medium_speed_1", 0.60),
+    MEDIUM_SPEED_2("motor_speed_limiter_medium_speed_2", 0.70),
+    FAST_SPEED_1("motor_speed_limiter_fast_speed_1", 0.80),
+    FAST_SPEED_2("motor_speed_limiter_fast_speed_2", 0.90),
+    FULL_SPEED("motor_speed_limiter_full_speed", 1.00)
 }

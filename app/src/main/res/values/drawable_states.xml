@@ -101,4 +101,18 @@
         <item>@drawable/differential_rear_error</item>
     </integer-array>
 
+    <integer-array name="motor_speed_limiter_states">
+        <item>@drawable/speed_limiter_off</item>
+        <item>@drawable/speed_limiter_manual_000</item>
+        <item>@drawable/speed_limiter_manual_020</item>
+        <item>@drawable/speed_limiter_manual_040</item>
+        <item>@drawable/speed_limiter_manual_060</item>
+        <item>@drawable/speed_limiter_manual_070</item>
+        <item>@drawable/speed_limiter_manual_080</item>
+        <item>@drawable/speed_limiter_manual_090</item>
+        <item>@drawable/speed_limiter_manual_100</item>
+        <item>@drawable/speed_limiter_auto</item>
+        <item>@drawable/speed_limiter_error</item>
+    </integer-array>
+
 </resources>
