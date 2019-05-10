@@ -66,43 +66,43 @@ class SetupKtTest {
     // Speed limiter
     @Test
     fun `validate that the motor speed limiter is deactivated`(){
-        setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_NO_SPEED)
-        assertThat(getMotorSpeedLimiter(), `is`(MOTOR_SPEED_LIMITER_NO_SPEED))
+        setMotorSpeedLimiter(MotorSpeedLimiter.NO_SPEED.value)
+        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.NO_SPEED.value))
     }
     @Test
     fun `validate that the motor speed limiter is in slow speed 1`(){
-        setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_SLOW_SPEED_1)
-        assertThat(getMotorSpeedLimiter(), `is`(MOTOR_SPEED_LIMITER_SLOW_SPEED_1))
+        setMotorSpeedLimiter(MotorSpeedLimiter.SLOW_SPEED_1.value)
+        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.SLOW_SPEED_1.value))
     }
     @Test
     fun `validate that the motor speed limiter is in slow speed 2`(){
-        setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_SLOW_SPEED_2)
-        assertThat(getMotorSpeedLimiter(), `is`(MOTOR_SPEED_LIMITER_SLOW_SPEED_2))
+        setMotorSpeedLimiter(MotorSpeedLimiter.SLOW_SPEED_2.value)
+        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.SLOW_SPEED_2.value))
     }
     @Test
     fun `validate that the motor speed limiter is in medium speed 1`(){
-        setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1)
-        assertThat(getMotorSpeedLimiter(), `is`(MOTOR_SPEED_LIMITER_MEDIUM_SPEED_1))
+        setMotorSpeedLimiter(MotorSpeedLimiter.MEDIUM_SPEED_1.value)
+        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.MEDIUM_SPEED_1.value))
     }
     @Test
     fun `validate that the motor speed limiter is in medium speed 2`(){
-        setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2)
-        assertThat(getMotorSpeedLimiter(), `is`(MOTOR_SPEED_LIMITER_MEDIUM_SPEED_2))
+        setMotorSpeedLimiter(MotorSpeedLimiter.MEDIUM_SPEED_2.value)
+        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.MEDIUM_SPEED_2.value))
     }
     @Test
     fun `validate that the motor speed limiter is in fast speed 1`(){
-        setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_FAST_SPEED_1)
-        assertThat(getMotorSpeedLimiter(), `is`(MOTOR_SPEED_LIMITER_FAST_SPEED_1))
+        setMotorSpeedLimiter(MotorSpeedLimiter.FAST_SPEED_1.value)
+        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.FAST_SPEED_1.value))
     }
     @Test
     fun `validate that the motor speed limiter is in fast speed 2`(){
-        setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_FAST_SPEED_2)
-        assertThat(getMotorSpeedLimiter(), `is`(MOTOR_SPEED_LIMITER_FAST_SPEED_2))
+        setMotorSpeedLimiter(MotorSpeedLimiter.FAST_SPEED_2.value)
+        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.FAST_SPEED_2.value))
     }
     @Test
     fun `validate that the motor speed limiter is in full speed`(){
-        setMotorSpeedLimiter(MOTOR_SPEED_LIMITER_FULL_SPEED)
-        assertThat(getMotorSpeedLimiter(), `is`(MOTOR_SPEED_LIMITER_FULL_SPEED))
+        setMotorSpeedLimiter(MotorSpeedLimiter.FULL_SPEED.value)
+        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.FULL_SPEED.value))
     }
 
     // Front Differential
