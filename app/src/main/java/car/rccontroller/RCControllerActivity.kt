@@ -44,7 +44,7 @@ class RCControllerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // declare local function
         fun throttle(progress: Int){
-            val direction = if (getReverseIntention()) ACTION_MOVE_BACKWARD else ACTION_MOVE_FORWARD
+            val direction = if (getReverseIntention()) Motion.BACKWARD else Motion.FORWARD
             when (progress) {
                 0 -> setBrakingStill()
                 10 -> setNeutral()
@@ -337,7 +337,7 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(::retrofit.isInitialized && isEngineStarted()) {
-                    if (getMotionState() == ACTION_NEUTRAL) {
+                    if (getMotionState() == Motion.NEUTRAL) {
                         setReverseIntention(!getReverseIntention())
                     }
                     else {

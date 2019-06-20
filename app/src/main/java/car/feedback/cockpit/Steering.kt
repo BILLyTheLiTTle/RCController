@@ -22,7 +22,6 @@ interface Steering {
 }
 
 
-
 const val ACTION_TURN_RIGHT = "right"
 const val ACTION_TURN_LEFT = "left"
 const val ACTION_STRAIGHT = "straight"

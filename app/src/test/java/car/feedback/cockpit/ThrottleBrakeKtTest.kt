@@ -94,7 +94,7 @@ class ThrottleBrakeKtTest {
         runBlocking {
             setNeutral()?.join()
         }
-        assertThat(getMotionState(), `is`(ACTION_NEUTRAL))
+        assertThat(getMotionState(), `is`(Motion.NEUTRAL))
     }
 
     // Braking still
@@ -103,23 +103,23 @@ class ThrottleBrakeKtTest {
         runBlocking {
             setBrakingStill()?.join()
         }
-        assertThat(getMotionState(), `is`(ACTION_BRAKING_STILL))
+        assertThat(getMotionState(), `is`(Motion.BRAKING_STILL))
     }
 
     // Throttle -n- Brake
     @Test
     fun `validate that car is throttling forward or braking`() {
         runBlocking {
-            setThrottleBrake(ACTION_MOVE_FORWARD, 60)?.join()
+            setThrottleBrake(Motion.FORWARD, 60)?.join()
         }
-        assertThat(getMotionState(), `is`(ACTION_MOVE_FORWARD))
+        assertThat(getMotionState(), `is`(Motion.FORWARD))
     }
 
     @Test
     fun `validate that car is throttling backward or braking`() {
         runBlocking {
-            setThrottleBrake(ACTION_MOVE_BACKWARD, 40)?.join()
+            setThrottleBrake(Motion.BACKWARD, 40)?.join()
         }
-        assertThat(getMotionState(), `is`(ACTION_MOVE_BACKWARD))
+        assertThat(getMotionState(), `is`(Motion.BACKWARD))
     }
 }

@@ -1,5 +1,6 @@
 package car.feedback.cockpit
 
+import car.enumContains
 import car.feedback.*
 import car.rccontroller.retrofit
 import kotlinx.coroutines.Job
@@ -26,13 +27,6 @@ interface ThrottleBrake {
         val throttleBrakeAPI: ThrottleBrake by lazy { retrofit.create<ThrottleBrake>(ThrottleBrake::class.java) }
     }
 }
-
-const val ACTION_MOVE_FORWARD = "forward"
-const val ACTION_MOVE_BACKWARD = "backward"
-const val ACTION_NEUTRAL = "neutral"
-const val ACTION_BRAKING_STILL = "braking_still"
-const val ACTION_PARKING_BRAKE = "parking_brake"
-const val ACTION_HANDBRAKE = "handbrake"
 // Initial value should be 0 cuz in server is -1
 var throttleBrakeActionId = 0L
 
@@ -45,10 +39,10 @@ fun activateParkingBrake(state: Boolean): String {
     return runBlockingRequest {
         if (state)
             ThrottleBrake.throttleBrakeAPI
-                .setThrottleBrakeAction(throttleBrakeActionId++, ACTION_PARKING_BRAKE, 100)
+                .setThrottleBrakeAction(throttleBrakeActionId++, Motion.PARKING_BRAKE.name, 100)
         else
             ThrottleBrake.throttleBrakeAPI
-                .setThrottleBrakeAction(throttleBrakeActionId++, ACTION_PARKING_BRAKE, 0)
+                .setThrottleBrakeAction(throttleBrakeActionId++, Motion.PARKING_BRAKE.name, 0)
     } ?: EMPTY_STRING
 }
 
@@ -61,31 +55,37 @@ fun activateHandbrake(state: Boolean): Job? {
     return launchRequest {
         if (state)
             ThrottleBrake.throttleBrakeAPI
-                .setThrottleBrakeAction(throttleBrakeActionId++, ACTION_HANDBRAKE, 100)
+                .setThrottleBrakeAction(throttleBrakeActionId++, Motion.HANDBRAKE.name, 100)
         else
             ThrottleBrake.throttleBrakeAPI
-                .setThrottleBrakeAction(throttleBrakeActionId++, ACTION_HANDBRAKE, 0)
+                .setThrottleBrakeAction(throttleBrakeActionId++, Motion.HANDBRAKE.name, 0)
     }
 }
 
 //---- Throttle / Brake / Neutral ----
-fun  getMotionState(): String {
-    return runBlockingRequest {
+fun  getMotionState(): Motion {
+    val motionState = runBlockingRequest {
         ThrottleBrake.throttleBrakeAPI.getMotionState()
     } ?: EMPTY_STRING
+
+    return if (enumContains<Motion>(motionState)) Motion.valueOf(motionState) else Motion.NOTHING
 }
 
 fun setNeutral(): Job? {
     return launchRequest { ThrottleBrake.throttleBrakeAPI.
-        setThrottleBrakeAction(throttleBrakeActionId++, ACTION_NEUTRAL) }
+        setThrottleBrakeAction(throttleBrakeActionId++, Motion.NEUTRAL.name) }
 }
 
 fun setBrakingStill(): Job? {
     return launchRequest { ThrottleBrake.throttleBrakeAPI
-        .setThrottleBrakeAction(throttleBrakeActionId++, ACTION_BRAKING_STILL) }
+        .setThrottleBrakeAction(throttleBrakeActionId++, Motion.BRAKING_STILL.name) }
 }
 
-fun setThrottleBrake(direction: String, value: Int): Job? {
+fun setThrottleBrake(direction: Motion, value: Int): Job? {
     return launchRequest { ThrottleBrake.throttleBrakeAPI
-        .setThrottleBrakeAction(throttleBrakeActionId++, direction, value) }
+        .setThrottleBrakeAction(throttleBrakeActionId++, direction.name, value) }
+}
+
+enum class Motion {
+    NOTHING, FORWARD, BACKWARD, NEUTRAL, BRAKING_STILL, PARKING_BRAKE, HANDBRAKE;
 }
