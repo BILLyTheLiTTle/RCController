@@ -87,5 +87,5 @@ fun setThrottleBrake(direction: Motion, value: Int): Job? {
 }
 
 enum class Motion {
-    NOTHING, FORWARD, BACKWARD, NEUTRAL, BRAKING_STILL, PARKING_BRAKE, HANDBRAKE;
+    NOTHING, FORWARD, BACKWARD, NEUTRAL, BRAKING_STILL, PARKING_BRAKE, HANDBRAKE
 }

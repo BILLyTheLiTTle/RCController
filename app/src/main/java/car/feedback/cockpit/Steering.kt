@@ -1,5 +1,6 @@
 package car.feedback.cockpit
 
+import car.enumContains
 import car.feedback.*
 import car.rccontroller.retrofit
 import kotlinx.coroutines.Job
@@ -21,16 +22,21 @@ interface Steering {
     }
 }
 
-
-const val ACTION_TURN_RIGHT = "right"
-const val ACTION_TURN_LEFT = "left"
-const val ACTION_STRAIGHT = "straight"
 // Initial value should be 0 cuz in server is -1
 var steeringDirectionId = 0L
-fun getSteeringDirection(): String {
-    return runBlockingRequest { Steering.steeringAPI.getSteeringDirection() } ?: EMPTY_STRING
+fun getSteeringDirection(): Turn {
+
+    val steeringDirection = runBlockingRequest {
+        Steering.steeringAPI.getSteeringDirection()
+    } ?: EMPTY_STRING
+
+    return if (enumContains<Turn>(steeringDirection)) Turn.valueOf(steeringDirection) else Turn.NOTHING
 }
 
-fun setSteering(direction: String, value: Int = 0): Job? {
-    return launchRequest { Steering.steeringAPI.setSteeringAction(steeringDirectionId++, direction, value) }
+fun setSteering(direction: Turn, value: Int = 0): Job? {
+    return launchRequest { Steering.steeringAPI.setSteeringAction(steeringDirectionId++, direction.name, value) }
+}
+
+enum class Turn {
+    NOTHING, RIGHT, LEFT, STRAIGHT
 }

@@ -15,6 +15,4 @@ enum class CarPart(val id: String) {
     SHIFT_REGISTERS("shift_registers"),
     LIGHTS("lights"),
     DIRECTION_LIGHTS("${LIGHTS.id}_direction");
-
-
 }

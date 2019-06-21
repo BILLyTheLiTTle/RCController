@@ -784,20 +784,20 @@ class RCControllerActivity : AppCompatActivity() {
             }
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 when (progress) {
-                    0 -> setSteering(ACTION_TURN_LEFT, progress+100) //100% left
-                    10 -> setSteering(ACTION_TURN_LEFT, progress+70) //80% left
-                    20 -> setSteering(ACTION_TURN_LEFT, progress+40) //60% left
-                    30 -> setSteering(ACTION_TURN_LEFT, progress+10) //40% left
-                    40 -> setSteering(ACTION_TURN_LEFT, progress-20) //20% left
+                    0 -> setSteering(Turn.LEFT, progress+100) //100% left
+                    10 -> setSteering(Turn.LEFT, progress+70) //80% left
+                    20 -> setSteering(Turn.LEFT, progress+40) //60% left
+                    30 -> setSteering(Turn.LEFT, progress+10) //40% left
+                    40 -> setSteering(Turn.LEFT, progress-20) //20% left
                     50 -> {
-                        setSteering(ACTION_STRAIGHT)
+                        setSteering(Turn.STRAIGHT)
                         viewModel.directionLightsLiveData.value = getDirectionLightsState()
                     } //0% means straight
-                    60 -> setSteering(ACTION_TURN_RIGHT, progress-40) //20% right
-                    70 -> setSteering(ACTION_TURN_RIGHT, progress-30) //40% right
-                    80 -> setSteering(ACTION_TURN_RIGHT, progress-20) //60% right
-                    90 -> setSteering(ACTION_TURN_RIGHT, progress-10) //80% right
-                    100 -> setSteering(ACTION_TURN_RIGHT, progress) //100% right
+                    60 -> setSteering(Turn.RIGHT, progress-40) //20% right
+                    70 -> setSteering(Turn.RIGHT, progress-30) //40% right
+                    80 -> setSteering(Turn.RIGHT, progress-20) //60% right
+                    90 -> setSteering(Turn.RIGHT, progress-10) //80% right
+                    100 -> setSteering(Turn.RIGHT, progress) //100% right
                 }
             }
         })
