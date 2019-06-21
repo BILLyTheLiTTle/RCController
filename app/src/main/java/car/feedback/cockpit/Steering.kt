@@ -12,7 +12,7 @@ interface Steering {
     @GET("/set_steering_system")
     fun setSteeringAction(@Query("id") id: Long,
                           @Query("direction") direction: String,
-                          @Query("value") value: Int): Call<String>
+                          @Query("value") value: String): Call<String>
 
     @GET("/get_steering_direction")
     fun getSteeringDirection(): Call<String>
@@ -33,10 +33,14 @@ fun getSteeringDirection(): Turn {
     return if (enumContains<Turn>(steeringDirection)) Turn.valueOf(steeringDirection) else Turn.NOTHING
 }
 
-fun setSteering(direction: Turn, value: Int = 0): Job? {
-    return launchRequest { Steering.steeringAPI.setSteeringAction(steeringDirectionId++, direction.name, value) }
+fun setSteering(direction: Turn, value: SteeringValues = SteeringValues.VALUE_00): Job? {
+    return launchRequest { Steering.steeringAPI.setSteeringAction(steeringDirectionId++, direction.name, value.name) }
 }
 
 enum class Turn {
     NOTHING, RIGHT, LEFT, STRAIGHT
+}
+
+enum class SteeringValues{
+    VALUE_00, VALUE_20, VALUE_40, VALUE_60, VALUE_80, VALUE_100, NOTHING
 }

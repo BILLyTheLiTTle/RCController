@@ -33,7 +33,7 @@ class SteeringKtTest {
             .baseUrl("http://$serverIp:$port/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
-        car.feedback.cockpit.startEngine(null)
+        startEngine(null)
         //throttleBrakeActionId = System.currentTimeMillis()
         steeringDirectionId = System.currentTimeMillis()
     }
@@ -51,21 +51,21 @@ class SteeringKtTest {
     @Test
     fun `validate that car is turning left`(){
         runBlocking {
-            setSteering(Turn.LEFT, 20)?.join()
+            setSteering(Turn.LEFT, SteeringValues.VALUE_20)?.join()
         }
         assertThat(getSteeringDirection(), `is`(Turn.LEFT))
     }
     @Test
     fun `validate that car is turning right`(){
         runBlocking {
-            setSteering(Turn.RIGHT, 80)?.join()
+            setSteering(Turn.RIGHT, SteeringValues.VALUE_80)?.join()
         }
         assertThat(getSteeringDirection(), `is`(Turn.RIGHT))
     }
     @Test
     fun `validate that car is going straight with value`(){
         runBlocking {
-            setSteering(Turn.STRAIGHT, 20)?.join()
+            setSteering(Turn.STRAIGHT, SteeringValues.VALUE_20)?.join()
         }
         assertThat(getSteeringDirection(), `is`(Turn.STRAIGHT))
     }
