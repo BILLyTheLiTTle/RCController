@@ -784,20 +784,20 @@ class RCControllerActivity : AppCompatActivity() {
             }
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 when (progress) {
-                    0 -> setSteering(Turn.LEFT, SteeringValues.VALUE_100)
-                    10 -> setSteering(Turn.LEFT, SteeringValues.VALUE_80)
-                    20 -> setSteering(Turn.LEFT, SteeringValues.VALUE_60)
-                    30 -> setSteering(Turn.LEFT, SteeringValues.VALUE_40)
-                    40 -> setSteering(Turn.LEFT, SteeringValues.VALUE_20)
+                    0 -> setSteering(Turn.LEFT, SteeringValue.VALUE_100)
+                    10 -> setSteering(Turn.LEFT, SteeringValue.VALUE_80)
+                    20 -> setSteering(Turn.LEFT, SteeringValue.VALUE_60)
+                    30 -> setSteering(Turn.LEFT, SteeringValue.VALUE_40)
+                    40 -> setSteering(Turn.LEFT, SteeringValue.VALUE_20)
                     50 -> {
                         setSteering(Turn.STRAIGHT)
                         viewModel.directionLightsLiveData.value = getDirectionLightsState()
                     }
-                    60 -> setSteering(Turn.RIGHT, SteeringValues.VALUE_20)
-                    70 -> setSteering(Turn.RIGHT, SteeringValues.VALUE_40)
-                    80 -> setSteering(Turn.RIGHT, SteeringValues.VALUE_60)
-                    90 -> setSteering(Turn.RIGHT, SteeringValues.VALUE_80)
-                    100 -> setSteering(Turn.RIGHT, SteeringValues.VALUE_100)
+                    60 -> setSteering(Turn.RIGHT, SteeringValue.VALUE_20)
+                    70 -> setSteering(Turn.RIGHT, SteeringValue.VALUE_40)
+                    80 -> setSteering(Turn.RIGHT, SteeringValue.VALUE_60)
+                    90 -> setSteering(Turn.RIGHT, SteeringValue.VALUE_80)
+                    100 -> setSteering(Turn.RIGHT, SteeringValue.VALUE_100)
                 }
             }
         })

@@ -33,7 +33,7 @@ fun getSteeringDirection(): Turn {
     return if (enumContains<Turn>(steeringDirection)) Turn.valueOf(steeringDirection) else Turn.NOTHING
 }
 
-fun setSteering(direction: Turn, value: SteeringValues = SteeringValues.VALUE_00): Job? {
+fun setSteering(direction: Turn, value: SteeringValue = SteeringValue.VALUE_00): Job? {
     return launchRequest { Steering.steeringAPI.setSteeringAction(steeringDirectionId++, direction.name, value.name) }
 }
 
@@ -41,6 +41,6 @@ enum class Turn {
     NOTHING, RIGHT, LEFT, STRAIGHT
 }
 
-enum class SteeringValues{
+enum class SteeringValue{
     VALUE_00, VALUE_20, VALUE_40, VALUE_60, VALUE_80, VALUE_100, NOTHING
 }

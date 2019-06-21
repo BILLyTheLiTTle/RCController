@@ -51,21 +51,21 @@ class SteeringKtTest {
     @Test
     fun `validate that car is turning left`(){
         runBlocking {
-            setSteering(Turn.LEFT, SteeringValues.VALUE_20)?.join()
+            setSteering(Turn.LEFT, SteeringValue.VALUE_20)?.join()
         }
         assertThat(getSteeringDirection(), `is`(Turn.LEFT))
     }
     @Test
     fun `validate that car is turning right`(){
         runBlocking {
-            setSteering(Turn.RIGHT, SteeringValues.VALUE_80)?.join()
+            setSteering(Turn.RIGHT, SteeringValue.VALUE_80)?.join()
         }
         assertThat(getSteeringDirection(), `is`(Turn.RIGHT))
     }
     @Test
     fun `validate that car is going straight with value`(){
         runBlocking {
-            setSteering(Turn.STRAIGHT, SteeringValues.VALUE_20)?.join()
+            setSteering(Turn.STRAIGHT, SteeringValue.VALUE_20)?.join()
         }
         assertThat(getSteeringDirection(), `is`(Turn.STRAIGHT))
     }
