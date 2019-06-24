@@ -317,8 +317,10 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
     }
 }
 
+// TODO TemperatureDevice
+//Also TODO remove the CarPart enum (and file of course!)
 enum class ThermometerDevice(val id: String) {
-    MOTOR_REAR_LEFT("${CarPart.MOTOR_REAR_LEFT.id}_temp"),
+    MOTOR_REAR_LEFT("${CarPart.MOTOR_REAR_LEFT.id}_temp"), // MOTOR_REAR_LEFT, etc for the others
     MOTOR_REAR_RIGHT("${CarPart.MOTOR_REAR_RIGHT.id}_temp"),
     MOTOR_FRONT_LEFT("${CarPart.MOTOR_FRONT_LEFT.id}_temp"),
     MOTOR_FRONT_RIGHT("${CarPart.MOTOR_FRONT_RIGHT.id}_temp"),
@@ -329,6 +331,7 @@ enum class ThermometerDevice(val id: String) {
     SHIFT_REGISTERS("${CarPart.SHIFT_REGISTERS.id}_temp")
 }
 
+// TODO Module
 enum class CarModule(val id: String) {
     TRACTION_CONTROL("TCM"),
     ANTILOCK_BRAKING("ABM"),
@@ -339,15 +342,16 @@ enum class CarModule(val id: String) {
 }
 
 enum class ModuleState(val id: String) {
-    NOTHING(EMPTY_STRING),
+    NOTHING(EMPTY_STRING), // NOTHING_STATE, etc for the others
     OFF("module_off_state"),
     ON("module_on_state"),
     IDLE("module_idle_state"),
     UNCHANGED("module_unchanged_state")
 }
 
+//TODO TemperatureWarning
 enum class TemperatureWarningType(val id: String) {
-    NOTHING(EMPTY_STRING),
+    NOTHING(EMPTY_STRING),// NOTHING_TEMPERATURE, etc for the others
     UNCHANGED("unchanged"),
     NORMAL("normal"),
     MEDIUM("medium"),

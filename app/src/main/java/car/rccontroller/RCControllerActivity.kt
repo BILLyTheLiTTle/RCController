@@ -141,19 +141,19 @@ class RCControllerActivity : AppCompatActivity() {
                 resources.obtainTypedArray(R.array.collision_detection_module_states))
         })
         // Setup UI items
-        viewModel.handlingAssistanceLiveData.observe(this, Observer<String>{
+        viewModel.handlingAssistanceLiveData.observe(this, Observer<HandlingAssistance>{
             updateHandlingAssistanceUIItem(it, handling_assistance_imageView,
                 resources.obtainTypedArray(R.array.handling_assistance_states))
         })
-        viewModel.frontDifferentialSlipperyLimiterLiveData.observe(this, Observer<Int>{
+        viewModel.frontDifferentialSlipperyLimiterLiveData.observe(this, Observer<DifferentialSlipperyLimiter>{
             updateDifferentialSlipperyUIItems(it, differential_slippery_limiter_front_imageView,
                 resources.obtainTypedArray(R.array.front_differential_slippery_limiter_states))
         })
-        viewModel.rearDifferentialSlipperyLimiterLiveData.observe(this, Observer<Int>{
+        viewModel.rearDifferentialSlipperyLimiterLiveData.observe(this, Observer<DifferentialSlipperyLimiter>{
             updateDifferentialSlipperyUIItems(it, differential_slippery_limiter_rear_imageView,
                 resources.obtainTypedArray(R.array.rear_differential_slippery_limiter_states))
         })
-        viewModel.motorSpeedLimiterLiveData.observe(this, Observer<Double>{
+        viewModel.motorSpeedLimiterLiveData.observe(this, Observer<MotorSpeedLimiter>{
             updateMotorSpeedLimiterUIItem(it, motor_speed_limiter_imageView,
                 resources.obtainTypedArray(R.array.motor_speed_limiter_states))
         })
@@ -252,9 +252,9 @@ class RCControllerActivity : AppCompatActivity() {
                 viewModel.visionLightsLiveData.value = MainLight.LIGHTS_OFF
                 viewModel.directionLightsLiveData.value = DirectionLight.DIRECTION_LIGHTS_STRAIGHT
 
-                viewModel.handlingAssistanceLiveData.value = HandlingAssistance.NULL.id
+                viewModel.handlingAssistanceLiveData.value = HandlingAssistance.NULL
 
-                viewModel.motorSpeedLimiterLiveData.value = MotorSpeedLimiter.NULL.value
+                viewModel.motorSpeedLimiterLiveData.value = MotorSpeedLimiter.NULL
 
                 viewModel.tractionControlModuleLiveData.postValue(ModuleState.OFF)
                 viewModel.antilockBrakingModuleLiveData.postValue(ModuleState.OFF)
@@ -547,9 +547,9 @@ class RCControllerActivity : AppCompatActivity() {
                 // If, for any reason, engine is stopped I should not do anything
                 if(::retrofit.isInitialized && isEngineStarted()) {
                     when (getHandlingAssistanceState()) {
-                        HandlingAssistance.MANUAL.id -> setHandlingAssistanceState(HandlingAssistance.WARNING.id)
-                        HandlingAssistance.WARNING.id -> setHandlingAssistanceState(HandlingAssistance.FULL.id)
-                        HandlingAssistance.FULL.id ->
+                        HandlingAssistance.MANUAL -> setHandlingAssistanceState(HandlingAssistance.WARNING)
+                        HandlingAssistance.WARNING -> setHandlingAssistanceState(HandlingAssistance.FULL)
+                        HandlingAssistance.FULL ->
                             Toast.makeText(context,
                                     getString(R.string.handling_assistance_full_warning),
                                     Toast.LENGTH_SHORT).show()
@@ -560,9 +560,9 @@ class RCControllerActivity : AppCompatActivity() {
             }
             setOnClickListener {
                 when (getHandlingAssistanceState()) {
-                    HandlingAssistance.FULL.id -> setHandlingAssistanceState(HandlingAssistance.WARNING.id)
-                    HandlingAssistance.WARNING.id -> setHandlingAssistanceState(HandlingAssistance.MANUAL.id)
-                    HandlingAssistance.MANUAL.id ->
+                    HandlingAssistance.FULL -> setHandlingAssistanceState(HandlingAssistance.WARNING)
+                    HandlingAssistance.WARNING -> setHandlingAssistanceState(HandlingAssistance.MANUAL)
+                    HandlingAssistance.MANUAL ->
                         Toast.makeText(context,
                                 getString(R.string.handling_assistance_none_warning),
                                 Toast.LENGTH_SHORT).show()
@@ -580,21 +580,21 @@ class RCControllerActivity : AppCompatActivity() {
                 // If, for any reason, engine is stopped I should not do anything
                 if(::retrofit.isInitialized && isEngineStarted()) {
                     when (getMotorSpeedLimiter()) {
-                        MotorSpeedLimiter.NO_SPEED.value ->
-                            setMotorSpeedLimiter(MotorSpeedLimiter.SLOW_SPEED_1.value)
-                        MotorSpeedLimiter.SLOW_SPEED_1.value ->
-                            setMotorSpeedLimiter(MotorSpeedLimiter.SLOW_SPEED_2.value)
-                        MotorSpeedLimiter.SLOW_SPEED_2.value ->
-                            setMotorSpeedLimiter(MotorSpeedLimiter.MEDIUM_SPEED_1.value)
-                        MotorSpeedLimiter.MEDIUM_SPEED_1.value ->
-                            setMotorSpeedLimiter(MotorSpeedLimiter.MEDIUM_SPEED_2.value)
-                        MotorSpeedLimiter.MEDIUM_SPEED_2.value ->
-                            setMotorSpeedLimiter(MotorSpeedLimiter.FAST_SPEED_1.value)
-                        MotorSpeedLimiter.FAST_SPEED_1.value ->
-                            setMotorSpeedLimiter(MotorSpeedLimiter.FAST_SPEED_2.value)
-                        MotorSpeedLimiter.FAST_SPEED_2.value ->
-                            setMotorSpeedLimiter(MotorSpeedLimiter.FULL_SPEED.value)
-                        MotorSpeedLimiter.FULL_SPEED.value -> Toast.
+                        MotorSpeedLimiter.NO_SPEED ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.SLOW_SPEED_1)
+                        MotorSpeedLimiter.SLOW_SPEED_1 ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.SLOW_SPEED_2)
+                        MotorSpeedLimiter.SLOW_SPEED_2 ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.MEDIUM_SPEED_1)
+                        MotorSpeedLimiter.MEDIUM_SPEED_1 ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.MEDIUM_SPEED_2)
+                        MotorSpeedLimiter.MEDIUM_SPEED_2 ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.FAST_SPEED_1)
+                        MotorSpeedLimiter.FAST_SPEED_1 ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.FAST_SPEED_2)
+                        MotorSpeedLimiter.FAST_SPEED_2 ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.FULL_SPEED)
+                        MotorSpeedLimiter.FULL_SPEED -> Toast.
                             makeText(context,
                             getString(R.string.motor_speed_limiter_full_warning),
                             Toast.LENGTH_SHORT
@@ -607,21 +607,21 @@ class RCControllerActivity : AppCompatActivity() {
             setOnClickListener {
                 if(::retrofit.isInitialized && isEngineStarted()) {
                     when (getMotorSpeedLimiter()) {
-                        MotorSpeedLimiter.FULL_SPEED.value ->
-                            setMotorSpeedLimiter(MotorSpeedLimiter.FAST_SPEED_2.value)
-                        MotorSpeedLimiter.FAST_SPEED_2.value ->
-                            setMotorSpeedLimiter(MotorSpeedLimiter.FAST_SPEED_1.value)
-                        MotorSpeedLimiter.FAST_SPEED_1.value ->
-                            setMotorSpeedLimiter(MotorSpeedLimiter.MEDIUM_SPEED_2.value)
-                        MotorSpeedLimiter.MEDIUM_SPEED_2.value ->
-                            setMotorSpeedLimiter(MotorSpeedLimiter.MEDIUM_SPEED_1.value)
-                        MotorSpeedLimiter.MEDIUM_SPEED_1.value ->
-                            setMotorSpeedLimiter(MotorSpeedLimiter.SLOW_SPEED_2.value)
-                        MotorSpeedLimiter.SLOW_SPEED_2.value ->
-                            setMotorSpeedLimiter(MotorSpeedLimiter.SLOW_SPEED_1.value)
-                        MotorSpeedLimiter.SLOW_SPEED_1.value ->
-                            setMotorSpeedLimiter(MotorSpeedLimiter.NO_SPEED.value)
-                        MotorSpeedLimiter.NO_SPEED.value -> Toast.
+                        MotorSpeedLimiter.FULL_SPEED ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.FAST_SPEED_2)
+                        MotorSpeedLimiter.FAST_SPEED_2 ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.FAST_SPEED_1)
+                        MotorSpeedLimiter.FAST_SPEED_1 ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.MEDIUM_SPEED_2)
+                        MotorSpeedLimiter.MEDIUM_SPEED_2 ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.MEDIUM_SPEED_1)
+                        MotorSpeedLimiter.MEDIUM_SPEED_1 ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.SLOW_SPEED_2)
+                        MotorSpeedLimiter.SLOW_SPEED_2 ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.SLOW_SPEED_1)
+                        MotorSpeedLimiter.SLOW_SPEED_1 ->
+                            setMotorSpeedLimiter(MotorSpeedLimiter.NO_SPEED)
+                        MotorSpeedLimiter.NO_SPEED -> Toast.
                             makeText(context,
                                 getString(R.string.motor_speed_limiter_none_warning),
                                 Toast.LENGTH_SHORT
@@ -640,17 +640,17 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(::retrofit.isInitialized && isEngineStarted()) {
-                    if (getHandlingAssistanceState() != HandlingAssistance.FULL.id) {
+                    if (getHandlingAssistanceState() != HandlingAssistance.FULL) {
                         when (getFrontDifferentialSlipperyLimiter()) {
-                            DifferentialSlipperyLimiterState.LOCKED.value ->
-                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_2.value)
-                            DifferentialSlipperyLimiterState.MEDI_2.value ->
-                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_1.value)
-                            DifferentialSlipperyLimiterState.MEDI_1.value ->
-                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_0.value)
-                            DifferentialSlipperyLimiterState.MEDI_0.value ->
-                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.OPEN.value)
-                            DifferentialSlipperyLimiterState.OPEN.value -> Toast.makeText(
+                            DifferentialSlipperyLimiter.LOCKED ->
+                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.MEDI_2)
+                            DifferentialSlipperyLimiter.MEDI_2 ->
+                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.MEDI_1)
+                            DifferentialSlipperyLimiter.MEDI_1 ->
+                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.MEDI_0)
+                            DifferentialSlipperyLimiter.MEDI_0 ->
+                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.OPEN)
+                            DifferentialSlipperyLimiter.OPEN -> Toast.makeText(
                                 context,
                                 getString(R.string.differential_slippery_limiter_open_warning),
                                 Toast.LENGTH_SHORT
@@ -672,17 +672,17 @@ class RCControllerActivity : AppCompatActivity() {
             }
             setOnClickListener {
                 if(::retrofit.isInitialized && isEngineStarted()) {
-                    if (getHandlingAssistanceState() != HandlingAssistance.FULL.id) {
+                    if (getHandlingAssistanceState() != HandlingAssistance.FULL) {
                         when (getFrontDifferentialSlipperyLimiter()) {
-                            DifferentialSlipperyLimiterState.OPEN.value ->
-                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_0.value)
-                            DifferentialSlipperyLimiterState.MEDI_0.value ->
-                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_1.value)
-                            DifferentialSlipperyLimiterState.MEDI_1.value ->
-                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_2.value)
-                            DifferentialSlipperyLimiterState.MEDI_2.value ->
-                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.LOCKED.value)
-                            DifferentialSlipperyLimiterState.LOCKED.value -> Toast.makeText(
+                            DifferentialSlipperyLimiter.OPEN ->
+                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.MEDI_0)
+                            DifferentialSlipperyLimiter.MEDI_0 ->
+                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.MEDI_1)
+                            DifferentialSlipperyLimiter.MEDI_1 ->
+                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.MEDI_2)
+                            DifferentialSlipperyLimiter.MEDI_2 ->
+                                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.LOCKED)
+                            DifferentialSlipperyLimiter.LOCKED -> Toast.makeText(
                                 context,
                                 getString(R.string.differential_slippery_limiter_locked_warning),
                                 Toast.LENGTH_SHORT
@@ -711,17 +711,17 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(::retrofit.isInitialized && isEngineStarted()) {
-                    if (getHandlingAssistanceState() != HandlingAssistance.FULL.id) {
+                    if (getHandlingAssistanceState() != HandlingAssistance.FULL) {
                         when (getRearDifferentialSlipperyLimiter()) {
-                            DifferentialSlipperyLimiterState.LOCKED.value ->
-                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_2.value)
-                            DifferentialSlipperyLimiterState.MEDI_2.value ->
-                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_1.value)
-                            DifferentialSlipperyLimiterState.MEDI_1.value ->
-                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_0.value)
-                            DifferentialSlipperyLimiterState.MEDI_0.value ->
-                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.OPEN.value)
-                            DifferentialSlipperyLimiterState.OPEN.value -> Toast.makeText(
+                            DifferentialSlipperyLimiter.LOCKED ->
+                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.MEDI_2)
+                            DifferentialSlipperyLimiter.MEDI_2 ->
+                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.MEDI_1)
+                            DifferentialSlipperyLimiter.MEDI_1 ->
+                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.MEDI_0)
+                            DifferentialSlipperyLimiter.MEDI_0 ->
+                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.OPEN)
+                            DifferentialSlipperyLimiter.OPEN -> Toast.makeText(
                                 context,
                                 getString(R.string.differential_slippery_limiter_open_warning),
                                 Toast.LENGTH_SHORT
@@ -743,17 +743,17 @@ class RCControllerActivity : AppCompatActivity() {
             }
             setOnClickListener {
                 if(::retrofit.isInitialized && isEngineStarted()) {
-                    if (getHandlingAssistanceState() != HandlingAssistance.FULL.id) {
+                    if (getHandlingAssistanceState() != HandlingAssistance.FULL) {
                         when (getRearDifferentialSlipperyLimiter()) {
-                            DifferentialSlipperyLimiterState.OPEN.value ->
-                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_0.value)
-                            DifferentialSlipperyLimiterState.MEDI_0.value ->
-                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_1.value)
-                            DifferentialSlipperyLimiterState.MEDI_1.value ->
-                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_2.value)
-                            DifferentialSlipperyLimiterState.MEDI_2.value ->
-                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.LOCKED.value)
-                            DifferentialSlipperyLimiterState.LOCKED.value -> Toast.makeText(
+                            DifferentialSlipperyLimiter.OPEN ->
+                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.MEDI_0)
+                            DifferentialSlipperyLimiter.MEDI_0 ->
+                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.MEDI_1)
+                            DifferentialSlipperyLimiter.MEDI_1 ->
+                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.MEDI_2)
+                            DifferentialSlipperyLimiter.MEDI_2 ->
+                                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.LOCKED)
+                            DifferentialSlipperyLimiter.LOCKED -> Toast.makeText(
                                 context,
                                 getString(R.string.differential_slippery_limiter_locked_warning),
                                 Toast.LENGTH_SHORT
@@ -907,15 +907,15 @@ class RCControllerActivity : AppCompatActivity() {
         This function here should get these states which must be as I want,
         and if they don't check the set functions between client-server.
      */
-    private fun updateDifferentialSlipperyUIItems(state: Int, item: ImageView, states: TypedArray) {
+    private fun updateDifferentialSlipperyUIItems(state: DifferentialSlipperyLimiter, item: ImageView, states: TypedArray) {
         val i = when (state) {
-            DifferentialSlipperyLimiterState.OPEN.value -> 1
-            DifferentialSlipperyLimiterState.MEDI_0.value -> 2
-            DifferentialSlipperyLimiterState.MEDI_1.value -> 3
-            DifferentialSlipperyLimiterState.MEDI_2.value -> 4
-            DifferentialSlipperyLimiterState.LOCKED.value -> 5
-            DifferentialSlipperyLimiterState.AUTO.value -> 6
-            DifferentialSlipperyLimiterState.ERROR.value -> 7
+            DifferentialSlipperyLimiter.OPEN -> 1
+            DifferentialSlipperyLimiter.MEDI_0 -> 2
+            DifferentialSlipperyLimiter.MEDI_1 -> 3
+            DifferentialSlipperyLimiter.MEDI_2 -> 4
+            DifferentialSlipperyLimiter.LOCKED -> 5
+            DifferentialSlipperyLimiter.AUTO -> 6
+            DifferentialSlipperyLimiter.ERROR -> 7
             else -> 0 // and OFF state
         }
         item.setImageResourceWithTag(states.getResourceId(i, 0))
@@ -927,18 +927,18 @@ class RCControllerActivity : AppCompatActivity() {
         This function here should get these states which must be as I want,
         and if they don't check the set functions between client-server.
      */
-    private fun updateMotorSpeedLimiterUIItem(state: Double, item: ImageView, states: TypedArray) {
+    private fun updateMotorSpeedLimiterUIItem(state: MotorSpeedLimiter, item: ImageView, states: TypedArray) {
         val i = when (state) {
-            MotorSpeedLimiter.NO_SPEED.value -> 1
-            MotorSpeedLimiter.SLOW_SPEED_1.value -> 2
-            MotorSpeedLimiter.SLOW_SPEED_2.value -> 3
-            MotorSpeedLimiter.MEDIUM_SPEED_1.value -> 4
-            MotorSpeedLimiter.MEDIUM_SPEED_2.value -> 5
-            MotorSpeedLimiter.FAST_SPEED_1.value -> 6
-            MotorSpeedLimiter.FAST_SPEED_2.value -> 7
-            MotorSpeedLimiter.FULL_SPEED.value -> 8
+            MotorSpeedLimiter.NO_SPEED -> 1
+            MotorSpeedLimiter.SLOW_SPEED_1 -> 2
+            MotorSpeedLimiter.SLOW_SPEED_2 -> 3
+            MotorSpeedLimiter.MEDIUM_SPEED_1 -> 4
+            MotorSpeedLimiter.MEDIUM_SPEED_2 -> 5
+            MotorSpeedLimiter.FAST_SPEED_1 -> 6
+            MotorSpeedLimiter.FAST_SPEED_2 -> 7
+            MotorSpeedLimiter.FULL_SPEED -> 8
             //MotorSpeedLimiter.AUTO.value -> 9 // Not implemented yet
-            MotorSpeedLimiter.ERROR_SPEED.value -> 10
+            MotorSpeedLimiter.ERROR_SPEED -> 10
             else -> 0 // and OFF state
         }
         item.setImageResourceWithTag(states.getResourceId(i, 0))
@@ -954,30 +954,30 @@ class RCControllerActivity : AppCompatActivity() {
         to handling assistance (ex. differential, suspension) and some of their
         functionality values.
      */
-    private fun updateHandlingAssistanceUIItem(state: String, item: ImageView, states: TypedArray){
+    private fun updateHandlingAssistanceUIItem(state: HandlingAssistance, item: ImageView, states: TypedArray){
         val i = when (state) {
-            HandlingAssistance.MANUAL.id -> {
+            HandlingAssistance.MANUAL -> {
                 setFrontDifferentialSlipperyLimiter(previousFrontDifferentialSlipperyLimiter)
                 setRearDifferentialSlipperyLimiter(previousRearDifferentialSlipperyLimiter)
                 1
             }
-            HandlingAssistance.WARNING.id -> {
+            HandlingAssistance.WARNING -> {
                 setFrontDifferentialSlipperyLimiter(previousFrontDifferentialSlipperyLimiter)
                 setRearDifferentialSlipperyLimiter(previousRearDifferentialSlipperyLimiter)
                 2
             }
-            HandlingAssistance.FULL.id -> {
-                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.AUTO.value)
-                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.AUTO.value)
+            HandlingAssistance.FULL -> {
+                setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.AUTO)
+                setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.AUTO)
                 3
             }
-            HandlingAssistance.NULL.id ->0
+            HandlingAssistance.NULL ->0
             else -> 0
         }
         item.setImageResourceWithTag(states.getResourceId(i, 0))
         states.recycle()
 
-        if((state == HandlingAssistance.FULL.id) || (state == HandlingAssistance.WARNING.id)){
+        if((state == HandlingAssistance.FULL) || (state == HandlingAssistance.WARNING)){
             viewModel.tractionControlModuleLiveData.postValue(ModuleState.IDLE)
             viewModel.antilockBrakingModuleLiveData.postValue(ModuleState.IDLE)
             viewModel.electronicStabilityModuleLiveData.postValue(ModuleState.IDLE)
@@ -995,10 +995,10 @@ class RCControllerActivity : AppCompatActivity() {
         }
 
         viewModel.frontDifferentialSlipperyLimiterLiveData.value =
-            if (state == HandlingAssistance.NULL.id) DifferentialSlipperyLimiterState.NULL.value
+            if (state == HandlingAssistance.NULL) DifferentialSlipperyLimiter.NULL
             else getFrontDifferentialSlipperyLimiter()
         viewModel.rearDifferentialSlipperyLimiterLiveData.value =
-            if (state == HandlingAssistance.NULL.id) DifferentialSlipperyLimiterState.NULL.value
+            if (state == HandlingAssistance.NULL) DifferentialSlipperyLimiter.NULL
             else getRearDifferentialSlipperyLimiter()
     }
 

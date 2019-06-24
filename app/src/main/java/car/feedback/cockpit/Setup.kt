@@ -1,5 +1,6 @@
 package car.feedback.cockpit
 
+import car.enumContains
 import car.feedback.EMPTY_STRING
 import car.feedback.runBlockingRequest
 import car.rccontroller.retrofit
@@ -15,93 +16,103 @@ interface Setup {
     fun getHandlingAssistanceState(): Call<String>
 
     @GET("/set_motor_speed_limiter")
-    fun setMotorSpeedLimiter(@Query("value") value: Double): Call<String>
+    fun setMotorSpeedLimiter(@Query("value") value: String): Call<String>
 
     @GET("/get_motor_speed_limiter")
-    fun getMotorSpeedLimiter(): Call<Double>
+    fun getMotorSpeedLimiter(): Call<String>
 
     @GET("/set_front_differential_slippery_limiter")
-    fun setFrontDifferentialSlipperyLimiter(@Query("value") value: Int): Call<String>
+    fun setFrontDifferentialSlipperyLimiter(@Query("value") value: String): Call<String>
 
     @GET("/get_front_differential_slippery_limiter")
-    fun getFrontDifferentialSlipperyLimiter(): Call<Int>
+    fun getFrontDifferentialSlipperyLimiter(): Call<String>
 
     @GET("/set_rear_differential_slippery_limiter")
-    fun setRearDifferentialSlipperyLimiter(@Query("value") value: Int): Call<String>
+    fun setRearDifferentialSlipperyLimiter(@Query("value") value: String): Call<String>
 
     @GET("/get_rear_differential_slippery_limiter")
-    fun getRearDifferentialSlipperyLimiter(): Call<Int>
+    fun getRearDifferentialSlipperyLimiter(): Call<String>
 
     companion object {
         val setupAPI: Setup by lazy { retrofit.create<Setup>(Setup::class.java) }
     }
 }
 
-fun setHandlingAssistanceState(state: String): String {
-    return runBlockingRequest { Setup.setupAPI.setHandlingAssistance(state) } ?: EMPTY_STRING
+fun setHandlingAssistanceState(state: HandlingAssistance): String {
+    return runBlockingRequest { Setup.setupAPI.setHandlingAssistance(state.name) } ?: EMPTY_STRING
 }
 
-fun getHandlingAssistanceState(): String {
-    return runBlockingRequest { Setup.setupAPI.getHandlingAssistanceState() } ?: EMPTY_STRING
+fun getHandlingAssistanceState(): HandlingAssistance {
+    val value = runBlockingRequest { Setup.setupAPI.getHandlingAssistanceState() } ?: EMPTY_STRING
+    return if (enumContains<HandlingAssistance>(value))
+        HandlingAssistance.valueOf(value)
+    else
+        HandlingAssistance.NULL
 }
 
-fun setMotorSpeedLimiter(value: Double): String {
-    return runBlockingRequest { Setup.setupAPI.setMotorSpeedLimiter(value) } ?: EMPTY_STRING
+fun setMotorSpeedLimiter(value: MotorSpeedLimiter): String {
+    return runBlockingRequest { Setup.setupAPI.setMotorSpeedLimiter(value.name) } ?: EMPTY_STRING
 }
 
-fun getMotorSpeedLimiter(): Double {
-    return runBlockingRequest { Setup.setupAPI.getMotorSpeedLimiter() } ?: MotorSpeedLimiter.ERROR_SPEED.value
+fun getMotorSpeedLimiter(): MotorSpeedLimiter {
+    val value = runBlockingRequest { Setup.setupAPI.getMotorSpeedLimiter() } ?: EMPTY_STRING
+    return if (enumContains<MotorSpeedLimiter>(value))
+        MotorSpeedLimiter.valueOf(value)
+    else
+        MotorSpeedLimiter.ERROR_SPEED
 }
 
 //---- Front ----
-var previousFrontDifferentialSlipperyLimiter: Int = DifferentialSlipperyLimiterState.LOCKED.value
+var previousFrontDifferentialSlipperyLimiter = DifferentialSlipperyLimiter.LOCKED
 
-fun setFrontDifferentialSlipperyLimiter(value: Int): String {
-    return runBlockingRequest { Setup.setupAPI.setFrontDifferentialSlipperyLimiter(value) } ?: EMPTY_STRING
+fun setFrontDifferentialSlipperyLimiter(value: DifferentialSlipperyLimiter): String {
+    return runBlockingRequest {
+        Setup.setupAPI.setFrontDifferentialSlipperyLimiter(value.name)
+    } ?: EMPTY_STRING
 }
 
-fun getFrontDifferentialSlipperyLimiter(): Int {
-    return runBlockingRequest { Setup.setupAPI.getFrontDifferentialSlipperyLimiter() } ?: DifferentialSlipperyLimiterState.ERROR.value
+fun getFrontDifferentialSlipperyLimiter(): DifferentialSlipperyLimiter {
+    val value = runBlockingRequest {
+        Setup.setupAPI.getFrontDifferentialSlipperyLimiter()
+    } ?: EMPTY_STRING
+    return if (enumContains<DifferentialSlipperyLimiter>(value))
+        DifferentialSlipperyLimiter.valueOf(value)
+    else
+        DifferentialSlipperyLimiter.ERROR
 }
 
 //---- Rear ----
-var previousRearDifferentialSlipperyLimiter: Int = DifferentialSlipperyLimiterState.LOCKED.value
+var previousRearDifferentialSlipperyLimiter = DifferentialSlipperyLimiter.LOCKED
 
-fun setRearDifferentialSlipperyLimiter(value: Int): String {
-    return runBlockingRequest { Setup.setupAPI.setRearDifferentialSlipperyLimiter(value) } ?: EMPTY_STRING
+fun setRearDifferentialSlipperyLimiter(value: DifferentialSlipperyLimiter): String {
+    return runBlockingRequest {
+        Setup.setupAPI.setRearDifferentialSlipperyLimiter(value.name)
+    } ?: EMPTY_STRING
 }
 
-fun getRearDifferentialSlipperyLimiter(): Int {
-    return runBlockingRequest { Setup.setupAPI.getRearDifferentialSlipperyLimiter() } ?: DifferentialSlipperyLimiterState.ERROR.value
+fun getRearDifferentialSlipperyLimiter(): DifferentialSlipperyLimiter {
+    val value = runBlockingRequest {
+        Setup.setupAPI.getRearDifferentialSlipperyLimiter()
+    } ?: EMPTY_STRING
+
+    return if (enumContains<DifferentialSlipperyLimiter>(value))
+        DifferentialSlipperyLimiter.valueOf(value)
+    else
+        DifferentialSlipperyLimiter.ERROR
 }
 
-enum class DifferentialSlipperyLimiterState(val id:String, val value: Int){
-    NULL("assistance_null", -2), // for local use only
-    OPEN("differential_slippery_limiter_open", 0),
-    MEDI_0("differential_slippery_limiter_medi_0", 1),
-    MEDI_1("differential_slippery_limiter_medi_1", 2),
-    MEDI_2("differential_slippery_limiter_medi_2", 3),
-    LOCKED("differential_slippery_limiter_locked", 4),
-    AUTO("differential_slippery_limiter_auto", 10),
-    ERROR("differential_slippery_limiter_error", -1),
+enum class DifferentialSlipperyLimiter {
+    NULL, // for local use only
+    OPEN, MEDI_0, MEDI_1, MEDI_2, LOCKED, AUTO, ERROR,
 }
 
-enum class HandlingAssistance(val id: String) {
-    NULL("assistance_null"), // for local use only
-    MANUAL("assistance_manual"),
-    WARNING("assistance_warning"),
-    FULL("assistance_full")
+enum class HandlingAssistance {
+    NULL, // for local use only
+    MANUAL, WARNING, FULL
 }
 
-enum class MotorSpeedLimiter(val id:String, val value: Double) {
-    NULL("motor_speed_limiter_null", -2.00), // for local use only
-    ERROR_SPEED("motor_speed_limiter_error_speed",-1.00),
-    NO_SPEED("motor_speed_limiter_no_speed", 0.00),
-    SLOW_SPEED_1("motor_speed_limiter_slow_speed_1", 0.20),
-    SLOW_SPEED_2("motor_speed_limiter_slow_speed_2", 0.40),
-    MEDIUM_SPEED_1("motor_speed_limiter_medium_speed_1", 0.60),
-    MEDIUM_SPEED_2("motor_speed_limiter_medium_speed_2", 0.70),
-    FAST_SPEED_1("motor_speed_limiter_fast_speed_1", 0.80),
-    FAST_SPEED_2("motor_speed_limiter_fast_speed_2", 0.90),
-    FULL_SPEED("motor_speed_limiter_full_speed", 1.00)
+enum class MotorSpeedLimiter {
+    NULL, // for local use only
+    ERROR_SPEED, NO_SPEED, SLOW_SPEED_1, SLOW_SPEED_2, MEDIUM_SPEED_1, MEDIUM_SPEED_2,
+    FAST_SPEED_1, FAST_SPEED_2, FULL_SPEED
 }

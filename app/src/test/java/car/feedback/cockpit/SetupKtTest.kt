@@ -49,141 +49,141 @@ class SetupKtTest {
     // Handling Assistance
     @Test
     fun `validate that handling assistance is deactivated`(){
-        setHandlingAssistanceState(HandlingAssistance.MANUAL.id)
-        assertThat(getHandlingAssistanceState(), `is`(HandlingAssistance.MANUAL.id))
+        setHandlingAssistanceState(HandlingAssistance.MANUAL)
+        assertThat(getHandlingAssistanceState(), `is`(HandlingAssistance.MANUAL))
     }
     @Test
     fun `validate that handling assistance is set to warning`(){
-        setHandlingAssistanceState(HandlingAssistance.WARNING.id)
-        assertThat(getHandlingAssistanceState(), `is`(HandlingAssistance.WARNING.id))
+        setHandlingAssistanceState(HandlingAssistance.WARNING)
+        assertThat(getHandlingAssistanceState(), `is`(HandlingAssistance.WARNING))
     }
     @Test
     fun `validate that handling assistance is set to full`(){
-        setHandlingAssistanceState(HandlingAssistance.FULL.id)
-        assertThat(getHandlingAssistanceState(), `is`(HandlingAssistance.FULL.id))
+        setHandlingAssistanceState(HandlingAssistance.FULL)
+        assertThat(getHandlingAssistanceState(), `is`(HandlingAssistance.FULL))
     }
 
     // Speed limiter
     @Test
     fun `validate that the motor speed limiter is deactivated`(){
-        setMotorSpeedLimiter(MotorSpeedLimiter.NO_SPEED.value)
-        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.NO_SPEED.value))
+        setMotorSpeedLimiter(MotorSpeedLimiter.NO_SPEED)
+        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.NO_SPEED))
     }
     @Test
     fun `validate that the motor speed limiter is in slow speed 1`(){
-        setMotorSpeedLimiter(MotorSpeedLimiter.SLOW_SPEED_1.value)
-        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.SLOW_SPEED_1.value))
+        setMotorSpeedLimiter(MotorSpeedLimiter.SLOW_SPEED_1)
+        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.SLOW_SPEED_1))
     }
     @Test
     fun `validate that the motor speed limiter is in slow speed 2`(){
-        setMotorSpeedLimiter(MotorSpeedLimiter.SLOW_SPEED_2.value)
-        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.SLOW_SPEED_2.value))
+        setMotorSpeedLimiter(MotorSpeedLimiter.SLOW_SPEED_2)
+        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.SLOW_SPEED_2))
     }
     @Test
     fun `validate that the motor speed limiter is in medium speed 1`(){
-        setMotorSpeedLimiter(MotorSpeedLimiter.MEDIUM_SPEED_1.value)
-        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.MEDIUM_SPEED_1.value))
+        setMotorSpeedLimiter(MotorSpeedLimiter.MEDIUM_SPEED_1)
+        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.MEDIUM_SPEED_1))
     }
     @Test
     fun `validate that the motor speed limiter is in medium speed 2`(){
-        setMotorSpeedLimiter(MotorSpeedLimiter.MEDIUM_SPEED_2.value)
-        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.MEDIUM_SPEED_2.value))
+        setMotorSpeedLimiter(MotorSpeedLimiter.MEDIUM_SPEED_2)
+        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.MEDIUM_SPEED_2))
     }
     @Test
     fun `validate that the motor speed limiter is in fast speed 1`(){
-        setMotorSpeedLimiter(MotorSpeedLimiter.FAST_SPEED_1.value)
-        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.FAST_SPEED_1.value))
+        setMotorSpeedLimiter(MotorSpeedLimiter.FAST_SPEED_1)
+        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.FAST_SPEED_1))
     }
     @Test
     fun `validate that the motor speed limiter is in fast speed 2`(){
-        setMotorSpeedLimiter(MotorSpeedLimiter.FAST_SPEED_2.value)
-        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.FAST_SPEED_2.value))
+        setMotorSpeedLimiter(MotorSpeedLimiter.FAST_SPEED_2)
+        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.FAST_SPEED_2))
     }
     @Test
     fun `validate that the motor speed limiter is in full speed`(){
-        setMotorSpeedLimiter(MotorSpeedLimiter.FULL_SPEED.value)
-        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.FULL_SPEED.value))
+        setMotorSpeedLimiter(MotorSpeedLimiter.FULL_SPEED)
+        assertThat(getMotorSpeedLimiter(), `is`(MotorSpeedLimiter.FULL_SPEED))
     }
 
     // Front Differential
     @Test
     fun `validate that the front differential is in error state`(){
         // TODO should be tested with mocking
-        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.OPEN.value)
-        assertThat(getFrontDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.OPEN.value))
+        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.OPEN)
+        assertThat(getFrontDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiter.OPEN))
     }
     @Test
     fun `validate that the front differential is in open state`(){
-        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.OPEN.value)
-        assertThat(getFrontDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.OPEN.value))
+        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.OPEN)
+        assertThat(getFrontDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiter.OPEN))
     }
     @Test
     fun `validate that the front differential is in medi 0 state`(){
-        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_0.value)
+        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.MEDI_0)
         assertThat(getFrontDifferentialSlipperyLimiter(), `is`(
-            DifferentialSlipperyLimiterState.MEDI_0.value))
+            DifferentialSlipperyLimiter.MEDI_0))
     }
     @Test
     fun `validate that the front differential is in medi 1 state`(){
-        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_1.value)
+        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.MEDI_1)
         assertThat(getFrontDifferentialSlipperyLimiter(), `is`(
-            DifferentialSlipperyLimiterState.MEDI_1.value))
+            DifferentialSlipperyLimiter.MEDI_1))
     }
     @Test
     fun `validate that the front differential is in medi 2 state`(){
-        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_2.value)
+        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.MEDI_2)
         assertThat(getFrontDifferentialSlipperyLimiter(), `is`(
-            DifferentialSlipperyLimiterState.MEDI_2.value))
+            DifferentialSlipperyLimiter.MEDI_2))
     }
     @Test
     fun `validate that the front differential is in locked state`(){
-        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.LOCKED.value)
+        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.LOCKED)
         assertThat(getFrontDifferentialSlipperyLimiter(), `is`(
-            DifferentialSlipperyLimiterState.LOCKED.value))
+            DifferentialSlipperyLimiter.LOCKED))
     }
     @Test
     fun `validate that the front differential is in auto state`(){
-        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.AUTO.value)
-        assertThat(getFrontDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.AUTO.value))
+        setFrontDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.AUTO)
+        assertThat(getFrontDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiter.AUTO))
     }
     @Test
     fun `validate that the front differential default state is locked`(){
-        assertThat(getFrontDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.LOCKED.value))
+        assertThat(getFrontDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiter.LOCKED))
     }
 
     // Rear Differential
     @Test
     fun `validate that the rear differential is in open state`(){
-        setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.OPEN.value)
-        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.OPEN.value))
+        setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.OPEN)
+        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiter.OPEN))
     }
     @Test
     fun `validate that the rear differential is in medi 0 state`(){
-        setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_0.value)
-        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.MEDI_0.value))
+        setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.MEDI_0)
+        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiter.MEDI_0))
     }
     @Test
     fun `validate that the rear differential is in medi 1 state`(){
-        setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_1.value)
-        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.MEDI_1.value))
+        setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.MEDI_1)
+        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiter.MEDI_1))
     }
     @Test
     fun `validate that the rear differential is in medi 2 state`(){
-        setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.MEDI_2.value)
-        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.MEDI_2.value))
+        setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.MEDI_2)
+        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiter.MEDI_2))
     }
     @Test
     fun `validate that the rear differential is in locked state`(){
-        setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.LOCKED.value)
-        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.LOCKED.value))
+        setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.LOCKED)
+        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiter.LOCKED))
     }
     @Test
     fun `validate that the rear differential is in auto state`(){
-        setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiterState.AUTO.value)
-        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.AUTO.value))
+        setRearDifferentialSlipperyLimiter(DifferentialSlipperyLimiter.AUTO)
+        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiter.AUTO))
     }
     @Test
     fun `validate that the rear differential default state is locked`(){
-        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiterState.LOCKED.value))
+        assertThat(getRearDifferentialSlipperyLimiter(), `is`(DifferentialSlipperyLimiter.LOCKED))
     }
 }
