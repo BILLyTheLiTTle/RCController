@@ -7,7 +7,6 @@ import androidx.lifecycle.OnLifecycleEvent
 import car.RCControllerApplication
 import car.rccontroller.RCControllerViewModel
 import car.feedback.*
-import car.feedback.CarPart
 import fi.iki.elonen.NanoHTTPD
 
 class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): LifecycleObserver {
@@ -77,118 +76,118 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                 when (uri) {
                     TEMP_URI -> {
                         when (params[TEMP_PARAM_KEY_ITEM]?.get(0)) {
-                            ThermometerDevice.MOTOR_REAR_LEFT.name -> {
-                                val warningType = TemperatureWarningType.valueOf(
+                            TemperatureDevice.MOTOR_REAR_LEFT_TEMP.name -> {
+                                val warningType = TemperatureWarning.valueOf(
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.name
+                                        ?.get(0) ?: TemperatureWarning.UNCHANGED_TEMPERATURE.name
                                 )
                                 model.rearLeftMotorTemperatureLiveData.postValue(warningType)
 
                                 formatResponse(
-                                    ThermometerDevice.MOTOR_REAR_LEFT.name,
+                                    TemperatureDevice.MOTOR_REAR_LEFT_TEMP.name,
                                     warningType.name
                                 )
                             }
-                            ThermometerDevice.MOTOR_REAR_RIGHT.name -> {
-                                val warningType = TemperatureWarningType.valueOf(
+                            TemperatureDevice.MOTOR_REAR_RIGHT_TEMP.name -> {
+                                val warningType = TemperatureWarning.valueOf(
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.name
+                                        ?.get(0) ?: TemperatureWarning.UNCHANGED_TEMPERATURE.name
                                 )
                                 model.rearRightMotorTemperatureLiveData.postValue(warningType)
 
                                 formatResponse(
-                                    ThermometerDevice.MOTOR_REAR_RIGHT.name,
+                                    TemperatureDevice.MOTOR_REAR_RIGHT_TEMP.name,
                                     warningType.name
                                 )
                             }
-                            ThermometerDevice.MOTOR_FRONT_LEFT.name -> {
-                                val warningType = TemperatureWarningType.valueOf(
+                            TemperatureDevice.MOTOR_FRONT_LEFT_TEMP.name -> {
+                                val warningType = TemperatureWarning.valueOf(
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.name
+                                        ?.get(0) ?: TemperatureWarning.UNCHANGED_TEMPERATURE.name
                                 )
                                 model.frontLeftMotorTemperatureLiveData.postValue(warningType)
 
                                 formatResponse(
-                                    ThermometerDevice.MOTOR_FRONT_LEFT.name,
+                                    TemperatureDevice.MOTOR_FRONT_LEFT_TEMP.name,
                                     warningType.name
                                 )
                             }
-                            ThermometerDevice.MOTOR_FRONT_RIGHT.name -> {
-                                val warningType = TemperatureWarningType.valueOf(
+                            TemperatureDevice.MOTOR_FRONT_RIGHT_TEMP.name -> {
+                                val warningType = TemperatureWarning.valueOf(
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.name
+                                        ?.get(0) ?: TemperatureWarning.UNCHANGED_TEMPERATURE.name
                                 )
                                 model.frontRightMotorTemperatureLiveData.postValue(warningType)
 
                                 formatResponse(
-                                    ThermometerDevice.MOTOR_FRONT_RIGHT.name,
+                                    TemperatureDevice.MOTOR_FRONT_RIGHT_TEMP.name,
                                     warningType.name
                                 )
                             }
-                            ThermometerDevice.H_BRIDGE_REAR.name -> {
-                                val warningType = TemperatureWarningType.valueOf(
+                            TemperatureDevice.H_BRIDGE_REAR_TEMP.name -> {
+                                val warningType = TemperatureWarning.valueOf(
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.name
+                                        ?.get(0) ?: TemperatureWarning.UNCHANGED_TEMPERATURE.name
                                 )
                                 model.frontHBridgeTemperatureLiveData.postValue(warningType)
 
                                 formatResponse(
-                                    ThermometerDevice.H_BRIDGE_REAR.name,
+                                    TemperatureDevice.H_BRIDGE_REAR_TEMP.name,
                                     warningType.name
                                 )
                             }
-                            ThermometerDevice.H_BRIDGE_FRONT.name -> {
-                                val warningType = TemperatureWarningType.valueOf(
+                            TemperatureDevice.H_BRIDGE_FRONT_TEMP.name -> {
+                                val warningType = TemperatureWarning.valueOf(
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.name
+                                        ?.get(0) ?: TemperatureWarning.UNCHANGED_TEMPERATURE.name
                                 )
                                 model.rearHBridgeTemperatureLiveData.postValue(warningType)
 
                                 formatResponse(
-                                    ThermometerDevice.H_BRIDGE_FRONT.name,
+                                    TemperatureDevice.H_BRIDGE_FRONT_TEMP.name,
                                     warningType.name
                                 )
                             }
-                            ThermometerDevice.RASPBERRY_PI.name -> {
-                                val warningType = TemperatureWarningType.valueOf(
+                            TemperatureDevice.RASPBERRY_PI_TEMP.name -> {
+                                val warningType = TemperatureWarning.valueOf(
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.name
+                                        ?.get(0) ?: TemperatureWarning.UNCHANGED_TEMPERATURE.name
                                 )
                                 model.raspberryPiTemperatureLiveData.postValue(warningType)
 
                                 formatResponse(
-                                    ThermometerDevice.RASPBERRY_PI.name,
+                                    TemperatureDevice.RASPBERRY_PI_TEMP.name,
                                     warningType.name
                                 )
                             }
-                            ThermometerDevice.BATTERIES.name -> {
-                                val warningType = TemperatureWarningType.valueOf(
+                            TemperatureDevice.BATTERIES_TEMP.name -> {
+                                val warningType = TemperatureWarning.valueOf(
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.name
+                                        ?.get(0) ?: TemperatureWarning.UNCHANGED_TEMPERATURE.name
                                 )
                                 model.batteriesTemperatureLiveData.postValue(warningType)
 
                                 formatResponse(
-                                    ThermometerDevice.BATTERIES.name,
+                                    TemperatureDevice.BATTERIES_TEMP.name,
                                     warningType.name
                                 )
                             }
-                            ThermometerDevice.SHIFT_REGISTERS.name -> {
-                                val warningType = TemperatureWarningType.valueOf(
+                            TemperatureDevice.SHIFT_REGISTERS_TEMP.name -> {
+                                val warningType = TemperatureWarning.valueOf(
                                     params[TEMP_PARAM_KEY_WARNING]
-                                        ?.get(0) ?: TemperatureWarningType.UNCHANGED.name
+                                        ?.get(0) ?: TemperatureWarning.UNCHANGED_TEMPERATURE.name
                                 )
                                 model.shiftRegistersTemperatureLiveData.postValue(warningType)
 
                                 formatResponse(
-                                    ThermometerDevice.SHIFT_REGISTERS.name,
+                                    TemperatureDevice.SHIFT_REGISTERS_TEMP.name,
                                     warningType.name
                                 )
                             }
                             else ->
                                 formatResponse(
                                     "ERROR TEMP",
-                                    TemperatureWarningType.NOTHING.name
+                                    TemperatureWarning.NOTHING_TEMPERATURE.name
                                 )
                         }
                     }
@@ -319,16 +318,12 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
 
 // TODO TemperatureDevice
 //Also TODO remove the CarPart enum (and file of course!)
-enum class ThermometerDevice(val id: String) {
-    MOTOR_REAR_LEFT("${CarPart.MOTOR_REAR_LEFT.id}_temp"), // MOTOR_REAR_LEFT, etc for the others
-    MOTOR_REAR_RIGHT("${CarPart.MOTOR_REAR_RIGHT.id}_temp"),
-    MOTOR_FRONT_LEFT("${CarPart.MOTOR_FRONT_LEFT.id}_temp"),
-    MOTOR_FRONT_RIGHT("${CarPart.MOTOR_FRONT_RIGHT.id}_temp"),
-    H_BRIDGE_REAR("${CarPart.H_BRIDGE_REAR.id}_temp"),
-    H_BRIDGE_FRONT("${CarPart.H_BRIDGE_FRONT.id}_temp"),
-    RASPBERRY_PI("${CarPart.RASPBERRY_PI.id}_temp"),
-    BATTERIES("${CarPart.BATTERIES.id}_temp"),
-    SHIFT_REGISTERS("${CarPart.SHIFT_REGISTERS.id}_temp")
+enum class TemperatureDevice {
+    BATTERIES_TEMP,
+    H_BRIDGE_FRONT_TEMP, H_BRIDGE_REAR_TEMP,
+    MOTOR_FRONT_LEFT_TEMP, MOTOR_FRONT_RIGHT_TEMP, MOTOR_REAR_LEFT_TEMP, MOTOR_REAR_RIGHT_TEMP,
+    RASPBERRY_PI_TEMP,
+    SHIFT_REGISTERS_TEMP
 }
 
 // TODO Module
@@ -349,11 +344,6 @@ enum class ModuleState(val id: String) {
     UNCHANGED("module_unchanged_state")
 }
 
-//TODO TemperatureWarning
-enum class TemperatureWarningType(val id: String) {
-    NOTHING(EMPTY_STRING),// NOTHING_TEMPERATURE, etc for the others
-    UNCHANGED("unchanged"),
-    NORMAL("normal"),
-    MEDIUM("medium"),
-    HIGH("high")
+enum class TemperatureWarning {
+    NOTHING_TEMPERATURE, UNCHANGED_TEMPERATURE, NORMAL_TEMPERATURE, MEDIUM_TEMPERATURE, HIGH_TEMPERATURE
 }

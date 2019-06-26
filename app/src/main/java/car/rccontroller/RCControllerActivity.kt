@@ -21,7 +21,7 @@ import car.feedback.*
 import car.feedback.cockpit.*
 import car.feedback.server.ModuleState
 import car.feedback.server.NanoHTTPDLifecycleAware
-import car.feedback.server.TemperatureWarningType
+import car.feedback.server.TemperatureWarning
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
@@ -79,39 +79,39 @@ class RCControllerActivity : AppCompatActivity() {
                 it, resources.getString(R.string.tachometer_unit))
         })
         // temperature UI items
-        viewModel.rearLeftMotorTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
+        viewModel.rearLeftMotorTemperatureLiveData.observe(this, Observer<TemperatureWarning>{
             updateUITempItems(it, rearLeftMotorTemps_imageView,
                 resources.obtainTypedArray(R.array.motor_temperature_states))
         })
-        viewModel.rearRightMotorTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
+        viewModel.rearRightMotorTemperatureLiveData.observe(this, Observer<TemperatureWarning>{
             updateUITempItems(it, rearRightMotorTemps_imageView,
                 resources.obtainTypedArray(R.array.motor_temperature_states))
         })
-        viewModel.frontLeftMotorTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
+        viewModel.frontLeftMotorTemperatureLiveData.observe(this, Observer<TemperatureWarning>{
             updateUITempItems(it, frontLeftMotorTemps_imageView,
                 resources.obtainTypedArray(R.array.motor_temperature_states))
         })
-        viewModel.frontRightMotorTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
+        viewModel.frontRightMotorTemperatureLiveData.observe(this, Observer<TemperatureWarning>{
             updateUITempItems(it, frontRightMotorTemps_imageView,
                 resources.obtainTypedArray(R.array.motor_temperature_states))
         })
-        viewModel.rearHBridgeTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
+        viewModel.rearHBridgeTemperatureLiveData.observe(this, Observer<TemperatureWarning>{
             updateUITempItems(it, rearHbridgeTemps_imageView,
                 resources.obtainTypedArray(R.array.h_bridge_temperature_states))
         })
-        viewModel.frontHBridgeTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
+        viewModel.frontHBridgeTemperatureLiveData.observe(this, Observer<TemperatureWarning>{
             updateUITempItems(it, frontHbridgeTemps_imageView,
                 resources.obtainTypedArray(R.array.h_bridge_temperature_states))
         })
-        viewModel.raspberryPiTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
+        viewModel.raspberryPiTemperatureLiveData.observe(this, Observer<TemperatureWarning>{
             updateUITempItems(it, raspiTemp_imageView,
                 resources.obtainTypedArray(R.array.raspberry_pi_temperature_states))
         })
-        viewModel.batteriesTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
+        viewModel.batteriesTemperatureLiveData.observe(this, Observer<TemperatureWarning>{
             updateUITempItems(it, batteryTemp_imageView,
                 resources.obtainTypedArray(R.array.batteries_temperature_states))
         })
-        viewModel.shiftRegistersTemperatureLiveData.observe(this, Observer<TemperatureWarningType>{
+        viewModel.shiftRegistersTemperatureLiveData.observe(this, Observer<TemperatureWarning>{
             updateUITempItems(it, shiftRegisterTemp_imageView,
                 resources.obtainTypedArray(R.array.shift_registers_temperature_states))
         })
@@ -235,15 +235,15 @@ class RCControllerActivity : AppCompatActivity() {
                 viewModel.emergencyLightsStatusLiveData.value = false
 
                 // Update those values with post in order to be executed after postValue of the server!
-                viewModel.rearLeftMotorTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
-                viewModel.rearRightMotorTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
-                viewModel.frontLeftMotorTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
-                viewModel.frontRightMotorTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
-                viewModel.frontHBridgeTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
-                viewModel.rearHBridgeTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
-                viewModel.raspberryPiTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
-                viewModel.batteriesTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
-                viewModel.shiftRegistersTemperatureLiveData.postValue(TemperatureWarningType.NOTHING)
+                viewModel.rearLeftMotorTemperatureLiveData.postValue(TemperatureWarning.NOTHING_TEMPERATURE)
+                viewModel.rearRightMotorTemperatureLiveData.postValue(TemperatureWarning.NOTHING_TEMPERATURE)
+                viewModel.frontLeftMotorTemperatureLiveData.postValue(TemperatureWarning.NOTHING_TEMPERATURE)
+                viewModel.frontRightMotorTemperatureLiveData.postValue(TemperatureWarning.NOTHING_TEMPERATURE)
+                viewModel.frontHBridgeTemperatureLiveData.postValue(TemperatureWarning.NOTHING_TEMPERATURE)
+                viewModel.rearHBridgeTemperatureLiveData.postValue(TemperatureWarning.NOTHING_TEMPERATURE)
+                viewModel.raspberryPiTemperatureLiveData.postValue(TemperatureWarning.NOTHING_TEMPERATURE)
+                viewModel.batteriesTemperatureLiveData.postValue(TemperatureWarning.NOTHING_TEMPERATURE)
+                viewModel.shiftRegistersTemperatureLiveData.postValue(TemperatureWarning.NOTHING_TEMPERATURE)
 
                 viewModel.speedLiveData.postValue(getString(R.string.tachometer_null_value))
 
@@ -866,12 +866,12 @@ class RCControllerActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUITempItems(warningType: TemperatureWarningType, item: ImageView, states: TypedArray) {
+    private fun updateUITempItems(warningType: TemperatureWarning, item: ImageView, states: TypedArray) {
         val i = when (warningType) {
-            TemperatureWarningType.NOTHING -> 0
-            TemperatureWarningType.NORMAL -> 1
-            TemperatureWarningType.MEDIUM -> 2
-            TemperatureWarningType.HIGH -> 3
+            TemperatureWarning.NOTHING_TEMPERATURE -> 0
+            TemperatureWarning.NORMAL_TEMPERATURE -> 1
+            TemperatureWarning.MEDIUM_TEMPERATURE -> 2
+            TemperatureWarning.HIGH_TEMPERATURE -> 3
             else -> 0
         }
         item.setImageResourceWithTag(states.getResourceId(i, 0))

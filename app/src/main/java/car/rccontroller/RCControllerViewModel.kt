@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import car.feedback.cockpit.*
 import car.feedback.server.ModuleState
-import car.feedback.server.TemperatureWarningType
+import car.feedback.server.TemperatureWarning
 
 class RCControllerViewModel: ViewModel() {
 
@@ -15,15 +15,15 @@ class RCControllerViewModel: ViewModel() {
     val emergencyLightsStatusLiveData = MutableLiveData<Boolean>()
     val cruiseControlStatusLiveData = MutableLiveData<Boolean>()
     val speedLiveData = MutableLiveData<String>()
-    val rearLeftMotorTemperatureLiveData = MutableLiveData<TemperatureWarningType>()
-    val rearRightMotorTemperatureLiveData = MutableLiveData<TemperatureWarningType>()
-    val frontLeftMotorTemperatureLiveData = MutableLiveData<TemperatureWarningType>()
-    val frontRightMotorTemperatureLiveData = MutableLiveData<TemperatureWarningType>()
-    val rearHBridgeTemperatureLiveData = MutableLiveData<TemperatureWarningType>()
-    val frontHBridgeTemperatureLiveData = MutableLiveData<TemperatureWarningType>()
-    val raspberryPiTemperatureLiveData = MutableLiveData<TemperatureWarningType>()
-    val batteriesTemperatureLiveData = MutableLiveData<TemperatureWarningType>()
-    val shiftRegistersTemperatureLiveData = MutableLiveData<TemperatureWarningType>()
+    val rearLeftMotorTemperatureLiveData = MutableLiveData<TemperatureWarning>()
+    val rearRightMotorTemperatureLiveData = MutableLiveData<TemperatureWarning>()
+    val frontLeftMotorTemperatureLiveData = MutableLiveData<TemperatureWarning>()
+    val frontRightMotorTemperatureLiveData = MutableLiveData<TemperatureWarning>()
+    val rearHBridgeTemperatureLiveData = MutableLiveData<TemperatureWarning>()
+    val frontHBridgeTemperatureLiveData = MutableLiveData<TemperatureWarning>()
+    val raspberryPiTemperatureLiveData = MutableLiveData<TemperatureWarning>()
+    val batteriesTemperatureLiveData = MutableLiveData<TemperatureWarning>()
+    val shiftRegistersTemperatureLiveData = MutableLiveData<TemperatureWarning>()
     val parkingBrakeLiveData = MutableLiveData<Boolean>()
     val handbrakeLiveData = MutableLiveData<Boolean>()
     val visionLightsLiveData = MutableLiveData<MainLight>()
@@ -53,15 +53,15 @@ class RCControllerViewModel: ViewModel() {
         emergencyLightsStatusLiveData.value = false
         cruiseControlStatusLiveData.value = false
         //speedLiveData.value = "-/-"
-        rearLeftMotorTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
-        rearRightMotorTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
-        frontLeftMotorTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
-        frontRightMotorTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
-        rearHBridgeTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
-        frontHBridgeTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
-        raspberryPiTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
-        batteriesTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
-        shiftRegistersTemperatureLiveData.value = TemperatureWarningType.UNCHANGED
+        rearLeftMotorTemperatureLiveData.value = TemperatureWarning.UNCHANGED_TEMPERATURE
+        rearRightMotorTemperatureLiveData.value = TemperatureWarning.UNCHANGED_TEMPERATURE
+        frontLeftMotorTemperatureLiveData.value = TemperatureWarning.UNCHANGED_TEMPERATURE
+        frontRightMotorTemperatureLiveData.value = TemperatureWarning.UNCHANGED_TEMPERATURE
+        rearHBridgeTemperatureLiveData.value = TemperatureWarning.UNCHANGED_TEMPERATURE
+        frontHBridgeTemperatureLiveData.value = TemperatureWarning.UNCHANGED_TEMPERATURE
+        raspberryPiTemperatureLiveData.value = TemperatureWarning.UNCHANGED_TEMPERATURE
+        batteriesTemperatureLiveData.value = TemperatureWarning.UNCHANGED_TEMPERATURE
+        shiftRegistersTemperatureLiveData.value = TemperatureWarning.UNCHANGED_TEMPERATURE
 
         visionLightsLiveData.value = MainLight.LIGHTS_OFF
         directionLightsLiveData.value = DirectionLight.DIRECTION_LIGHTS_STRAIGHT
