@@ -1,8 +1,8 @@
 package car.feedback.cockpit
 
+import car.enumContains
 import car.feedback.EMPTY_STRING
 import car.feedback.runBlockingRequest
-import car.feedback.CarPart
 import car.rccontroller.retrofit
 import retrofit2.Call
 import retrofit2.http.GET
@@ -42,30 +42,44 @@ interface Electrics {
 // Main Lights
 /////////
 fun setMainLightsState(state: MainLight): MainLight {
-    return MainLight.valueOf(
-        runBlockingRequest { Electrics.electricsAPI.setMainLightsState(state.name) } ?: EMPTY_STRING
-    )
+    val light = runBlockingRequest {
+        Electrics.electricsAPI.setMainLightsState(state.name)
+    } ?: EMPTY_STRING
+
+    return if (enumContains<MainLight>(light)) MainLight.valueOf(light) else MainLight.NOTHING
 }
 
 fun getMainLightsState(): MainLight {
-    return MainLight.valueOf(
-        runBlockingRequest { Electrics.electricsAPI.getMainLightsState() } ?: EMPTY_STRING
-    )
+    val light = runBlockingRequest {
+        Electrics.electricsAPI.getMainLightsState()
+    } ?: EMPTY_STRING
+
+    return if (enumContains<MainLight>(light)) MainLight.valueOf(light) else MainLight.NOTHING
 }
 
 /////////
 // Turn Lights (Left/Right/Straight)
 /////////
-fun setDirectionLightsState(state: DirectionLight): DirectionLight {
-    return DirectionLight.valueOf(
-        runBlockingRequest { Electrics.electricsAPI.setDirectionLights(state.name) } ?: EMPTY_STRING
-    )
+fun setDirectionLightsState(state: CorneringLight): CorneringLight {
+    val light = runBlockingRequest {
+        Electrics.electricsAPI.setDirectionLights(state.name)
+    } ?: EMPTY_STRING
+
+    return if (enumContains<CorneringLight>(light))
+        CorneringLight.valueOf(light)
+    else
+        CorneringLight.NOTHING
 }
 
-fun getDirectionLightsState(): DirectionLight {
-    return DirectionLight.valueOf(
-        runBlockingRequest { Electrics.electricsAPI.getDirectionLights() } ?: EMPTY_STRING
-    )
+fun getDirectionLightsState(): CorneringLight {
+    val light = runBlockingRequest {
+        Electrics.electricsAPI.getDirectionLights()
+    } ?: EMPTY_STRING
+
+    return if (enumContains<CorneringLight>(light))
+        CorneringLight.valueOf(light)
+    else
+        CorneringLight.NOTHING
 }
 
 /////////
@@ -90,22 +104,14 @@ fun getReverseIntention(): Boolean {
     return runBlockingRequest { Electrics.electricsAPI.getReverseLightsState() } == true
 }
 
-enum class MainLight(val id: String) {
-    LIGHTS_OFF("${CarPart.LIGHTS.id}_off"),
-    POSITION_LIGHTS("${CarPart.LIGHTS.id}_position"),
-    DRIVING_LIGHTS("${CarPart.LIGHTS.id}_driving"),
-    LONG_RANGE_LIGHTS("${CarPart.LIGHTS.id}_long_range"),
-    LONG_RANGE_SIGNAL_LIGHTS("${CarPart.LIGHTS.id}_long_range_signal")
+enum class MainLight {
+    NOTHING,
+    LIGHTS_OFF,
+    POSITION_LIGHTS, DRIVING_LIGHTS, LONG_RANGE_LIGHTS,
+    LONG_RANGE_SIGNAL_LIGHTS
 }
 
-enum class DirectionLight(val id:String){
-    DIRECTION_LIGHTS_RIGHT("${CarPart.DIRECTION_LIGHTS.id}_right"),
-    DIRECTION_LIGHTS_LEFT("${CarPart.DIRECTION_LIGHTS.id}_left"),
-    DIRECTION_LIGHTS_STRAIGHT("${CarPart.DIRECTION_LIGHTS.id}_straight");
-}
-
-enum class OtherLight(val id:String){
-    BRAKING_LIGHTS("${CarPart.LIGHTS.id}_braking"),
-    REVERSE_LIGHTS("${CarPart.LIGHTS.id}_reverse"),
-    EMERGENCY_LIGHTS("${CarPart.LIGHTS.id}_emergency")
+enum class CorneringLight {
+    NOTHING,
+    RIGHT_LIGHTS, LEFT_LIGHTS, STRAIGHT_LIGHTS
 }

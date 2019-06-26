@@ -27,7 +27,7 @@ class RCControllerViewModel: ViewModel() {
     val parkingBrakeLiveData = MutableLiveData<Boolean>()
     val handbrakeLiveData = MutableLiveData<Boolean>()
     val visionLightsLiveData = MutableLiveData<MainLight>()
-    val directionLightsLiveData = MutableLiveData<DirectionLight>()
+    val directionLightsLiveData = MutableLiveData<CorneringLight>()
     val handlingAssistanceLiveData = MutableLiveData<HandlingAssistance>()
     val tractionControlModuleLiveData = MutableLiveData<ModuleState>()
     val antilockBrakingModuleLiveData = MutableLiveData<ModuleState>()
@@ -64,7 +64,7 @@ class RCControllerViewModel: ViewModel() {
         shiftRegistersTemperatureLiveData.value = TemperatureWarning.UNCHANGED_TEMPERATURE
 
         visionLightsLiveData.value = MainLight.LIGHTS_OFF
-        directionLightsLiveData.value = DirectionLight.DIRECTION_LIGHTS_STRAIGHT
+        directionLightsLiveData.value = CorneringLight.STRAIGHT_LIGHTS
 
         parkingBrakeLiveData.value = false
         handbrakeLiveData.value = false

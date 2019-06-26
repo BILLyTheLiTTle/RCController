@@ -250,7 +250,7 @@ class RCControllerActivity : AppCompatActivity() {
                 updateMotionUIItems(false)
 
                 viewModel.visionLightsLiveData.value = MainLight.LIGHTS_OFF
-                viewModel.directionLightsLiveData.value = DirectionLight.DIRECTION_LIGHTS_STRAIGHT
+                viewModel.directionLightsLiveData.value = CorneringLight.STRAIGHT_LIGHTS
 
                 viewModel.handlingAssistanceLiveData.value = HandlingAssistance.NULL
 
@@ -456,7 +456,7 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(::retrofit.isInitialized && isEngineStarted()) {
-                    setDirectionLightsState(DirectionLight.DIRECTION_LIGHTS_LEFT)
+                    setDirectionLightsState(CorneringLight.LEFT_LIGHTS)
                 }
                 viewModel.directionLightsLiveData.value = getDirectionLightsState()
                 true
@@ -477,7 +477,7 @@ class RCControllerActivity : AppCompatActivity() {
             setOnLongClickListener {
                 // If, for any reason, engine is stopped I should not do anything
                 if(::retrofit.isInitialized && isEngineStarted()) {
-                    setDirectionLightsState(DirectionLight.DIRECTION_LIGHTS_RIGHT)
+                    setDirectionLightsState(CorneringLight.RIGHT_LIGHTS)
                 }
                 viewModel.directionLightsLiveData.value = getDirectionLightsState()
                 true
@@ -487,20 +487,20 @@ class RCControllerActivity : AppCompatActivity() {
                 //true
             }
         }
-        viewModel.directionLightsLiveData.observe(this, Observer<DirectionLight> {
+        viewModel.directionLightsLiveData.observe(this, Observer<CorneringLight> {
             when (it) {
-                DirectionLight.DIRECTION_LIGHTS_STRAIGHT -> {
+                CorneringLight.STRAIGHT_LIGHTS -> {
                     leftDirectionLightsAnimation.stop()
                     leftDirectionLightsAnimation.selectDrawable(0)
                     rightDirectionLightsAnimation.stop()
                     rightDirectionLightsAnimation.selectDrawable(0)
                 }
-                DirectionLight.DIRECTION_LIGHTS_LEFT -> {
+                CorneringLight.LEFT_LIGHTS -> {
                     rightDirectionLightsAnimation.stop()
                     rightDirectionLightsAnimation.selectDrawable(0)
                     leftDirectionLightsAnimation.start()
                 }
-                DirectionLight.DIRECTION_LIGHTS_RIGHT -> {
+                CorneringLight.RIGHT_LIGHTS -> {
                     leftDirectionLightsAnimation.stop()
                     leftDirectionLightsAnimation.selectDrawable(0)
                     rightDirectionLightsAnimation.start()

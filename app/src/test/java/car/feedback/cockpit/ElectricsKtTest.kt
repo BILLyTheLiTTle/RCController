@@ -32,7 +32,7 @@ class ElectricsKtTest {
             .baseUrl("http://$serverIp:$port/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
-        car.feedback.cockpit.startEngine(null)
+        startEngine(null)
         //throttleBrakeActionId = System.currentTimeMillis()
         //steeringDirectionId = System.currentTimeMillis()
     }
@@ -75,18 +75,18 @@ class ElectricsKtTest {
     // Turn Lights
     @Test
     fun `validate that turn lights are off`(){
-        setDirectionLightsState(DirectionLight.DIRECTION_LIGHTS_STRAIGHT)
-        assertThat(getDirectionLightsState(), `is`(DirectionLight.DIRECTION_LIGHTS_STRAIGHT))
+        setDirectionLightsState(CorneringLight.STRAIGHT_LIGHTS)
+        assertThat(getDirectionLightsState(), `is`(CorneringLight.STRAIGHT_LIGHTS))
     }
     @Test
     fun `validate that left turn lights are on`(){
-        setDirectionLightsState(DirectionLight.DIRECTION_LIGHTS_LEFT)
-        assertThat(getDirectionLightsState(), `is`(DirectionLight.DIRECTION_LIGHTS_LEFT))
+        setDirectionLightsState(CorneringLight.LEFT_LIGHTS)
+        assertThat(getDirectionLightsState(), `is`(CorneringLight.LEFT_LIGHTS))
     }
     @Test
     fun `validate that right turn lights are on`(){
-        setDirectionLightsState(DirectionLight.DIRECTION_LIGHTS_RIGHT)
-        assertThat(getDirectionLightsState(), `is`(DirectionLight.DIRECTION_LIGHTS_RIGHT))
+        setDirectionLightsState(CorneringLight.RIGHT_LIGHTS)
+        assertThat(getDirectionLightsState(), `is`(CorneringLight.RIGHT_LIGHTS))
     }
 
     // Emergency Lights

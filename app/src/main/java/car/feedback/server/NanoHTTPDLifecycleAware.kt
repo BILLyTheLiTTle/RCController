@@ -316,8 +316,6 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
     }
 }
 
-// TODO TemperatureDevice
-//Also TODO remove the CarPart enum (and file of course!)
 enum class TemperatureDevice {
     BATTERIES_TEMP,
     H_BRIDGE_FRONT_TEMP, H_BRIDGE_REAR_TEMP,
@@ -337,7 +335,7 @@ enum class CarModule(val id: String) {
 }
 
 enum class ModuleState(val id: String) {
-    NOTHING(EMPTY_STRING), // NOTHING_STATE, etc for the others
+    NOTHING(EMPTY_STRING), // TODO NOTHING_STATE, etc for the others
     OFF("module_off_state"),
     ON("module_on_state"),
     IDLE("module_idle_state"),
