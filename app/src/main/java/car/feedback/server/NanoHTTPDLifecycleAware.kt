@@ -202,82 +202,82 @@ class NanoHTTPDLifecycleAware(private val model: RCControllerViewModel): Lifecyc
                     }
                     ECU_URI -> {
                         when (params[ECU_PARAM_KEY_ITEM]?.get(0)) {
-                            CarModule.TRACTION_CONTROL.name -> {
+                            Module.TRACTION_CONTROL.name -> {
                                 val state = ModuleState.valueOf(
                                     params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: ModuleState.UNCHANGED.name
+                                        ?.get(0) ?: ModuleState.UNCHANGED_STATE.name
                                 )
                                 model.tractionControlModuleLiveData.postValue(state)
 
                                 formatResponse(
-                                    CarModule.TRACTION_CONTROL.name,
+                                    Module.TRACTION_CONTROL.name,
                                     state.name
                                 )
                             }
-                            CarModule.ANTILOCK_BRAKING.name -> {
+                            Module.ANTILOCK_BRAKING.name -> {
                                 val state = ModuleState.valueOf(
                                     params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: ModuleState.UNCHANGED.name
+                                        ?.get(0) ?: ModuleState.UNCHANGED_STATE.name
                                 )
                                 model.antilockBrakingModuleLiveData.postValue(state)
 
                                 formatResponse(
-                                    CarModule.ANTILOCK_BRAKING.name,
+                                    Module.ANTILOCK_BRAKING.name,
                                     state.name
                                 )
                             }
-                            CarModule.ELECTRONIC_STABILITY.name -> {
+                            Module.ELECTRONIC_STABILITY.name -> {
                                 val state = ModuleState.valueOf(
                                     params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: ModuleState.UNCHANGED.name
+                                        ?.get(0) ?: ModuleState.UNCHANGED_STATE.name
                                 )
                                 model.electronicStabilityModuleLiveData.postValue(state)
 
                                 formatResponse(
-                                    CarModule.ELECTRONIC_STABILITY.name,
+                                    Module.ELECTRONIC_STABILITY.name,
                                     state.name
                                 )
                             }
-                            CarModule.UNDERSTEER_DETECTION.name -> {
+                            Module.UNDERSTEER_DETECTION.name -> {
                                 val state = ModuleState.valueOf(
                                     params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: ModuleState.UNCHANGED.name
+                                        ?.get(0) ?: ModuleState.UNCHANGED_STATE.name
                                 )
                                 model.understeerDetectionModuleLiveData.postValue(state)
 
                                 formatResponse(
-                                    CarModule.UNDERSTEER_DETECTION.name,
+                                    Module.UNDERSTEER_DETECTION.name,
                                     state.name
                                 )
                             }
-                            CarModule.OVERSTEER_DETECTION.name -> {
+                            Module.OVERSTEER_DETECTION.name -> {
                                 val state = ModuleState.valueOf(
                                     params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: ModuleState.UNCHANGED.name
+                                        ?.get(0) ?: ModuleState.UNCHANGED_STATE.name
                                 )
                                 model.oversteerDetectionModuleLiveData.postValue(state)
 
                                 formatResponse(
-                                    CarModule.OVERSTEER_DETECTION.name,
+                                    Module.OVERSTEER_DETECTION.name,
                                     state.name
                                 )
                             }
-                            CarModule.COLLISION_DETECTION.name -> {
+                            Module.COLLISION_DETECTION.name -> {
                                 val state = ModuleState.valueOf(
                                     params[ECU_PARAM_KEY_VALUE]
-                                        ?.get(0) ?: ModuleState.UNCHANGED.name
+                                        ?.get(0) ?: ModuleState.UNCHANGED_STATE.name
                                 )
                                 model.collisionDetectionModuleLiveData.postValue(state)
 
                                 formatResponse(
-                                    CarModule.COLLISION_DETECTION.name,
+                                    Module.COLLISION_DETECTION.name,
                                     state.name
                                 )
                             }
                             else ->
                                 formatResponse(
                                     "ERROR ECU",
-                                    ModuleState.NOTHING.id
+                                    ModuleState.NOTHING_STATE.name
                                 )
                         }
                     }
@@ -324,22 +324,13 @@ enum class TemperatureDevice {
     SHIFT_REGISTERS_TEMP
 }
 
-// TODO Module
-enum class CarModule(val id: String) {
-    TRACTION_CONTROL("TCM"),
-    ANTILOCK_BRAKING("ABM"),
-    ELECTRONIC_STABILITY("ESM"),
-    UNDERSTEER_DETECTION("UDM"),
-    OVERSTEER_DETECTION("ODM"),
-    COLLISION_DETECTION("CDM")
+enum class ModuleState {
+    NOTHING_STATE, OFF_STATE, ON_STATE, IDLE_STATE, UNCHANGED_STATE
 }
 
-enum class ModuleState(val id: String) {
-    NOTHING(EMPTY_STRING), // TODO NOTHING_STATE, etc for the others
-    OFF("module_off_state"),
-    ON("module_on_state"),
-    IDLE("module_idle_state"),
-    UNCHANGED("module_unchanged_state")
+enum class Module {
+    TRACTION_CONTROL, ANTILOCK_BRAKING, ELECTRONIC_STABILITY, UNDERSTEER_DETECTION, OVERSTEER_DETECTION,
+    COLLISION_DETECTION
 }
 
 enum class TemperatureWarning {

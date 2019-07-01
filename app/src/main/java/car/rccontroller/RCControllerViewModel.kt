@@ -69,11 +69,11 @@ class RCControllerViewModel: ViewModel() {
         parkingBrakeLiveData.value = false
         handbrakeLiveData.value = false
 
-        tractionControlModuleLiveData.value = ModuleState.UNCHANGED
-        antilockBrakingModuleLiveData.value = ModuleState.UNCHANGED
-        electronicStabilityModuleLiveData.value = ModuleState.UNCHANGED
-        understeerDetectionModuleLiveData.value = ModuleState.UNCHANGED
-        oversteerDetectionModuleLiveData.value = ModuleState.UNCHANGED
-        collisionDetectionModuleLiveData.value = ModuleState.UNCHANGED
+        tractionControlModuleLiveData.value = ModuleState.UNCHANGED_STATE
+        antilockBrakingModuleLiveData.value = ModuleState.UNCHANGED_STATE
+        electronicStabilityModuleLiveData.value = ModuleState.UNCHANGED_STATE
+        understeerDetectionModuleLiveData.value = ModuleState.UNCHANGED_STATE
+        oversteerDetectionModuleLiveData.value = ModuleState.UNCHANGED_STATE
+        collisionDetectionModuleLiveData.value = ModuleState.UNCHANGED_STATE
     }
 }

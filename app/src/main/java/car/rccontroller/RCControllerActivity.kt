@@ -256,12 +256,12 @@ class RCControllerActivity : AppCompatActivity() {
 
                 viewModel.motorSpeedLimiterLiveData.value = MotorSpeedLimiter.NULL
 
-                viewModel.tractionControlModuleLiveData.postValue(ModuleState.OFF)
-                viewModel.antilockBrakingModuleLiveData.postValue(ModuleState.OFF)
-                viewModel.electronicStabilityModuleLiveData.postValue(ModuleState.OFF)
-                viewModel.understeerDetectionModuleLiveData.postValue(ModuleState.OFF)
-                viewModel.oversteerDetectionModuleLiveData.postValue(ModuleState.OFF)
-                viewModel.collisionDetectionModuleLiveData.postValue(ModuleState.OFF)
+                viewModel.tractionControlModuleLiveData.postValue(ModuleState.OFF_STATE)
+                viewModel.antilockBrakingModuleLiveData.postValue(ModuleState.OFF_STATE)
+                viewModel.electronicStabilityModuleLiveData.postValue(ModuleState.OFF_STATE)
+                viewModel.understeerDetectionModuleLiveData.postValue(ModuleState.OFF_STATE)
+                viewModel.oversteerDetectionModuleLiveData.postValue(ModuleState.OFF_STATE)
+                viewModel.collisionDetectionModuleLiveData.postValue(ModuleState.OFF_STATE)
             }
         })
 
@@ -883,9 +883,9 @@ class RCControllerActivity : AppCompatActivity() {
      */
     private fun updateUIAdvancedSensorItems(state: ModuleState, item: ImageView, states: TypedArray) {
         val i = when (state) {
-            ModuleState.NOTHING, ModuleState.OFF -> 0
-            ModuleState.ON -> 1
-            ModuleState.IDLE -> 2
+            ModuleState.NOTHING_STATE, ModuleState.OFF_STATE -> 0
+            ModuleState.ON_STATE -> 1
+            ModuleState.IDLE_STATE -> 2
             else -> 0
         }
         item.setImageResourceWithTag(states.getResourceId(i, 0))
@@ -978,20 +978,20 @@ class RCControllerActivity : AppCompatActivity() {
         states.recycle()
 
         if((state == HandlingAssistance.FULL) || (state == HandlingAssistance.WARNING)){
-            viewModel.tractionControlModuleLiveData.postValue(ModuleState.IDLE)
-            viewModel.antilockBrakingModuleLiveData.postValue(ModuleState.IDLE)
-            viewModel.electronicStabilityModuleLiveData.postValue(ModuleState.IDLE)
-            viewModel.understeerDetectionModuleLiveData.postValue(ModuleState.IDLE)
-            viewModel.oversteerDetectionModuleLiveData.postValue(ModuleState.IDLE)
-            viewModel.collisionDetectionModuleLiveData.postValue(ModuleState.IDLE)
+            viewModel.tractionControlModuleLiveData.postValue(ModuleState.IDLE_STATE)
+            viewModel.antilockBrakingModuleLiveData.postValue(ModuleState.IDLE_STATE)
+            viewModel.electronicStabilityModuleLiveData.postValue(ModuleState.IDLE_STATE)
+            viewModel.understeerDetectionModuleLiveData.postValue(ModuleState.IDLE_STATE)
+            viewModel.oversteerDetectionModuleLiveData.postValue(ModuleState.IDLE_STATE)
+            viewModel.collisionDetectionModuleLiveData.postValue(ModuleState.IDLE_STATE)
         }
         else {
-            viewModel.tractionControlModuleLiveData.postValue(ModuleState.OFF)
-            viewModel.antilockBrakingModuleLiveData.postValue(ModuleState.OFF)
-            viewModel.electronicStabilityModuleLiveData.postValue(ModuleState.OFF)
-            viewModel.understeerDetectionModuleLiveData.postValue(ModuleState.OFF)
-            viewModel.oversteerDetectionModuleLiveData.postValue(ModuleState.OFF)
-            viewModel.collisionDetectionModuleLiveData.postValue(ModuleState.OFF)
+            viewModel.tractionControlModuleLiveData.postValue(ModuleState.OFF_STATE)
+            viewModel.antilockBrakingModuleLiveData.postValue(ModuleState.OFF_STATE)
+            viewModel.electronicStabilityModuleLiveData.postValue(ModuleState.OFF_STATE)
+            viewModel.understeerDetectionModuleLiveData.postValue(ModuleState.OFF_STATE)
+            viewModel.oversteerDetectionModuleLiveData.postValue(ModuleState.OFF_STATE)
+            viewModel.collisionDetectionModuleLiveData.postValue(ModuleState.OFF_STATE)
         }
 
         viewModel.frontDifferentialSlipperyLimiterLiveData.value =
